@@ -3,6 +3,7 @@ from django.contrib.sessions.models import Session
 from databases import databases
 
 local_global = local()
+local_global.keyword = 'core_db'
 
 class KeywordMiddleware(object):
     
