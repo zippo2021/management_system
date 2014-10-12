@@ -45,7 +45,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'middlewares.KeywordMiddleware',
 )
+
+DATABASE_ROUTERS = ['routers.SessionRouter',
+		    'routers.KeywordRouter']
 
 ROOT_URLCONF = 'management_system.urls'
 
