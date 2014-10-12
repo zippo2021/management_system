@@ -48,7 +48,7 @@ MIDDLEWARE_CLASSES = (
     'middlewares.KeywordMiddleware',
 )
 
-DATABASE_ROUTERS = ['routers.SessionRouter',
+DATABASE_ROUTERS = ['routers.CoreRouter',
 		    'routers.KeywordRouter']
 
 ROOT_URLCONF = 'management_system.urls'
