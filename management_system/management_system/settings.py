@@ -41,6 +41,8 @@ INSTALLED_APPS = (
     'customuseradmin',
     'markdown_deux',  # Required for Knowledgebase item formatting
     'helpdesk', 
+    'bootstrap_toolkit',
+    'markdown_deux',
 )
 
 MIDDLEWARE_CLASSES = (

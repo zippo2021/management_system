@@ -36,12 +36,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.markup',  # Required for helpdesk text display
     'django.contrib.humanize',  # Required for elapsed time formatting
     'registration',
     'customuseradmin',
     'markdown_deux',  # Required for Knowledgebase item formatting
     'helpdesk', 
+    'bootstrap_toolkit',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -55,7 +55,8 @@ MIDDLEWARE_CLASSES = (
 )
 
 DATABASE_ROUTERS = ['routers.CoreRouter',
-		    'routers.KeywordRouter']
+		    'routers.KeywordRouter',
+]
 
 ROOT_URLCONF = 'management_system.urls'
 
