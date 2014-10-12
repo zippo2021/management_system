@@ -36,8 +36,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',  # Required for elapsed time formatting
     'registration',
     'customuseradmin',
+    'markdown_deux',  # Required for Knowledgebase item formatting
+    'helpdesk', 
 )
 
 MIDDLEWARE_CLASSES = (
