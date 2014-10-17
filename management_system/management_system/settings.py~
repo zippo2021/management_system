@@ -43,7 +43,7 @@ INSTALLED_APPS = (
     'markdown_deux',  # Required for Knowledgebase item formatting
     'helpdesk', 
     'bootstrap_toolkit',
-    'bootstrap',
+    'bootstrapform',
     'markdown_deux',
 )
 
