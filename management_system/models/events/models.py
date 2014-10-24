@@ -31,6 +31,7 @@ class PersonalComment(models.Model):
 if event is a journey
 '''
 class JourneyData(models.Model):
+    event = models.OneToOne(Event)
     ticket_price = models.IntegerField(verbose_name = 'Стоимость билетов')
     departure_time = models.DateTimeField(verbose_name = 'Время и дата отправления')
     departure_place = models.CharField(verbose_name = 'Место отправления', max_length = 100)
