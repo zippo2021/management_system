@@ -26,13 +26,18 @@ class UserData(models.Model):
 	is_event_worker = models.BooleanField()
 	is_subject_worker = models.BooleanField()
 	is_observer = models.BooleanField()
+    is_admin = models.BooleanField()'''no additional fields for admin'''
+
 
 class EventWorker(models.Model):
 	data = models.OneToOneField(UserData)
 
 class SubjectWorker(models.Model):
 	data = models.OneToOneField(UserData)
-	subject = models.CharField(verbose_name = 'Предмет', max_length = 100)
+    info = models.CharField(verbose_name = 'Информация' , max_length = 1000)
+
+class Mentor(models.Model)
+    data = models.OneToOneField(UserData)
 
 class Observer(models.Model):
 	data = models.OneToOneField(UserData)
@@ -79,6 +84,12 @@ class Note(models.Model)
 	author = models.ForeignKey(SubjectWorker)
 	receiver = models.ForeignKey(RegularUser)
 	text = models.CharField(verbose_name = 'Запись', max_length = 1000)
+
+class Rap(models.Model)
+    author = models.ForeignKey(Mentor)
+    receiver = models.ForeignKey(RegularUser)
+    text = models.CharField(verbose_name = 'Замечание', max_length = 1000)
+    is_sms = models.BooleanField()
 
 class School(models.Model)
 	name = models.CharField(verbose_name = 'Название', max_length = 100)
