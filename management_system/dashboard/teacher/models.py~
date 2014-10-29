@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from dashboard.regular.models import UserData
+from events.admin import UserData
 # Create your models here.
 class EventWorker(models.Model):
 	data = models.OneToOneField(UserData)

@@ -44,10 +44,23 @@ INSTALLED_APPS = (
     'helpdesk', 
     'bootstrap_toolkit',
     'bootstrapform',
-    'markdown_deux',
+    'markdown_deux',    
+    'dashboard.teacher',
+    'dashboard.regular',
+    'events.comments',
+    'events.events_admin',
+    'events.notes',
+    'events.raps',
+    'events.study_groups',
+    'events.price_groups',
+    'events.tickets',
+    'define_user',
+    'export',
+    'schools',
+    'search',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = (  
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

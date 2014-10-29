@@ -14,7 +14,7 @@ class JourneyData(models.Model):
     info = models.CharField(verbose_name = 'Информация', blank = True)
 
 class Ticket(models.Model):
-    user = models.OneToOneField(RegularUser) # or any user? 
+    user = models.OneToOneField(RegularUser) ''' or any user? '''
     price = models.IntegerField(verbose_name = 'Цена билета', blank = True)
     place = nodels.CharField(verbose_name = 'Место', blank = True)
     is_apart = models.BooleanField()

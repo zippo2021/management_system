@@ -2,8 +2,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from dashboard.regular.models import Regular
-from dashboard.teacher.models import EventWorker, Teacher, Mentor, Observer
+from ..regular.models import Regular
+from teacher.models import EventWorker, Teacher, Mentor, Observer
 
 
 class Event(models.Model):

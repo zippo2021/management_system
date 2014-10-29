@@ -39,6 +39,9 @@ class UserData(models.Model):
     is_observer = models.BooleanField()
     is_admin = models.BooleanField()
     '''no additional fields for admin'''
+
+class Regular():
+    pass
     
 class RegularUser(models.Model):
     data = models.OneToOneField(UserData)

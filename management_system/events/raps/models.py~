@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.db import models
 from dashboard.teacher.models import Mentor
 from dashboard.regular.models import RegularUser
