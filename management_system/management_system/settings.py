@@ -47,6 +47,8 @@ INSTALLED_APPS = (
     'markdown_deux',    
     'dashboard.teacher',
     'dashboard.regular',
+	'dashboard.mentor',
+	'dashboard.observer',
     'events.comments',
     'events.events_admin',
     'events.notes',

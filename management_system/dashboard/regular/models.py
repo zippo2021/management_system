@@ -3,8 +3,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-from events.events_admin.models import Event
-
 
 class UserData(models.Model):
     user = models.OneToOneField(User)
@@ -88,7 +86,4 @@ class RegularUser(models.Model):
                     null = True,
     )
 
-    school = models.ForeignKey(School)
-    notes = models.ForeignKey(Note)
-
-
+    school = models.ForeignKey('schools.School')
