@@ -4,15 +4,6 @@ from django.contrib.auth.models import User
 
 from dashboard.teacher.models import Teacher
 
-class EventWorker(models.Model):
-    data = models.OneToOneField('dashboard.regular.UserData')
-
-class Mentor(models.Model):
-    data = models.OneToOneField('dashboard.regular.UserData')
-
-class Observer(models.Model):
-    data = models.OneToOneField('dashboard.regular.UserData')
-
 
 class Event(models.Model):
     name = models.CharField(verbose_name = 'Название', max_length = 100)
@@ -25,10 +16,20 @@ class Event(models.Model):
     is_private = models.BooleanField()
     is_journey = models.BooleanField()
     is_payed = models.BooleanField()
-    event_workers = models.ManyToManyField(EventWorker)
-    subject_workers = models.ManyToManyField('dashboard.teacher.Teacher')
-    mentors = models.ManyToManyField(Mentor)
-    observers = models.ManyToManyField(Observer)
+    event_workers = models.ManyToManyField('event_worker.EventWorker')
+    subject_workers = models.ManyToManyField('teacher.Teacher')
+    mentors = models.ManyToManyField('mentor.Mentor')
+    observers = models.ManyToManyField('observer.Observer')
+
+
+class JourneyData(models.Model):
+    event = models.OneToOneField('events_admin.Event')
+    tickets = models.ForeignKey('tickets.Ticket')
+    departure_time = models.DateTimeField(verbose_name = 'Время отправления')
+    info = models.CharField(verbose_name = 'Информация',
+                            blank = True,
+                            max_length = 1000,
+    )
 
 
 '''
@@ -36,11 +37,11 @@ if event is private
 '''
 class Requests(models.Model):
     event = models.ForeignKey(Event)
-    users = models.ManyToManyField('dashboard.regular.RegularUser')
+    users = models.ManyToManyField('regular.RegularUser')
 
 class Contract(models.Model):
     event = models.ForeignKey(Event)
-    user = models.ForeignKey('dashboard.regular.RegularUser')
+    user = models.ForeignKey('regular.RegularUser')
     '''
     it has to be completed
     '''

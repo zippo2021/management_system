@@ -49,7 +49,8 @@ INSTALLED_APPS = (
     'dashboard.regular',
 	'dashboard.mentor',
 	'dashboard.observer',
-    'events.comments',
+    'dashboard.event_worker',
+	'events.comments',
     'events.events_admin',
     'events.notes',
     'events.raps',
@@ -73,7 +74,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 DATABASE_ROUTERS = ['routers.CoreRouter',
-		    'routers.KeywordRouter',
+					'routers.KeywordRouter',
 ]
 
 ROOT_URLCONF = 'management_system.urls'

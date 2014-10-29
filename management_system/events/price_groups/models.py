@@ -5,7 +5,7 @@ from django.db import models
 price and participants applied for this price
 '''
 class PriceGroup(models.Model):
-    event = models.ForeignKey('events.admin_events.Event')
+    event = models.ForeignKey('events_admin.Event')
     price = models.IntegerField(verbose_name = 'Стоимость')
-    users = models.ManyToManyField('dashboard.regular.RegularUser')
+    users = models.ManyToManyField('regular.RegularUser')
     
