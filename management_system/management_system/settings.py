@@ -70,11 +70,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'middlewares.KeywordMiddleware',
+    'middlewares.SubdomainMiddleware',
 )
 
 DATABASE_ROUTERS = ['routers.CoreRouter',
-					'routers.KeywordRouter',
+					'routers.SubdomainRouter',
 ]
 
 ROOT_URLCONF = 'management_system.urls'
@@ -86,14 +86,32 @@ WSGI_APPLICATION = 'management_system.wsgi.application'
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+	'default': {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'management_system',
         'USER': 'user',
         'PASSWORD': 'password',
         'HOST': '127.0.0.1', # Or an IP Address that your DB is hosted on
         'PORT': '3306',
-    }
+	},
+
+	'sub1': {
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'sub1',
+        'USER': 'user1',
+        'PASSWORD': 'password',
+        'HOST': '127.0.0.1', # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
+	},
+	
+	'sub2': {
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'sub2',
+        'USER': 'user2',
+        'PASSWORD': 'password',
+        'HOST': '127.0.0.1', # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
+	}
 }
 
 # Django-registration
