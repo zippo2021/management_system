@@ -13,7 +13,7 @@ class KeywordRouter(object):
 	from databases import databases
 	return databases[local_global.keyword]
     
-    def allow_relation(self, obj1, obj2, databases):
+    def allow_relation(self, obj1, obj2, **hints):
 	return None
 
     def allow_syncdb(self, db, model):

@@ -3,4 +3,4 @@ mysql-python
 django-helpdesk
 django-bootstrap-toolkit
 django-markdown-deux
-
+pillow 

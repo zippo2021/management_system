@@ -6,12 +6,12 @@ class KeywordRouter(object):
 	from middlewares import local_global
 	from databases import databases
 	print model._meta.app_label, ' KeywordRouter'
-	return databases[local_global.keyword]
+	return databases[local_global.subdomain]
 
     def db_for_write(self, model, **hints):
 	from middlewares import local_global
 	from databases import databases
-	return databases[local_global.keyword]
+	return databases[local_global.subdomain]
     
     def allow_relation(self, obj1, obj2, **hints):
 	return None
