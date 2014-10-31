@@ -9,11 +9,11 @@ class SubdomainMiddleware(object):
     def process_request(self, request):
 	    def get_subdomain(request):
 			try:
-				host = request.META['HTTP_HOST'].split('.')
-				if len(host) > 2:
-					return host[0]
+				subdomain = request.META['HTTP_HOST'].split('.')[0]
+				if subdomain in databases.keys():
+					return subdomain
 				else:
-					return 'core_db' #FIXME 
+					return 'else!!!' #FIXME 
 
-			except: return 'core_db' #FIXME
+			except: return 'except!!!' #FIXME
 	    local_global.subdomain =  get_subdomain(request)
