@@ -10,4 +10,5 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('registration.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'helpdesk/', include('helpdesk.urls')),
+	url(r'define_user/', include('define_user.urls')),
 )
