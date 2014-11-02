@@ -8,8 +8,12 @@ from dashboard.event_worker.models import EventWorker
 from dashboard.observer.models import Observer
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
+from decorators import should_has_no_data
 # Create your views here.
+
+
 @login_required
+@should_has_no_data
 def request(request):
 	if request.method == 'POST':
 		#update eisting data, if exists
@@ -37,6 +41,7 @@ def request(request):
 	return render(request, 'request.html', {'form' : form})
 
 @login_required
+@should_has_no_data
 def completed(request):
 	define_request = request.user.DefineUserRequest
 	return render(request, 'completed.html', 
@@ -49,16 +54,23 @@ def show_requests(request):
 
 @staff_member_required
 def apply_request(request, define_user_request_id):
+	#creating UserData
 	define_request = DefineUserRequest.objects.get(id = define_user_request_id)
 	user = define_request.user
-	user.UserData = UserData()
+	data = UserData(user = user)
+	data.save()
+	#creating special data
 	if define_request.teacher:
-		user.UserData.Teacher = Teacher()
+		teacher = Teacher(data = data)
+		teacher.save()
 	if define_request.event_worker:
-		user.UserData.EventWorker = EventWorker()
+		event_worker = EventWorker(data = data)
+		event_worker.save()
 	if define_request.mentor:
-		user.UserData.Mentor = Mentor()
+		mentor = Mentor(data = data)
+		mentor.save()
 	if define_request.observer:
-		user.UserData.Observer = Observer()
+		observer = Observer(data = data)
+		observer.save()
 	user.DefineUserRequest.delete()
 	return redirect('define_user_show_requests');
