@@ -47,11 +47,13 @@ INSTALLED_APPS = (
     'markdown_deux',    
     'dashboard.teacher',
     'dashboard.regular',
-    'events.comments',
+	'dashboard.mentor',
+	'dashboard.observer',
+    'dashboard.event_worker',
+	'events.comments',
     'events.events_admin',
     'events.notes',
     'events.raps',
-    'events.schedule',
     'events.study_groups',
     'events.price_groups',
     'events.tickets',
@@ -68,11 +70,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'middlewares.KeywordMiddleware',
+    'middlewares.SubdomainMiddleware',
 )
 
 DATABASE_ROUTERS = ['routers.CoreRouter',
-		    'routers.KeywordRouter',
+					'routers.SubdomainRouter',
 ]
 
 ROOT_URLCONF = 'management_system.urls'
@@ -84,26 +86,44 @@ WSGI_APPLICATION = 'management_system.wsgi.application'
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+	'default': {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'management_system',
         'USER': 'user',
         'PASSWORD': 'password',
         'HOST': '127.0.0.1', # Or an IP Address that your DB is hosted on
         'PORT': '3306',
-    }
+	},
+
+	'sub1': {
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'sub1',
+        'USER': 'user1',
+        'PASSWORD': 'password',
+        'HOST': '127.0.0.1', # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
+	},
+	
+	'sub2': {
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'sub2',
+        'USER': 'user2',
+        'PASSWORD': 'password',
+        'HOST': '127.0.0.1', # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
+	}
 }
 
 # Django-registration
 
 ACCOUNT_ACTIVATION_DAYS = 2
 AUTH_USER_EMAIL_UNIQUE = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'regtest2014@gmail.com'
-EMAIL_HOST_PASSWORD = 'curebadbreath'
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'regtest2014@gmail.com'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = 'info@google.com'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

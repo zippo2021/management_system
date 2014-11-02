@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from define_user.forms import DefineUserRequestForm
 from define_user.models import DefineUserRequest
-from dashboard.regular.models import UserData
+from userdata.models import UserData
 from dashboard.teacher.models import Teacher
 from dashboard.mentor.models import Mentor
 from dashboard.event_worker.models import EventWorker
@@ -16,7 +16,7 @@ from decorators import should_have_no_data
 @should_have_no_data
 def request(request):
 	if request.method == 'POST':
-		#update eisting data, if exists
+		#update existing data, if exists
 		if hasattr(request.user, 'DefineUserRequest'):
 			form = DefineUserRequestForm(request.POST, 
 				   instance = request.user.DefineUserRequest)
@@ -74,3 +74,4 @@ def apply_request(request, define_user_request_id):
 		observer.save()
 	user.DefineUserRequest.delete()
 	return redirect('define_user_show_requests');
+

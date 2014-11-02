@@ -8,15 +8,15 @@ from dashboard.event_worker.models import EventWorker
 from dashboard.observer.models import Observer
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from decorators import should_has_no_data
+from decorators import should_have_no_data
 # Create your views here.
 
 
 @login_required
-@should_has_no_data
+@should_have_no_data
 def request(request):
 	if request.method == 'POST':
-		#update eisting data, if exists
+		#update existing data, if exists
 		if hasattr(request.user, 'DefineUserRequest'):
 			form = DefineUserRequestForm(request.POST, 
 				   instance = request.user.DefineUserRequest)
@@ -41,7 +41,7 @@ def request(request):
 	return render(request, 'request.html', {'form' : form})
 
 @login_required
-@should_has_no_data
+@should_have_no_data
 def completed(request):
 	define_request = request.user.DefineUserRequest
 	return render(request, 'completed.html', 

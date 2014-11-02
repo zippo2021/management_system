@@ -1,47 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
-
-
-from events.events_admin.models import Event
-
-
-class UserData(models.Model):
-    user = models.OneToOneField(User)
-    avatar = models.ImageField(
-                    verbose_name = 'Аватар',
-                    upload_to ='images/profile_pics',
-                    blank = True,
-                    null = True,
-    )
-    
-    first_name = models.CharField(verbose_name = 'Имя', max_length = 255)
-    
-    middle_name = models.CharField(
-                    verbose_name = 'Отчество',
-                    max_length = 255, 
-                    blank = True, 
-                    null = True,
-    )
-    
-    last_name = models.CharField(verbose_name = 'Фамилия',  max_length = 255)
-    
-    phone  = models.CharField(
-                    verbose_name = 'Телефон', 
-                    max_length = 15,
-                    blank = True, 
-                    null = True,
-    )
-
-    is_regular_user = models.BooleanField()
-    is_event_worker = models.BooleanField()
-    is_teacher = models.BooleanField()
-    is_observer = models.BooleanField()
-    is_admin = models.BooleanField()
-    '''no additional fields for admin'''
-
-class Regular():
-    pass
     
 class RegularUser(models.Model):
     data = models.OneToOneField(UserData)
@@ -91,7 +50,4 @@ class RegularUser(models.Model):
                     null = True,
     )
 
-    school = models.ForeignKey(School)
-    notes = models.ForeignKey(Note)
-
-
+    school = models.ForeignKey('schools.School')
