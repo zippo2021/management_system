@@ -1,5 +1,5 @@
 from threading import local
-from databases import databases
+from databases import databases, subdoms
 
 local_global = local()
 local_global.subdomain = 'core_db'
@@ -10,7 +10,7 @@ class SubdomainMiddleware(object):
 	    def get_subdomain(request):
 			try:
 				subdomain = request.META['HTTP_HOST'].split('.')[0]
-				if subdomain in databases.keys():
+				if subdomain in subdoms:
 					return subdomain
 				else:
 					return 'else!!!' #FIXME 

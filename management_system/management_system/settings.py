@@ -118,12 +118,12 @@ DATABASES = {
 
 ACCOUNT_ACTIVATION_DAYS = 2
 AUTH_USER_EMAIL_UNIQUE = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'regtest2014@gmail.com'
-EMAIL_HOST_PASSWORD = 'curebadbreath'
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'regtest2014@gmail.com'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = 'info@google.com'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

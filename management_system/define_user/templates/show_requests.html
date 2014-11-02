@@ -1,0 +1,11 @@
+{% for each in requests %}
+{{ each.user.email }}<br>
+{{ each.info }}<br>
+-------teacher: {{ each.teacher }}<br>
+-------event_worker: {{ each.event_worker }}<br>
+-------observer: {{ each.observer }}<br>
+-------mentor: {{ each.mentor }}<br>
+<a href="{% url 'define_user_apply' each.id %}">Одобрить</a>
+{% empty %}
+Список запросов пуст
+{% endfor %}
