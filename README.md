@@ -4,13 +4,15 @@ To install al the required packages try pip install -r requirements.txt
 
 Attention!!!
 To use this version of project you'll need:
+
+
 	1)in etc/hosts:
 		change:
 			127.0.0.1   localhost -----> 127.0.0.1 localhost.com
 		
 		add:
-										 127.0.0.1 sub1.localhost.com
-										 127.0.0.1 sub2.localhost.com
+			127.0.0.1 sub1.localhost.com
+			127.0.0.1 sub2.localhost.com
 	
 	2)create 2 additional DB (see settings.py)
 		#! now you are ready to use subdom on your localhost
