@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 
 class UserData(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, related_name = 'UserData')
     avatar = models.ImageField(
                     verbose_name = 'Аватар',
                     upload_to ='images/profile_pics',

@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect
 from define_user.forms import DefineUserRequestForm
 from define_user.models import DefineUserRequest
+from dashboard.regular.models import UserData
+from dashboard.teacher.models import Teacher
+from dashboard.mentor.models import Mentor
+from dashboard.event_worker.models import EventWorker
+from dashboard.observer.models import Observer
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 # Create your views here.
@@ -44,11 +49,16 @@ def show_requests(request):
 
 @staff_member_required
 def apply_request(request, define_user_request_id):
-	define_request = DefineUserRequest.objects.get(id = define_request_id)
+	define_request = DefineUserRequest.objects.get(id = define_user_request_id)
 	user = define_request.user
-	user.is_teacher = define_request.teacher
-	user.is_event_worker = define_request.event_worker
-	user.is_mentor = define_request.mentor
-	user.is_observer = define_request.observer
+	user.UserData = UserData()
+	if define_request.teacher:
+		user.UserData.Teacher = Teacher()
+	if define_request.event_worker:
+		user.UserData.EventWorker = EventWorker()
+	if define_request.mentor:
+		user.UserData.Mentor = Mentor()
+	if define_request.observer:
+		user.UserData.Observer = Observer()
 	user.DefineUserRequest.delete()
 	return redirect('define_user_show_requests');

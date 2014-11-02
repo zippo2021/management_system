@@ -9,7 +9,6 @@ class DefineUserRequestForm(ModelForm):
 		if not(cd['teacher'] or cd['observer']
 			or cd['event_worker'] or cd['mentor']):
 			raise ValidationError('Хотя бы одно поле должно быть выбрано')
-		else: return cd
 	class Meta:
 		model = DefineUserRequest
 		exclude = ['user']
