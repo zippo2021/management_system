@@ -19,7 +19,16 @@ def check_decorator(view=None,
 	     return wrapper
 	return decorator(view) if view else decorator
 
+'''
+false functions
+FIXME!
+'''
+redirect = lambda request, *args, **kwargs: pass
+'''
+condition functions
+'''
 has_data = lambda user: hasattr(user, 'UserData')
+has_no_data = lambda request, *args, **kwargs: !has_data(request.user)
 is_teacher = lambda request, *args, **kwargs: 
 				hasattr(request.user.UserData.Teacher)
 				if has_data(request.user) else False
@@ -32,8 +41,21 @@ is_mentor = lambda request, *args, **kwargs:
 is_observer = lambda request, *args, **kwargs:
 				hasattr(request.user.UserData.Observer)
 				if has_data(request.user) else False
-
+'''
+decorators themself
+'''
 should_be_teacher = partial(check_decorator,
 							conditiom_func = is_teacher,
-							false_func = 
-
+							false_func = redirect)
+should_be_event_worker =  partial(check_decorator,
+                            conditiom_func = is_event_worker,
+							false_func = redirect)
+should_be_mentor =  partial(check_decorator,
+                            conditiom_func = is_mentor,
+							false_func = redirect)
+should_be_observer =  partial(check_decorator,
+                            conditiom_func = is_observer,
+							false_func = redirect)
+should_has_no_data =  partial(check_decorator,
+                              conditiom_func = has_no_data,
+							  false_func = redirect)

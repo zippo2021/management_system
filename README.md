@@ -12,19 +12,13 @@ To use this version of project you'll need:
 										 127.0.0.1 sub1.localhost.com
 										 127.0.0.1 sub2.localhost.com
 	
-	2-1)create 2 additional DB (see settings.py)
+	2)create 2 additional DB (see settings.py)
 		#! now you are ready to use subdom on your localhost
 
-	2-2)make: python manage.py syncdb --database=sub1
-			  python manage.py syncdb --database=sub2
+	3) run ./syncdb.sh	
 	
-	3)exchange the names default <-----> sub1 in settings.py
-	  make: python manage.py createsuperuser
-	
-	4)exchange the names default <-----> sub2 in settings.py
-	  make: python manage.py createsuperuser
-		 #! 3-4 needed because there is no way to create superuser in the 
-	 		non-default db, but we need different SU in our subdom
+	4) while syncdb you'll be able to create two additional superusers
+	   for subdoms
 	
 	5)test subprojects on sub1.localhost.com
 	  					  sub2.localhost.com

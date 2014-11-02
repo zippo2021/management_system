@@ -30,13 +30,6 @@ class UserData(models.Model):
                     blank = True, 
                     null = True,
     )
-
-    is_regular_user = models.BooleanField()
-    is_event_worker = models.BooleanField()
-    is_teacher = models.BooleanField()
-    is_observer = models.BooleanField()
-    is_admin = models.BooleanField()
-    '''no additional fields for admin'''
     
 class RegularUser(models.Model):
     data = models.OneToOneField(UserData)
