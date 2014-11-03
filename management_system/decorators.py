@@ -32,21 +32,41 @@ condition functions
 has_data = lambda request, *args, **kwargs: hasattr(request.user, 'UserData')
 has_no_data = lambda request, *args, **kwargs:\
 				not(has_data(request, *args, **kwargs))
+#is_regular = lambda request, *args, **kwargs:\
+#				hasattr(request.user.UserData, 'Observer')\
+#				if has_data(request) else False
 is_teacher = lambda request, *args, **kwargs:\
-				hasattr(request.user.UserData.Teacher)\
-				if has_data(request.user) else False
+				hasattr(request.user.UserData, 'Teacher')\
+				if has_data(request) else False
 is_event_worker = lambda request, *args, **kwargs:\
-				hasattr(request.user.UserData.Event_Worker)\
-				if has_data(request.user) else False
+				hasattr(request.user.UserData, 'Event_Worker')\
+				if has_data(request) else False
 is_mentor = lambda request, *args, **kwargs:\
-				hasattr(request.user.UserData.Mentor)\
-				if has_data(request.user) else False
+				hasattr(request.user.UserData, 'Mentor')\
+				if has_data(request) else False
 is_observer = lambda request, *args, **kwargs:\
-				hasattr(request.user.UserData.Observer)\
-				if has_data(request.user) else False
+				hasattr(request.user.UserData, 'Observer')\
+				if has_data(request) else False
+is_defined = lambda request, *args, **kwargs:\
+				(is_observer(request, *args, **kwargs) or
+				is_mentor(request, *args, **kwargs) or 
+				is_event_worker(request, *args, **kwargs) or
+				is_teacher(request, *args, **kwargs) or
+				is_regular(request, *args, **kwargs))
+
+is_undefined = lambda request, *args, **kwargs:\
+				not(is_defined(request, *args, **kwargs))
 '''
 decorators themself
 '''
+should_be_undefined = partial(check_decorator,
+							  condition_func = is_undefined,
+							  false_func = redirect)
+
+should_be_defined = partial(check_decorator,
+							condition_func = is_defined,
+							false_func = redirect)
+
 should_be_teacher = partial(check_decorator,
 							condition_func = is_teacher,
 							false_func = redirect)

@@ -3,7 +3,8 @@ from django.db import models
 from django.contrib.auth.models import User
     
 class RegularUser(models.Model):
-    data = models.OneToOneField('userdata.UserData')
+    data = models.OneToOneField('userdata.UserData',
+								related_name = 'ReqularUser')
 
     grad_date = models.CharField(verbose_name = 'Год окончания школы', max_length=4, null = True)
 
