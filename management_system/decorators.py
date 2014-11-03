@@ -32,9 +32,9 @@ condition functions
 has_data = lambda request, *args, **kwargs: hasattr(request.user, 'UserData')
 has_no_data = lambda request, *args, **kwargs:\
 				not(has_data(request, *args, **kwargs))
-#is_regular = lambda request, *args, **kwargs:\
-#				hasattr(request.user.UserData, 'Observer')\
-#				if has_data(request) else False
+is_regular = lambda request, *args, **kwargs:\
+				hasattr(request.user.UserData, 'RegularUser')\
+				if has_data(request) else False
 is_teacher = lambda request, *args, **kwargs:\
 				hasattr(request.user.UserData, 'Teacher')\
 				if has_data(request) else False
@@ -66,7 +66,9 @@ should_be_undefined = partial(check_decorator,
 should_be_defined = partial(check_decorator,
 							condition_func = is_defined,
 							false_func = redirect)
-
+should_be_regular = partial(check_decorator,
+							condition_func = is_regular,
+							false_func = redirect)
 should_be_teacher = partial(check_decorator,
 							condition_func = is_teacher,
 							false_func = redirect)
