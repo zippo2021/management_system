@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from define_user.forms import DefineUserRequestForm
 from define_user.models import DefineUserRequest
-from userdata.models import UserData
+from dashboard.userdata.models import UserData
 from dashboard.teacher.models import Teacher
 from dashboard.mentor.models import Mentor
 from dashboard.event_worker.models import EventWorker
@@ -38,24 +38,27 @@ def request(request):
 		else:
 			form = DefineUserRequestForm()
 	
-	return render(request, 'request.html', {'form' : form})
+	return render(request, 'define_user_request.html', {'form' : form})
 
 @login_required
 @should_have_no_data
 def completed(request):
 	define_request = request.user.DefineUserRequest
-	return render(request, 'completed.html', 
+	return render(request, 'define_user_completed.html', 
 						  {'define_request': define_request})
 
 @staff_member_required
 def show_requests(request):
 	requests = DefineUserRequest.objects.all()
-	return render(request, 'show_requests.html', {'requests' : requests})
+	return render(request, 'define_user_show_requests.html',
+				  {'requests' : requests})
 
 @staff_member_required
 def apply_request(request, define_user_request_id):
 	#creating UserData
+	# if no request FIXME: try:
 	define_request = DefineUserRequest.objects.get(id = define_user_request_id)
+	#except: 
 	user = define_request.user
 	data = UserData(user = user)
 	data.save()

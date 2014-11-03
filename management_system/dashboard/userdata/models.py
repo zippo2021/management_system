@@ -26,7 +26,6 @@ class UserData(models.Model):
     phone  = models.CharField(
                     verbose_name = 'Телефон',
                     max_length = 15,
-                    blank = True,
                     null = True,
     )
 

@@ -50,7 +50,8 @@ INSTALLED_APPS = (
     'dashboard.mentor',
     'dashboard.observer',
     'dashboard.event_worker',
-    'events.comments',
+    'dashboard.userdata',
+	'events.comments',
     'events.events_admin',
     'events.notes',
     'events.raps',
@@ -61,7 +62,6 @@ INSTALLED_APPS = (
     'export',
     'schools',
     'search',
-    'userdata',
 )
 
 MIDDLEWARE_CLASSES = (  

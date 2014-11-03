@@ -29,8 +29,9 @@ redirect = lambda request, *args, **kwargs: HttpResponse("Here we have decorator
 '''
 condition functions
 '''
-has_data = lambda user: hasattr(user, 'UserData')
-has_no_data = lambda request, *args, **kwargs: not(has_data(request.user))
+has_data = lambda request, *args, **kwargs: hasattr(request.user, 'UserData')
+has_no_data = lambda request, *args, **kwargs:\
+				not(has_data(request, *args, **kwargs))
 is_teacher = lambda request, *args, **kwargs:\
 				hasattr(request.user.UserData.Teacher)\
 				if has_data(request.user) else False
@@ -61,3 +62,6 @@ should_be_observer =  partial(check_decorator,
 should_have_no_data =  partial(check_decorator,
                               condition_func = has_no_data,
 							  false_func = redirect)
+should_have_data = partial(check_decorator,
+						   condition_func = has_data,
+						   false_func = redirect)
