@@ -51,4 +51,4 @@ class RegularUser(models.Model):
                     null = True,
     )
 
-    school = models.ForeignKey('schools.School')
+    school = models.ForeignKey('schools.School', related_name = 'RegularUser')

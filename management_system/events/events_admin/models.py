@@ -23,8 +23,9 @@ class Event(models.Model):
 
 
 class JourneyData(models.Model):
-    event = models.OneToOneField('events_admin.Event')
-    tickets = models.ForeignKey('tickets.Ticket')
+    event = models.OneToOneField('events_admin.Event',
+								 related_name = 'JourneyData')
+    tickets = models.ForeignKey('tickets.Ticket', related_name = 'JourneyData')
     departure_time = models.DateTimeField(verbose_name = 'Время отправления')
     info = models.CharField(verbose_name = 'Информация',
                             blank = True,
@@ -36,12 +37,13 @@ class JourneyData(models.Model):
 if event is private
 '''
 class Requests(models.Model):
-    event = models.ForeignKey(Event)
-    users = models.ManyToManyField('regular.RegularUser')
+    event = models.ForeignKey(Event, related_name = 'Requests')
+    users = models.ManyToManyField('regular.RegularUser',
+								   related_name = 'Requests')
 
 class Contract(models.Model):
-    event = models.ForeignKey(Event)
-    user = models.ForeignKey('regular.RegularUser')
+    event = models.ForeignKey(Event, related_name = 'Contract')
+    user = models.ForeignKey('regular.RegularUser', related_name = 'Contract')
     '''
     it has to be completed
     '''

@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from decorators import should_have_no_data, should_have_data
 from decorators import should_be_undefined, should_be_defined
+from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 
 
@@ -46,8 +47,10 @@ def request(request):
 @should_have_data
 @should_be_undefined
 def completed(request):
-	#FIXME redirect if has no request
-	define_request = request.user.DefineUserRequest
+	try:
+		define_request = request.user.DefineUserRequest
+	except:
+		raise ObjectDoesNotExist
 	return render(request, 'define_user_completed.html', 
 						  {'define_request': define_request})
 
@@ -59,9 +62,11 @@ def show_requests(request):
 
 @staff_member_required
 def apply_request(request, define_user_request_id):
-	# if no request FIXME: try:
-	define_request = DefineUserRequest.objects.get(id = define_user_request_id)
-	#except: 
+	try:
+		define_request = DefineUserRequest.objects.get(
+						 id = define_user_request_id)
+	except:
+		raise ObjectDoesNotExist
 	user = define_request.user
 	data = user.UserData
 	#creating special data

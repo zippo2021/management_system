@@ -1,5 +1,6 @@
 from threading import local
 from databases import databases, subdoms
+from django.core.exceptions import PermissionDenied
 
 local_global = local()
 local_global.subdomain = 'core_db'
@@ -13,7 +14,7 @@ class SubdomainMiddleware(object):
 				if subdomain in subdoms:
 					return subdomain
 				else:
-					return 'else!!!' #FIXME 
-
-			except: return 'except!!!' #FIXME
+					raise PermissionDenied 
+			
+			except: raise PermissionDenied #FIXME
 	    local_global.subdomain =  get_subdomain(request)
