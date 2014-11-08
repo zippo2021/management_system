@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'helpdesk/', include('helpdesk.urls')),
     url(r'define_user/', include('define_user.urls')),
-    url(r'edit_userdata/', include('dashboard.userdata.urls')),
-    
+    url(r'userdata/', include('dashboard.userdata.urls')),
+    url(r'teacher/', include('dashboard.teacher.urls')),
+    url(r'regular/', include('dashboard.regular.urls')),
 )

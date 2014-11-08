@@ -6,8 +6,8 @@ from dashboard.userdata.forms import UserDataForm
 from dashboard.userdata.models import UserData
 # Create your views here.
 
-@should_have_no_data
 @login_required
+@should_have_no_data
 def create(request):
 	if request.method == 'POST':
 		form = UserDataForm(request.POST)
@@ -29,7 +29,7 @@ def edit(request):
 		#validate form and redirect
 		if form.is_valid():
 			user_data = form.save()
-			return redirect('userdata_completed')
+			return redirect('userdata_edited')
 	else:
 		form = UserDataForm(instance = request.user.UserData)
 

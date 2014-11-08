@@ -4,9 +4,13 @@ from django.contrib.auth.models import User
     
 class RegularUser(models.Model):
     data = models.OneToOneField('userdata.UserData',
-								related_name = 'ReqularUser')
+								related_name = 'ReqularUser',
+	)
 
-    grad_date = models.CharField(verbose_name = 'Год окончания школы', max_length=4, null = True)
+    grad_date = models.CharField(verbose_name = 'Год окончания школы',
+								 max_length=4, 
+								 null = True,
+	)
 
     birthdate = models.DateField(verbose_name = 'Дата рождения',null = True)
 
@@ -33,9 +37,16 @@ class RegularUser(models.Model):
 
     housing = models.CharField(verbose_name = 'Корпус',  max_length = 2)
     appartment = models.CharField(verbose_name = 'Квартира',  max_length = 5)
-    parent_1 = models.CharField(verbose_name = 'ФИО отца',  max_length = 255)
-	
-    parent_1_phone  = models.CharField(verbose_name = 'Телефон отца',  max_length = 15)
+    parent_1 = models.CharField(verbose_name = 'ФИО отца',
+								max_length = 255,
+								blank = True,
+								null = True,
+	)
+    parent_1_phone  = models.CharField(verbose_name = 'Телефон отца',
+									   max_length = 15,
+									   blank = True,
+									   null = True,
+	)
 
     parent_2 = models.CharField(
                     verbose_name = 'ФИО матери', 

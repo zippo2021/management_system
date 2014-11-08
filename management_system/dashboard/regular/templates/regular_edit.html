@@ -1,6 +1,6 @@
 <form method="post" class="form-container" action="">
 {% csrf_token %}
-<dl class="userdata">
+<dl class="teacher">
 {% for field in form %}
     <dt>{{ field.label }}</dt>
     <dd class="clearfix">
@@ -14,6 +14,6 @@
     </dd>
 {% endfor %}
 </dl>
-<input type="submit" value="Cохранить" class="clearfix">
+<input type="submit" value="Сохранить" class="clearfix">
 </form>
 
