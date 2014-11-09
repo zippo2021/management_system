@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
 <form method="post" class="form-container" action="">
 {% csrf_token %}
 <dl class="teacher">
@@ -16,4 +18,4 @@
 </dl>
 <input type="submit" value="Сохранить" class="clearfix">
 </form>
-
+{% endblock %}

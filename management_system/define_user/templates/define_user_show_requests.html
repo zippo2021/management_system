@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
 {% for each in requests %}
 {{ each.user.email }}<br>
 {{ each.info }}<br>
@@ -9,3 +11,4 @@
 {% empty %}
 Список запросов пуст
 {% endfor %}
+{% endblock %}
