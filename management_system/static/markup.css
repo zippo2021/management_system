@@ -28,6 +28,15 @@ html, body {
 	background: #e2e2e2;
 }
 
+#org_title{
+	width: 80%;
+	height: 100px;
+	margin: auto;
+	line-height: 100px;
+	text-align: center;
+	font-size: 25px;
+}
+
 #navigation{
 	width: 100%;
 	height: 50px;
