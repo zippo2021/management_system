@@ -4,16 +4,20 @@ from define_user.models import DefineUserRequest
 from dashboard.userdata.models import UserData
 from dashboard.teacher.models import Teacher
 from dashboard.mentor.models import Mentor
+from dashboard.regular.models import RegularUser
 from dashboard.event_worker.models import EventWorker
 from dashboard.observer.models import Observer
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from decorators import should_have_no_data
+from decorators import should_have_no_data, should_have_data
+from decorators import should_be_undefined, should_be_defined
+from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 
 
 @login_required
-@should_have_no_data
+@should_have_data
+@should_be_undefined
 def request(request):
 	if request.method == 'POST':
 		#update existing data, if exists
@@ -41,9 +45,13 @@ def request(request):
 	return render(request, 'define_user_request.html', {'form' : form})
 
 @login_required
-@should_have_no_data
+@should_have_data
+@should_be_undefined
 def completed(request):
-	define_request = request.user.DefineUserRequest
+	try:
+		define_request = request.user.DefineUserRequest
+	except:
+		raise ObjectDoesNotExist
 	return render(request, 'define_user_completed.html', 
 						  {'define_request': define_request})
 
@@ -55,13 +63,13 @@ def show_requests(request):
 
 @staff_member_required
 def apply_request(request, define_user_request_id):
-	#creating UserData
-	# if no request FIXME: try:
-	define_request = DefineUserRequest.objects.get(id = define_user_request_id)
-	#except: 
+	try:
+		define_request = DefineUserRequest.objects.get(
+						 id = define_user_request_id)
+	except:
+		raise ObjectDoesNotExist
 	user = define_request.user
-	data = UserData(user = user)
-	data.save()
+	data = user.UserData
 	#creating special data
 	if define_request.teacher:
 		teacher = Teacher(data = data)
@@ -77,4 +85,14 @@ def apply_request(request, define_user_request_id):
 		observer.save()
 	user.DefineUserRequest.delete()
 	return redirect('define_user_show_requests');
+
+@login_required
+@should_have_data
+def define_regular(request):
+    user = request.user
+    regular = RegularUser(data = user.UserData)
+    regular.save()
+    return render(request, 'define_user_completed.html',{})
+    
+    
 

@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 class Ticket(models.Model):
-    user = models.OneToOneField('regular.RegularUser') # or any user? 
+    user = models.OneToOneField('regular.RegularUser', related_name = 'Ticket' )
     price = models.IntegerField(verbose_name = 'Цена билета', blank = True)
     place = models.CharField(verbose_name = 'Место',
 							 blank = True,

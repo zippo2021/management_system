@@ -31,7 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
+   	'management_system',
+	'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -145,7 +146,8 @@ TEMPLATE_DIRS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
             global_settings.TEMPLATE_CONTEXT_PROCESSORS +
-            ('django.core.context_processors.request',)
+            ('django.core.context_processors.request',
+			 'context_processors.organisation_settings_processor')
      )
 
 # Static files (CSS, JavaScript, Images)

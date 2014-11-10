@@ -10,4 +10,5 @@ urlpatterns = [
 					   name = 'define_user_show_requests'),
 	url(r'^apply/(?P<define_user_request_id>[0-9]+)', 
 					   views.apply_request, name = 'define_user_apply'),
+    url(r'^define_regular', views.define_regular, name = 'define_regular'),
 ]

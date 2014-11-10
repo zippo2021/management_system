@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<head>
+	<link rel="stylesheet" href="{% static "markup.css" %}">
+</head>
+
+<body>
+	<div id="container">
+		<div id="top_menu">
+		Top menu:
+		{% if user.UserData %}
+			you are <font color="blue">{{ user.username }} </font>
+			<font color="red">
+			{% if user.UserData.Teacher %}
+				Teacher!
+			{% endif %}
+			{% if user.UserData.EventWorker %}
+				EventWorker!
+			{% endif %}
+			{% if user.UserData.Mentor %}
+				Mentor!
+			{% endif %}
+			{% if user.UserData.Observer %}
+				Observer!
+			{% endif %}
+			{% if user.UserData.RegularUser %}
+				RegularUser!
+			{% endif %}
+			</font>
+		{% endif %}
+		</div>
+		
+		<div id="org_info">
+			<div id="org_title">
+				{{ organisation_settings.title }}
+			</div>
+		</div>
+		
+		<div id="navigation">
+		Main menu
+		</div>
+
+		<div id="sidebar">
+			{% block sidebar %}
+			<ul>
+				Sidebar
+			</ul>
+			{% endblock %}
+		</div>
+
+		<div id="content">
+			{% block content %}{% endblock %}
+		</div>
+
+		<div id="clear">
+		</div>
+
+		<div id="footer">
+			Footer
+		</div>
+
+	</div>	

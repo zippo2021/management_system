@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<p>ФИО:<br><b> {{ user_data.last_name }} {{ user_data.first_name }} {{ user_data.middle_name }} </b></p>
+<p>Дата рождения:<br><b> {{ user_data.birthdate }}</b></p>
+<p>Город рождения:<br><b> {{ user_data.birthplace }}</b></p>
+<p>Телефон:<br><b> {{ user_data.phone }}</b></p>
+<p>Город проживания:<br><b> {{ user_data.city }}</b></p>
+<p>Улица:<br><b> {{ user_data.street }}</b></p>
+<p>Дом:<br><b> {{ user_data.building }}</b></p>
+<p>Индекс:<br><b> {{ user_data.postal_code }}</b></p>
+<p>ФИО отца:<br><b> {{ user_data.parent_1 }}</b></p>
+<p>Телефон отца:<br><b> {{ user_data.parent_1_phone }}</b></p>
+<p>ФИО матери:<br><b> {{ user_data.parent_2 }}</b></p>
+<p>Телефон матери:<br><b> {{ user.parent_2_phone }}</b></p>
+<p>Год выпуска:<br><b> {{ user_data.grad_date }} </b></p>
+<p>Школа:<br><b> {{ user_data.school }}</b></p>
+<p>Учитель физики(истории):<br><b> {{ user_data.phys_teacher_initial }}</b></p>
+<p>Учитель математики(обществознания):<br><b> {{ user_data.maths_teacher_initial }}</b></p>
+<p>Директор школы:<br><b> {{ user_data.principle_initial }}</b></p>
+
+{% endblock %}
