@@ -16,4 +16,4 @@ class RegularUserForm(ModelForm):
 		else: return cd
 	class Meta:
 		model = RegularUser
-		exclude = ['user']
+		exclude = ['user', 'modified']

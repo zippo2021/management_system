@@ -2,18 +2,20 @@ from django.shortcuts import render, redirect
 from dashboard.regular.models import RegularUser
 from dashboard.regular.forms import RegularUserForm
 from django.contrib.auth.decorators import login_required
-from decorators import should_be_regular
+from decorators import should_have_regular_attr, should_be_regular
 
 # Create your views here.
 
 @login_required
-@should_be_regular
+@should_have_regular_attr
 def edit(request):
 	if request.method == 'POST':
 		form = RegularUserForm(request.POST,
 			   instance = request.user.UserData.RegularUser)
 		if form.is_valid():
-			regular = form.save()
+			regular = form.save(commit = False)
+			regular.modified = True
+			regular.save()
 			return redirect('regular_edited')
 	else:
 		form = RegularUserForm(instance = request.user.UserData.RegularUser)

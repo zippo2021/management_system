@@ -7,7 +7,6 @@ from django.shortcuts import redirect
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 
-from registration import signals
 from registration.forms import RegistrationForm
 
 
@@ -120,9 +119,6 @@ class ActivationView(TemplateView):
     def get(self, request, *args, **kwargs):
         activated_user = self.activate(request, *args, **kwargs)
         if activated_user:
-            signals.user_activated.send(sender=self.__class__,
-                                        user=activated_user,
-                                        request=request)
             success_url = self.get_success_url(request, activated_user)
             try:
                 to, args, kwargs = success_url

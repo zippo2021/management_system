@@ -59,7 +59,6 @@ INSTALLED_APPS = (
     'events.study_groups',
     'events.price_groups',
     'events.tickets',
-    'define_user',
     'export',
     'schools',
     'search',
@@ -120,12 +119,12 @@ DATABASES = {
 
 ACCOUNT_ACTIVATION_DAYS = 2
 AUTH_USER_EMAIL_UNIQUE = True
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 1025
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = False
-DEFAULT_FROM_EMAIL = 'info@google.com'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'managtest@yandex.ru'
+EMAIL_HOST_PASSWORD = 'qwerty2021'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'managtest@yandex.ru'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

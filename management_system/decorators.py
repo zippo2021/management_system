@@ -1,6 +1,9 @@
 from functools import partial, wraps
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from dashboard import userdata
+from dashboard import regular
+
 
 def check_decorator(view=None,
               condition_func = lambda request, *args, **kwargs: True,
@@ -25,12 +28,24 @@ def check_decorator(view=None,
 '''
 false functions
 '''
-not_has_no_data = lambda request, *args, **kwargs: render(request, 'decorator.html',
-{'error' : "Here we have decorator working to prevent you from getting to this page, while you HAVE UserData"})
-not_has_data = lambda request, *args, **kwargs: render(request, 'decorator.html',
-{'error' : "Here we have decorator working to prevent you from getting to this page, while you HAVE NO UserData"})
-not_regular = lambda request, *args, **kwargs: render(request, 'decorator.html',
-{'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT RegularUser"})
+not_has_data = lambda request, *args, **kwargs: redirect('edit_userdata')
+
+not_has_regular_attr = lambda request, *args, **kwargs: render(request, 'decorator.html',
+{'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Regular"})
+
+
+def not_regular(request, *args, **kwargs):
+	if not(has_data(request)): 
+		return not_has_data(request)
+	elif not(hasattr(request.user.UserData, 'RegularUser')):
+		return not_has_regular_attr(request)
+	else:
+		return redirect('edit_regular')
+		
+not_defined = lambda request, *args, **kwargs: not_regular(request)\
+				if has_data(request) else not_has_data(request)
+
+
 not_teacher = lambda request, *args, **kwargs: render(request, 'decorator.html',
 {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Teacher"})
 not_mentor = lambda request, *args, **kwargs: render(request, 'decorator.html', {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Mentor"})
@@ -38,31 +53,40 @@ not_event_worker = lambda request, *args, **kwargs: render(request, 'decorator.h
 {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT EventWorker"})
 not_observer = lambda request, *args, **kwargs: render(request, 'decorator.html', 
 {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Observer"})
-not_defined = lambda request, *args, **kwargs: render(request, 'decorator.html',{'error' :"Here we have decorator working to prevent you from getting to this page, while you are NOT defined"})
-not_undefined = lambda request, *args, **kwargs: render(request, 'decorator.html',
-{'error' : "Here we have decorator working to prevent you from getting to this page, while you ARE defined"})
+
 
 '''
 condition functions
 '''
-has_data = lambda request, *args, **kwargs: hasattr(request.user, 'UserData')
-has_no_data = lambda request, *args, **kwargs:\
-				not(has_data(request, *args, **kwargs))
+has_data = lambda request, *args, **kwargs:\
+			request.user.UserData.modified\
+			if hasattr(request.user, 'UserData') else False
+
+#this one is needed only for regular_edit
+has_regular_attr = lambda request, *args, **kwargs:\
+				hasattr(request.user.UserData, 'RegularUser')
+
 is_regular = lambda request, *args, **kwargs:\
-				hasattr(request.user.UserData, 'RegularUser')\
-				if has_data(request) else False
+				request.user.UserData.RegularUser.modified\
+				if hasattr(request.user.UserData, 'RegularUser')\
+				and  has_data(request) else False
+
 is_teacher = lambda request, *args, **kwargs:\
 				hasattr(request.user.UserData, 'Teacher')\
 				if has_data(request) else False
+
 is_event_worker = lambda request, *args, **kwargs:\
 				hasattr(request.user.UserData, 'Event_Worker')\
 				if has_data(request) else False
+
 is_mentor = lambda request, *args, **kwargs:\
 				hasattr(request.user.UserData, 'Mentor')\
 				if has_data(request) else False
+
 is_observer = lambda request, *args, **kwargs:\
 				hasattr(request.user.UserData, 'Observer')\
 				if has_data(request) else False
+
 is_defined = lambda request, *args, **kwargs:\
 				(is_observer(request, *args, **kwargs) or
 				is_mentor(request, *args, **kwargs) or 
@@ -70,23 +94,22 @@ is_defined = lambda request, *args, **kwargs:\
 				is_teacher(request, *args, **kwargs) or
 				is_regular(request, *args, **kwargs))
 
-is_undefined = lambda request, *args, **kwargs:\
-				not(is_defined(request, *args, **kwargs))
-
 '''
 decorators themself
 '''
 
-should_be_undefined = partial(check_decorator,
-							  condition_func = is_undefined,
-							  false_func = not_undefined)
-
 should_be_defined = partial(check_decorator,
 							condition_func = is_defined,
 							false_func = not_defined)
+
 should_be_regular = partial(check_decorator,
 							condition_func = is_regular,
 							false_func = not_regular)
+
+should_have_regular_attr = partial(check_decorator,
+						   condition_func = has_regular_attr,
+						   false_func = not_has_regular_attr)
+
 should_be_teacher = partial(check_decorator,
 							condition_func = is_teacher,
 							false_func = not_teacher)
@@ -99,9 +122,6 @@ should_be_mentor =  partial(check_decorator,
 should_be_observer =  partial(check_decorator,
                               condition_func = is_observer,
 							  false_func = not_observer)
-should_have_no_data =  partial(check_decorator,
-                              condition_func = has_no_data,
-							  false_func = not_has_no_data)
 should_have_data = partial(check_decorator,
 						   condition_func = has_data,
 						   false_func = not_has_data)
