@@ -28,23 +28,6 @@ def check_decorator(view=None,
 '''
 false functions
 '''
-not_has_data = lambda request, *args, **kwargs: redirect('edit_userdata')
-
-not_has_regular_attr = lambda request, *args, **kwargs: render(request, 'decorator.html',
-{'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Regular"})
-
-
-def not_regular(request, *args, **kwargs):
-	if not(has_data(request)): 
-		return not_has_data(request)
-	elif not(hasattr(request.user.UserData, 'RegularUser')):
-		return not_has_regular_attr(request)
-	else:
-		return redirect('edit_regular')
-		
-not_defined = lambda request, *args, **kwargs: not_regular(request)\
-				if has_data(request) else not_has_data(request)
-
 
 not_teacher = lambda request, *args, **kwargs: render(request, 'decorator.html',
 {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Teacher"})
@@ -58,18 +41,7 @@ not_observer = lambda request, *args, **kwargs: render(request, 'decorator.html'
 '''
 condition functions
 '''
-has_data = lambda request, *args, **kwargs:\
-			request.user.UserData.modified\
-			if hasattr(request.user, 'UserData') else False
-
 #this one is needed only for regular_edit
-has_regular_attr = lambda request, *args, **kwargs:\
-				hasattr(request.user.UserData, 'RegularUser')
-
-is_regular = lambda request, *args, **kwargs:\
-				request.user.UserData.RegularUser.modified\
-				if hasattr(request.user.UserData, 'RegularUser')\
-				and  has_data(request) else False
 
 is_teacher = lambda request, *args, **kwargs:\
 				hasattr(request.user.UserData, 'Teacher')\
@@ -87,28 +59,9 @@ is_observer = lambda request, *args, **kwargs:\
 				hasattr(request.user.UserData, 'Observer')\
 				if has_data(request) else False
 
-is_defined = lambda request, *args, **kwargs:\
-				(is_observer(request, *args, **kwargs) or
-				is_mentor(request, *args, **kwargs) or 
-				is_event_worker(request, *args, **kwargs) or
-				is_teacher(request, *args, **kwargs) or
-				is_regular(request, *args, **kwargs))
-
 '''
 decorators themself
 '''
-
-should_be_defined = partial(check_decorator,
-							condition_func = is_defined,
-							false_func = not_defined)
-
-should_be_regular = partial(check_decorator,
-							condition_func = is_regular,
-							false_func = not_regular)
-
-should_have_regular_attr = partial(check_decorator,
-						   condition_func = has_regular_attr,
-						   false_func = not_has_regular_attr)
 
 should_be_teacher = partial(check_decorator,
 							condition_func = is_teacher,
@@ -122,6 +75,3 @@ should_be_mentor =  partial(check_decorator,
 should_be_observer =  partial(check_decorator,
                               condition_func = is_observer,
 							  false_func = not_observer)
-should_have_data = partial(check_decorator,
-						   condition_func = has_data,
-						   false_func = not_has_data)
