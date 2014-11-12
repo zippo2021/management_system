@@ -1,13 +1,11 @@
 from django.shortcuts import render, redirect
-from decorators import should_be_defined
-from decorators import should_have_data
 from django.contrib.auth.decorators import login_required
 from dashboard.userdata.forms import UserDataForm
 from dashboard.userdata.models import UserData
+from decorators import should_be_defined
 # Create your views here.
 
 @login_required
-#@should_be_defined
 def edit(request):
 	if request.method == 'POST':
 		#userdata always exists if we passed should_have_data

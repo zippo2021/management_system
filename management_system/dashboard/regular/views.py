@@ -2,8 +2,7 @@ from django.shortcuts import render, redirect
 from dashboard.regular.models import RegularUser
 from dashboard.regular.forms import RegularUserForm
 from django.contrib.auth.decorators import login_required
-from dashboard.regular.decorators import should_have_regular_attr
-from dashboard.regular.decorators import should_be_regular
+from decorators import should_have_regular_attr, should_be_regular
 
 # Create your views here.
 
