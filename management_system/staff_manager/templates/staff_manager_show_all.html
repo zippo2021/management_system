@@ -1,24 +1,59 @@
 {% extends 'base.html' %}
 {% block content %}
-	{% for key, value in staff_members.items %}
-		<h3>{{ key }}</h3>
+<ul>
+{% for each in staff_members %}
+	<li>
+	<p>
+		{{ each.username }}<br>
+		{{ each.UserData.last_name}} {{each.UserData.first_name }}<br>
+		{% if not each.is_active %}
+			<font color = "red">Отключен</font>
+		{% endif %}
 		<ul>
-		{% for each in value %}
-			<p>
-			<a href="{% url 'edit_staff_member_permissions' each.id %}">
-			Изменить права
-			</a>
-			<li>{{ each.username }}</li>
-				{{ each.UserData.last_name }} {{each.UserData.first_name }}<br>
-			{% if each.is_staff %}
-				<font color="red">Администратор</font>
+		{% if each.is_staff %}
+		<li>
+			{% if each.is_superuser %}
+				<font color = "red">Главный Администратор</font>
+			{% else %}
+				<font color = "red">Администратор</font>
 			{% endif %}
-			</p>
-		{% empty %}
-			<p>
-			Персонал не найден.
-			</p>
-		{% endfor %}
+		</li>
+		{% endif %}
+		{% if each.UserData.EventWorker %}
+		<li>
+			<font color = "blue">Управляющий событиями</font>
+		</li>
+		{% endif %}
+		{% if each.UserData.Teacher %}
+		<li>
+			<font color = "blue">Учитель</font><br>
+		</li>
+		{% endif %}
+		{% if each.UserData.Mentor %}
+		<li>
+			<font color = "blue">Воспитатель</font><br>
+		</li>
+		{% endif %}
+		{% if each.UserData.Observer %}
+		<li>
+			<font color = "blue">Наблюдатель</font><br>
+		</li>
+		{% endif %}
 		</ul>
-	{% endfor %}
+		<a href="{% url 'edit_staff_member_permissions' each.id %}">
+			Изменить права
+		</a><br>
+		{% if user.is_superuser and not each.is_superuser %}
+			<a href="{% url 'deactivate_staff_member' each.id %}">
+				{% if each.is_active %}
+				Отключить
+				{% else %}
+				Включить
+				{% endif %}
+			</a>
+		{% endif %}
+	</p>
+	</li>
+{% endfor %}
+</ul>
 {% endblock %}

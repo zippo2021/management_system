@@ -7,7 +7,10 @@ from django.core.mail import send_mail
 from staff_manager.source_functions import create_staff_user, get_staff_members
 from base_source_functions import send_templated_email
 from django.contrib.auth.models import User
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import user_passes_test
 
+@staff_member_required
 def create(request):
 	if request.method == 'POST':
 		form = CreateStaffForm(request.POST)
@@ -42,18 +45,20 @@ def create(request):
 		
 	return render(request, 'staff_manager_create.html', {'form' : form})
 
+@staff_member_required
 def completed(request):
 	return render(request, 'staff_manager_completed.html')
 
+@staff_member_required
 def show_all(request):
 	staff_members = get_staff_members()
 	return render(request,
 				  'staff_manager_show_all.html',
 				  {'staff_members' : staff_members}
 		   )
-
+		   
+@staff_member_required
 def edit_permissions(request, user_id):
-	
 	user = User.objects.get(id = user_id)
 	if request.method == 'POST':
 		form = EditPermissionsForm(request.POST)
@@ -67,3 +72,9 @@ def edit_permissions(request, user_id):
 				  'staff_manager_edit_permissions.html',
 				  {'form' : form })
 
+@user_passes_test(lambda u: u.is_superuser)
+def deactivate(request, user_id):
+	user = User.objects.get(id = user_id)
+	user.is_active = not(user.is_active)
+	user.save()
+	return redirect('show_all_staff_members')
