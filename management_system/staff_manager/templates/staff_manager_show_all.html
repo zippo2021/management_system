@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+	{% for key, value in staff_members.items %}
+		<h3>{{ key }}</h3>
+		<ul>
+		{% for each in value %}
+			<p>
+			<a href="{% url 'edit_staff_member_permissions' each.id %}">
+			Изменить права
+			</a>
+			<li>{{ each.username }}</li>
+				{{ each.UserData.last_name }} {{each.UserData.first_name }}<br>
+			{% if each.is_staff %}
+				<font color="red">Администратор</font>
+			{% endif %}
+			</p>
+		{% empty %}
+			<p>
+			Персонал не найден.
+			</p>
+		{% endfor %}
+		</ul>
+	{% endfor %}
+{% endblock %}
