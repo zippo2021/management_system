@@ -1,7 +1,17 @@
-{% extends "base_profile.html" %}
-{% block regular_info %}
+{% extends "base.html" %}
+{% block content %}
 <table>
-{% if regular_data  %}
+<tr valign="top">
+    <td width=25%>
+        <img src="{{ base_data.avatar }}"/> 
+    </td>
+
+    
+    <td width=25%>
+        <p>ФИО:<br><b> {{ base_data.last_name }} {{ base_data.first_name }} {{ base_data.middle_name }} </b></p>
+        <p>Телефон:<br><b> {{ base_data.phone }}</b></p>
+    </td>
+</tr>
 <tr valign="top">
     
     <td width=25%>
@@ -20,12 +30,9 @@
         <p>Директор школы:<br><b> {{ regular_data.principle_initial }}</b></p>
     </td>
 </tr>
-{% endif %}
-{% if teacher_data_view == None %}
-    <p>fuck</p>
-{% endif %}
 </table>
 {% endblock %}
+
 
 
 

@@ -26,10 +26,3 @@ def edit(request):
 def completed(request):
 	return render(request, 'userdata_completed.html')
 
-@login_required
-@should_be_defined
-def base_profile_view(request):
-        base_data = request.user.UserData
-        return render( request, 'base_profile.html' , {'base_data' : base_data})
-
-

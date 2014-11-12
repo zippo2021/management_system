@@ -97,7 +97,6 @@ is_regular = lambda request, *args, **kwargs:\
 				if hasattr(request.user.UserData, 'RegularUser')\
 				and  has_data(request) else False
 
-
 	#decorators
 
 should_be_regular = partial(check_decorator,

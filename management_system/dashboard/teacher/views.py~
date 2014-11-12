@@ -28,4 +28,4 @@ def completed(request):
 def self_profile_view(request):
         base_data = request.user.UserData
         teacher_data = request.user.UserData.Teacher
-        return render( request, 'self_profile_view.html' , {'base_data' : base_data , 'additional_data' : teacher_data })
+        return render( request, 'self_teacher_profile.html' , {'base_data' : base_data , 'additional_data' : teacher_data })
