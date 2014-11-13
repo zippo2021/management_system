@@ -4,13 +4,14 @@ from django.forms import Form, EmailField, BooleanField
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
-class EditPermissionsForm(Form):
+class StaffForm(Form):
 	event_worker = BooleanField(required = False)
 	teacher = BooleanField(required = False)
 	mentor = BooleanField(required = False)
 	observer = BooleanField(required = False)
 	admin = BooleanField(required = False)
 
+class EditPermissionsForm(StaffForm):
 	def __init__(self, *args, **kwargs):
 		editor = kwargs.pop('editor')
 		edited = kwargs.pop('edited')
@@ -19,7 +20,7 @@ class EditPermissionsForm(Form):
 			self.fields['admin'].widget.attrs['disabled'] = 'disabled'
 			
 
-class CreateStaffForm(EditPermissionsForm):
+class CreateStaffForm(StaffForm):
 	email = EmailField(required = True)
 
 	def clean(self):

@@ -31,7 +31,6 @@ def completed(request):
 @should_be_regular
 def regular_profile_view(request):
         data = request.user.UserData.RegularUser
-         
-        return render(request, 'regular_profile.html',{'user_data':data})	
+        return render(request, 'regular_profile.html', {'user_data' : data})	
 
 

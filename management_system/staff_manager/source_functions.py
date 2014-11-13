@@ -42,4 +42,5 @@ def get_staff_members():
 	for key in perms_db.keys():
 		staff = staff + [each.data.user for each in 
 				globals()[perms_db[key]].objects.all()]
+	#c-style distinct() for lists
 	return list(set(staff))

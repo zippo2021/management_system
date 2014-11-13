@@ -55,6 +55,7 @@ def show_all(request):
 				  {'staff_members' : staff_members}
 		   )
 		   
+@staff_member_required
 def edit_permissions(request, user_id):
 	user = User.objects.get(id = user_id)
 	if request.method == 'POST':
@@ -63,10 +64,12 @@ def edit_permissions(request, user_id):
 								   edited = user)
 		if form.is_valid():
 			cd = form.cleaned_data
+			#set new permissions
 			admin = cd.pop('admin')
 			user.UserData.set_permissions(cd, admin)
 			return redirect('show_all_staff_members')
 	else:
+		#load permissions to form
 		perms, admin = user.UserData.get_permissions()
 		perms.update({'admin' : admin})
 		form = EditPermissionsForm(initial = perms,
@@ -79,6 +82,9 @@ def edit_permissions(request, user_id):
 @user_passes_test(lambda u: u.is_superuser)
 def deactivate(request, user_id):
 	user = User.objects.get(id = user_id)
-	user.is_active = not(user.is_active)
-	user.save()
+	#we can not deactivate superuser
+	if not(user.is_superuser):
+		user.is_active = not(user.is_active)
+		user.save()
+	else: pass #FIXME
 	return redirect('show_all_staff_members')
