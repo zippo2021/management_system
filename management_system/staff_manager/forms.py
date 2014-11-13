@@ -4,18 +4,28 @@ from django.forms import Form, EmailField, BooleanField
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
-class CreateStaffForm(Form):
-	email = EmailField(required = True)
+class EditPermissionsForm(Form):
 	event_worker = BooleanField(required = False)
 	teacher = BooleanField(required = False)
 	mentor = BooleanField(required = False)
 	observer = BooleanField(required = False)
-	administrator = BooleanField(required = False)
+	admin = BooleanField(required = False)
+
+	def __init__(self, *args, **kwargs):
+		editor = kwargs.pop('editor')
+		edited = kwargs.pop('edited')
+		super(EditPermissionsForm, self).__init__(*args, **kwargs)
+		if not(editor.is_superuser) or edited.is_superuser:
+			self.fields['admin'].widget.attrs['disabled'] = 'disabled'
+			
+
+class CreateStaffForm(EditPermissionsForm):
+	email = EmailField(required = True)
 
 	def clean(self):
 		cd = super(CreateStaffForm, self).clean()
 		if not(cd['event_worker'] or cd['teacher']
-		   or cd['mentor'] or cd['observer'] or cd['administrator']):
+		   or cd['mentor'] or cd['observer'] or cd['admin']):
 				raise ValidationError('Не выбрано ни одного поля!',
 									  code = 'Invalid')
 		else:
@@ -29,17 +39,4 @@ class CreateStaffForm(Form):
 		else:
 			return email
 
-class EditPermissionsForm(Form):
-	def __init__(self, *args, **kwargs):
-		super(EditPermissionsForm, self).__init__(*args, **kwargs)
-		if self.initial:	
-			current_perms = self.initial
-			for key in current_perms.keys():
-				if current_perms[key]:
-					self.fields[key].widget.attrs['disabled'] = 'disabled'
-				
-	event_worker = BooleanField(required = False)
-	teacher = BooleanField(required = False)
-	mentor = BooleanField(required = False)
-	observer = BooleanField(required = False)
-	administrator = BooleanField(required = False)
+

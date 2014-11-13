@@ -19,22 +19,22 @@
 			{% endif %}
 		</li>
 		{% endif %}
-		{% if each.UserData.EventWorker %}
+		{% if each.UserData.is_event_worker %}
 		<li>
 			<font color = "blue">Управляющий событиями</font>
 		</li>
 		{% endif %}
-		{% if each.UserData.Teacher %}
+		{% if each.UserData.is_teacher %}
 		<li>
 			<font color = "blue">Учитель</font><br>
 		</li>
 		{% endif %}
-		{% if each.UserData.Mentor %}
+		{% if each.UserData.is_mentor %}
 		<li>
 			<font color = "blue">Воспитатель</font><br>
 		</li>
 		{% endif %}
-		{% if each.UserData.Observer %}
+		{% if each.UserData.is_observer %}
 		<li>
 			<font color = "blue">Наблюдатель</font><br>
 		</li>

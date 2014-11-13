@@ -12,16 +12,16 @@
 		{% if user.UserData %}
 			you are <font color="blue">{{ user.username }} </font>
 			<font color="red">
-			{% if user.UserData.Teacher %}
+			{% if user.UserData.is_teacher %}
 				Teacher!
 			{% endif %}
-			{% if user.UserData.EventWorker %}
+			{% if user.UserData.is_event_worker %}
 				EventWorker!
 			{% endif %}
-			{% if user.UserData.Mentor %}
+			{% if user.UserData.is_mentor %}
 				Mentor!
 			{% endif %}
-			{% if user.UserData.Observer %}
+			{% if user.UserData.is_observer %}
 				Observer!
 			{% endif %}
 			{% if user.UserData.RegularUser %}

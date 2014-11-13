@@ -10,40 +10,32 @@ from dashboard.event_worker.models import EventWorker
 from dashboard.teacher.models import Teacher
 from dashboard.mentor.models import Mentor
 from dashboard.observer.models import Observer
-from permissions import perms_trans
+from permissions import perms_trans, perms_db
 
-#activation signal
-#@receiver(post_save, sender = User)
 @receiver(user_activated)
 def create_userdata_and_regular_user(**kwargs):
-#def create_userdata_and_regular_user(sender, instance, created, **kwargs):
-#	if created:
-		data = UserData(user = kwargs['user'])
+		user = kwargs['user']	
+		data = UserData(user = user)
 		data.save()
 		regular = RegularUser(data = data)
 		regular.save()
-
+		user.save()
 
 # Create your models here.
 class UserData(models.Model):
 	def get_permissions(self):
-		perms = {key : hasattr(self, perms_trans[key]) 
-				for key in perms_trans.keys()}
-		perms['administrator'] = self.user.is_staff
-		return perms
+		perms = {key : getattr(self, 'is_'+key)
+				for key in perms_db.keys()}
+		admin = self.user.is_staff
+		return perms, admin
 	
-	def set_permissions(self, perms):
-		old_perms = self.get_permissions()
-		to_set = [key for key in perms.keys()
-				  if perms[key] and not(old_perms[key])]
-		if 'administrator' in to_set:
-			self.user.is_staff = True
-			self.user.save()
-			to_set.remove('administrator')
-		for each in to_set:
-			globals()[each] = globals()[perms_trans[each]](data = self)
-			globals()[perms_trans[each]].save()
-
+	def set_permissions(self, perms, admin):
+		for key in perms_db.keys():
+			setattr(self, 'is_'+key, perms[key])
+		self.save()
+		self.user.is_staff = admin
+		self.user.save()
+	
 	def __str__ (self):
 		return self.user.__str__()
 	
@@ -73,6 +65,10 @@ class UserData(models.Model):
                     null = True,
     )
 	
+	is_event_worker = models.BooleanField(default = False)
+	is_teacher = models.BooleanField(default = False)
+	is_mentor = models.BooleanField(default = False)
+	is_observer = models.BooleanField(default = False)
 	modified = models.BooleanField(default = False)
 
 

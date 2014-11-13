@@ -118,7 +118,7 @@ not_teacher = lambda request, *args, **kwargs: render(request, 'decorator.html',
 	#condition functions
 
 is_teacher = lambda request, *args, **kwargs:\
-				hasattr(request.user.UserData, 'Teacher')\
+				request.user.UserData.is_teacher\
 				if has_data(request) else False
 
 	#decorators
@@ -139,7 +139,7 @@ not_event_worker = lambda request, *args, **kwargs: render(request, 'decorator.h
 	#condition fucntions
 
 is_event_worker = lambda request, *args, **kwargs:\
-				hasattr(request.user.UserData, 'Event_Worker')\
+				request.user.UserData.is_event_worker\
 				if has_data(request) else False
 
 	#decorators
@@ -159,7 +159,7 @@ not_mentor = lambda request, *args, **kwargs: render(request, 'decorator.html', 
 	#condition functions
 
 is_mentor = lambda request, *args, **kwargs:\
-				hasattr(request.user.UserData, 'Mentor')\
+				request.user.UserData.is_mentor\
 				if has_data(request) else False
 
 	#decorators
@@ -180,7 +180,7 @@ not_observer = lambda request, *args, **kwargs: render(request, 'decorator.html'
 	#condition functions
 
 is_observer = lambda request, *args, **kwargs:\
-				hasattr(request.user.UserData, 'Observer')\
+				request.user.UserData.is_observer\
 				if has_data(request) else False
 
 	#decorators
