@@ -10,7 +10,7 @@ from dashboard.event_worker.models import EventWorker
 from dashboard.teacher.models import Teacher
 from dashboard.mentor.models import Mentor
 from dashboard.observer.models import Observer
-from permissions import perms_trans, perms_db
+from staff_manager.permissions import permissions_names
 
 @receiver(user_activated)
 def create_userdata_and_regular_user(**kwargs):
@@ -24,14 +24,14 @@ def create_userdata_and_regular_user(**kwargs):
 # Create your models here.
 class UserData(models.Model):
 	def get_permissions(self):
-		perms = {key : getattr(self, 'is_'+key)
-				for key in perms_db.keys()}
+		perms = {each : getattr(self, 'is_' + each)
+				for each in permissions_names}
 		admin = self.user.is_staff
 		return perms, admin
 	
 	def set_permissions(self, perms, admin):
-		for key in perms_db.keys():
-			setattr(self, 'is_'+key, perms[key])
+		for each in permissions_names:
+			setattr(self, 'is_' + each, perms[each])
 		self.save()
 		self.user.is_staff = admin
 		self.user.save()

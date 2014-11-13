@@ -17,8 +17,7 @@ class EditPermissionsForm(StaffForm):
 		edited = kwargs.pop('edited')
 		super(EditPermissionsForm, self).__init__(*args, **kwargs)
 		if not(editor.is_superuser) or edited.is_superuser:
-			self.fields['admin'].widget.attrs['disabled'] = 'disabled'
-			
+			self.fields['admin'].widget.attrs['readonly'] = True
 
 class CreateStaffForm(StaffForm):
 	email = EmailField(required = True)
