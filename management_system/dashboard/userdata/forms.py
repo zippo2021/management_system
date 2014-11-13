@@ -8,4 +8,9 @@ class UserDataForm(ModelForm):
 					   error_message = ("Телефонный номер должен иметь формат +99999999999. Может содержать до 15 цифр"))
 	class Meta:
 		model = UserData
-		exclude = ['user', 'modified']
+		exclude = ['user',
+				   'modified',
+				   'is_event_worker',
+				   'is_teacher',
+				   'is_mentor',
+				   'is_observer']
