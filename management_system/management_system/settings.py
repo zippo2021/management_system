@@ -62,6 +62,7 @@ INSTALLED_APPS = (
     'export',
     'schools',
     'search',
+	'staff_manager',
 )
 
 MIDDLEWARE_CLASSES = (  

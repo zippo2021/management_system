@@ -31,6 +31,7 @@ def completed(request):
 
 @login_required
 @should_be_regular
+<<<<<<< HEAD
 def self_profile_view(request):
         base_data = request.user.UserData
         regular_data = request.user.UserData.RegularUser
@@ -47,5 +48,10 @@ def regular_profile_view(request,uid):
         else:
             return render( request, 'regular_profile_view.html' , {})                                                  
                                      	
+=======
+def regular_profile_view(request):
+        data = request.user.UserData.RegularUser
+        return render(request, 'regular_profile.html', {'user_data' : data})	
+>>>>>>> 3dce65bf82d9421cc1763ef805fbca5b80e8ad57
 
 
