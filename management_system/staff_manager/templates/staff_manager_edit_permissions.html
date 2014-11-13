@@ -2,7 +2,8 @@
 {% block content %}
 <form method="post" class="form-container" action="">
 {% csrf_token %}
-<dl class="defne_user">
+<dl class="staff_manager">
+{{ form.non_field_errors }}
 {% for field in form %}
     <dt>{{ field.label }}</dt>
     <dd class="clearfix">
@@ -16,6 +17,6 @@
     </dd>
 {% endfor %}
 </dl>
-<input type="submit" value="Подать заявку" class="clearfix">
+<input type="submit" value="Сохранить" class="clearfix">
 </form>
 {% endblock %}
