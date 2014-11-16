@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% block extrahead %}
-<script src="{% static 'ajax_form.js' %}"></script>
+<script src="{% static 'popitup.js' %}"></script>
 {% endblock %}
 
 {% block content %}

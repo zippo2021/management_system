@@ -3,11 +3,16 @@ from django.contrib.auth.decorators import login_required
 from dashboard.userdata.forms import UserDataForm
 from dashboard.userdata.models import UserData
 from decorators import should_be_defined
+from django.http import HttpResponse
 # Create your views here.
 
 @login_required
 def edit(request):
-	if request.method == 'POST':
+	return render(request, 'userdata_edit.html', {})
+
+@login_required
+def dialog_userdata(request):
+    if request.method == 'POST':
 		#userdata always exists if we passed should_have_data
 		form = UserDataForm(request.POST, instance = request.user.UserData)
 		#validate form and redirect
@@ -15,11 +20,12 @@ def edit(request):
 			user_data = form.save(commit = False)
 			user_data.modified = True
 			user_data.save()
-			return redirect('userdata_edited')
-	else:
-		form = UserDataForm(instance = request.user.UserData)
+			return render(request, 'userdata_completed.html', {})
+    else:		
+        form = UserDataForm(instance = request.user.UserData)
 
-	return render(request, 'userdata_edit.html', {'form' : form})
+	return render(request, 'userdata_form.html', {'form' : form})
+    
 
 @login_required
 @should_be_defined
