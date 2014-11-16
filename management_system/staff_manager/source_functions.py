@@ -4,7 +4,7 @@ from dashboard.teacher.models import Teacher
 from dashboard.mentor.models import Mentor
 from dashboard.observer.models import Observer
 from django.contrib.auth.models import User
-from permissions import perms_trans, perms_db
+from staff_manager.permissions import perms_to_classes
 
 def create_staff_user(username, password, email = None,
 					  perms = {
@@ -30,8 +30,8 @@ def create_staff_user(username, password, email = None,
 	data = UserData(user = user)
 	data.save()
 	#creating additional data
-	for key in perms_db.keys():
-		globals()[key] = globals()[perms_db[key]](data = data)
+	for key in perms_to_classes.keys():
+		globals()[key] = globals()[perms_to_classes[key]](data = data)
 		globals()[key].save()
 	#setting permissions
 	data.set_permissions(perms, admin)
@@ -39,8 +39,8 @@ def create_staff_user(username, password, email = None,
 
 def get_staff_members():
 	staff = list(User.objects.filter(is_staff = True))
-	for key in perms_db.keys():
+	for key in perms_to_classes.keys():
 		staff = staff + [each.data.user for each in 
-				globals()[perms_db[key]].objects.all()]
+				globals()[perms_to_classes[key]].objects.all()]
 	#c-style distinct() for lists
 	return list(set(staff))

@@ -11,26 +11,27 @@ class StaffForm(Form):
 	observer = BooleanField(required = False)
 	admin = BooleanField(required = False)
 
-class EditPermissionsForm(StaffForm):
-	def __init__(self, *args, **kwargs):
-		editor = kwargs.pop('editor')
-		edited = kwargs.pop('edited')
-		super(EditPermissionsForm, self).__init__(*args, **kwargs)
-		if not(editor.is_superuser) or edited.is_superuser:
-			self.fields['admin'].widget.attrs['disabled'] = 'disabled'
-			
-
-class CreateStaffForm(StaffForm):
-	email = EmailField(required = True)
-
 	def clean(self):
-		cd = super(CreateStaffForm, self).clean()
+		cd = super(StaffForm, self).clean()
 		if not(cd['event_worker'] or cd['teacher']
 		   or cd['mentor'] or cd['observer'] or cd['admin']):
 				raise ValidationError('Не выбрано ни одного поля!',
 									  code = 'Invalid')
 		else:
 				return cd
+
+
+class EditPermissionsForm(StaffForm):
+	def __init__(self, *args, **kwargs):
+		editor = kwargs.pop('editor')
+		edited = kwargs.pop('edited')
+		super(EditPermissionsForm, self).__init__(*args, **kwargs)
+		if not(editor.is_superuser) or edited.is_superuser:
+			self.fields['admin'].widget.attrs['readonly'] = True
+
+
+class CreateStaffForm(StaffForm):
+	email = EmailField(required = True)
 
 	def clean_email(self):
 		email = self.cleaned_data['email']
@@ -39,5 +40,3 @@ class CreateStaffForm(StaffForm):
 								  code = 'Invalid email')
 		else:
 			return email
-
-

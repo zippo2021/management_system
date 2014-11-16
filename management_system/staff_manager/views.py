@@ -9,7 +9,7 @@ from base_source_functions import send_templated_email
 from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import user_passes_test
-from permissions import perms_trans
+from staff_manager.permissions import perms_to_classes, permissions_names
 
 @staff_member_required
 def create(request):
@@ -18,7 +18,7 @@ def create(request):
 		if form.is_valid():
 			cd = form.cleaned_data
 			#creating user
-			perms = { each : cd[each] for each in perms_db.keys()}
+			perms = { each : cd[each] for each in permissions_names}
 			password = User.objects.make_random_password(length = 8)
 			user = create_staff_user(username = cd['email'],
 							  password = password,
@@ -48,6 +48,7 @@ def create(request):
 def completed(request):
 	return render(request, 'staff_manager_completed.html')
 
+@staff_member_required
 def show_all(request):
 	staff_members = get_staff_members()
 	return render(request,
