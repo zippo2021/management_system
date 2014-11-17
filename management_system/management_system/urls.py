@@ -13,5 +13,5 @@ urlpatterns = patterns('',
     url(r'userdata/', include('dashboard.userdata.urls')),
     url(r'teacher/', include('dashboard.teacher.urls')),
     url(r'regular/', include('dashboard.regular.urls')),
-	url(r'^staff_manager/', include('staff_manager.urls')),
+	url(r'^user_manager/', include('user_manager.urls')),
 )
