@@ -32,7 +32,7 @@ define decorators
 	#false functions
 
 not_defined = lambda request, *args, **kwargs: not_regular(request)\
-				if has_data(request) else not_has_data(request)
+				if has_filled_data(request) else not_has_data(request)
 
 	#condition functions
 
@@ -41,7 +41,8 @@ is_defined = lambda request, *args, **kwargs:\
 				is_mentor(request, *args, **kwargs) or 
 				is_event_worker(request, *args, **kwargs) or
 				is_teacher(request, *args, **kwargs) or
-				is_regular(request, *args, **kwargs))
+				is_regular(request, *args, **kwargs) or
+				request.user.is_staff)
 
 	#decorators
 
@@ -81,7 +82,7 @@ def not_regular(request, *args, **kwargs):
 	if not(has_filled_data(request)): 
 		return not_has_filled_data(request)
 	elif not(is_regular_possibly_unfilled(request)):
-		return not_regular_possibly_unfilled(request)
+		return not_is_regular_possibly_unfilled(request)
 	else:
 		return redirect('edit_regular')
 
@@ -93,7 +94,7 @@ is_regular_possibly_unfilled = lambda request, *args, **kwargs:\
 is_regular = lambda request, *args, **kwargs:\
 				request.user.UserData.RegularUser.modified\
 				if is_regular_possibly_unfilled(request)\
-				and  has_data(request) else False
+				and  has_filled_data(request) else False
 
 	#decorators
 

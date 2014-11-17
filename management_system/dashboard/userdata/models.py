@@ -60,10 +60,6 @@ class UserData(models.Model):
                     null = True,
     )
 	
-	is_event_worker = models.BooleanField(default = False)
-	is_teacher = models.BooleanField(default = False)
-	is_mentor = models.BooleanField(default = False)
-	is_observer = models.BooleanField(default = False)
 	modified = models.BooleanField(default = False)
 
 

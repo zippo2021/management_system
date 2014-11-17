@@ -18,4 +18,4 @@ class RegularUserForm(ModelForm):
 	
 	class Meta:
 		model = RegularUser
-		exclude = ['user', 'modified']
+		exclude = ['user', 'modified', 'is_active']
