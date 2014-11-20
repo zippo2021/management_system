@@ -10,30 +10,25 @@ from dashboard.event_worker.models import EventWorker
 from dashboard.teacher.models import Teacher
 from dashboard.mentor.models import Mentor
 from dashboard.observer.models import Observer
-from staff_manager.permissions import permissions_names
+from user_manager.permissions import perms_to_classes
+from django.db.models.signals import post_save
 
-@receiver(user_activated)
-def create_userdata_and_regular_user(**kwargs):
-		user = kwargs['user']	
-		data = UserData(user = user)
-		data.save()
-		regular = RegularUser(data = data)
-		regular.save()
-		user.save()
 
 # Create your models here.
 class UserData(models.Model):
 	def get_permissions(self):
-		perms = {each : getattr(self, 'is_' + each)
-				for each in permissions_names}
+		perms = {key : getattr(self, perms_to_classes[key]).is_active
+				for key in perms_to_classes.keys()}
 		admin = self.user.is_staff
-		return perms, admin
+		superadmin = self.user.is_superuser
+		return perms, admin, superadmin
 	
-	def set_permissions(self, perms, admin):
-		for each in permissions_names:
-			setattr(self, 'is_' + each, perms[each])
-		self.save()
+	def set_permissions(self, perms, admin, superadmin):
+		for key in perms_to_classes.keys():
+			getattr(self, perms_to_classes[key]).is_active = perms[key]
+			getattr(self, perms_to_classes[key]).save()
 		self.user.is_staff = admin
+		self.user.is_superuser = superadmin
 		self.user.save()
 	
 	def __str__ (self):
@@ -65,11 +60,25 @@ class UserData(models.Model):
                     null = True,
     )
 	
-	is_event_worker = models.BooleanField(default = False)
-	is_teacher = models.BooleanField(default = False)
-	is_mentor = models.BooleanField(default = False)
-	is_observer = models.BooleanField(default = False)
 	modified = models.BooleanField(default = False)
 
 
 admin.site.register(UserData)
+
+@receiver(post_save, sender = User)
+def create_userdata(instance, created, **kwargs):
+	if created:
+		data = UserData(user = instance)
+		data.save()
+
+@receiver(user_activated)
+def create_regular_user(user, **kwargs):
+	user.UserData.RegularUser.is_active = True
+	user.UserData.RegularUser.save()
+
+@receiver(post_save, sender = UserData)
+def create_additional_data(instance, created, **kwargs):
+	if created:
+		for key in perms_to_classes.keys():
+			globals()[key] = globals()[perms_to_classes[key]](data = instance)
+			globals()[key].save()

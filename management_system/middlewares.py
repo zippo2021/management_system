@@ -3,7 +3,7 @@ from databases import databases, subdoms
 from django.core.exceptions import PermissionDenied
 
 local_global = local()
-local_global.subdomain = 'core_db'
+local_global.subdomain = None
 
 def get_subdomain(request):
 	try:

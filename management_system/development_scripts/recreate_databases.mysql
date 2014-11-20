@@ -1,0 +1,10 @@
+drop database management_system;
+drop database sub1;
+drop database sub2;
+create database management_system;
+create database sub1;
+create database sub2;
+grant all privileges on management_system.* to user identified by 'password';
+grant all privileges on sub1.* to user1 identified by 'password';
+grant all privileges on sub2.* to user2 identified by 'password';
+flush privileges;

@@ -62,7 +62,7 @@ INSTALLED_APPS = (
     'export',
     'schools',
     'search',
-	'staff_manager',
+	'user_manager',
 )
 
 MIDDLEWARE_CLASSES = (  
@@ -75,8 +75,7 @@ MIDDLEWARE_CLASSES = (
     'middlewares.SubdomainMiddleware',
 )
 
-DATABASE_ROUTERS = ['routers.CoreRouter',
-					'routers.SubdomainRouter',
+DATABASE_ROUTERS = ['routers.SubdomainRouter',
 ]
 
 ROOT_URLCONF = 'management_system.urls'
@@ -147,7 +146,8 @@ TEMPLATE_DIRS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
             global_settings.TEMPLATE_CONTEXT_PROCESSORS +
             ('django.core.context_processors.request',
-			 'context_processors.organisation_settings_processor')
+			 'context_processors.organisation_settings_processor',
+			 'context_processors.permission_translation_processor',)
      )
 
 # Static files (CSS, JavaScript, Images)

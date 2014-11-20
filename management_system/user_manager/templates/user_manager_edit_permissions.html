@@ -4,8 +4,8 @@
 {% csrf_token %}
 <dl class="staff_manager">
 {{ form.non_field_errors }}
-{% for field in form %}
-    <dt>{{ field.label }}</dt>
+{% for field in form.visible_fields %}
+	<dt>{{ field.label }}</dt>
     <dd class="clearfix">
     {{ field }}
     {% if field.help_text %}

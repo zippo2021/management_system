@@ -10,7 +10,4 @@ class UserDataForm(ModelForm):
 		model = UserData
 		exclude = ['user',
 				   'modified',
-				   'is_event_worker',
-				   'is_teacher',
-				   'is_mentor',
-				   'is_observer']
+				   ]

@@ -19,32 +19,37 @@
 			{% endif %}
 		</li>
 		{% endif %}
-		{% if each.UserData.is_event_worker %}
+		{% if each.UserData.EventWorker.is_active %}
 		<li>
 			<font color = "blue">Управляющий событиями</font>
 		</li>
 		{% endif %}
-		{% if each.UserData.is_teacher %}
+		{% if each.UserData.Teacher.is_active %}
 		<li>
 			<font color = "blue">Учитель</font><br>
 		</li>
 		{% endif %}
-		{% if each.UserData.is_mentor %}
+		{% if each.UserData.Mentor.is_active %}
 		<li>
 			<font color = "blue">Воспитатель</font><br>
 		</li>
 		{% endif %}
-		{% if each.UserData.is_observer %}
+		{% if each.UserData.Observer.is_active %}
 		<li>
 			<font color = "blue">Наблюдатель</font><br>
 		</li>
 		{% endif %}
+		{% if each.UserData.RegularUser.is_active %}
+		<li>
+			<font color = "blue">Ученик</font><br>
+		</li>
+		{% endif %}
 		</ul>
-		<a href="{% url 'edit_staff_member_permissions' each.id %}">
+		<a href="{% url 'edit_user_permissions' each.id %}">
 			Изменить права
 		</a><br>
 		{% if user.is_superuser and not each.is_superuser %}
-			<a href="{% url 'deactivate_staff_member' each.id %}">
+			<a href="{% url 'deactivate_user' each.id %}">
 				{% if each.is_active %}
 				Отключить
 				{% else %}

@@ -4,16 +4,18 @@ from dashboard.teacher.models import Teacher
 from dashboard.mentor.models import Mentor
 from dashboard.observer.models import Observer
 from django.contrib.auth.models import User
-from staff_manager.permissions import perms_to_classes
+from user_manager.permissions import perms_to_classes
 
-def create_staff_user(username, password, email = None,
+def create_user(username, password, email = None,
 					  perms = {
 					  			'event_worker' : False,
 								'teacher' : False,
 								'mentor' : False,
 								'observer' : False,
+								'regular' : False,
 					  },
-					  admin = False
+					  admin = False,
+					  superadmin = False
 					  ):
 
 	#creating User
@@ -26,21 +28,19 @@ def create_staff_user(username, password, email = None,
 	
 	user.set_password(password)
 	user.save()
-	#creating userdata
-	data = UserData(user = user)
-	data.save()
-	#creating additional data
-	for key in perms_to_classes.keys():
-		globals()[key] = globals()[perms_to_classes[key]](data = data)
-		globals()[key].save()
+	
 	#setting permissions
-	data.set_permissions(perms, admin)
+	user.UserData.set_permissions(perms, admin, superadmin)
 	return user
 
 def get_staff_members():
 	staff = list(User.objects.filter(is_staff = True))
-	for key in perms_to_classes.keys():
-		staff = staff + [each.data.user for each in 
-				globals()[perms_to_classes[key]].objects.all()]
+	#no regular users here
+	staff_perms_list = perms_to_classes.keys()
+	staff_perms_list.remove('regular')
+	for key in staff_perms_list:
+		staff = staff +\
+		[each.data.user for each in globals()\
+		[perms_to_classes[key]].objects.filter(is_active = True)]
 	#c-style distinct() for lists
 	return list(set(staff))

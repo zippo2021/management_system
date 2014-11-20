@@ -32,7 +32,7 @@ define decorators
 	#false functions
 
 not_defined = lambda request, *args, **kwargs: not_regular(request)\
-				if has_data(request) else not_has_data(request)
+				if has_filled_data(request) else not_has_data(request)
 
 	#condition functions
 
@@ -41,7 +41,8 @@ is_defined = lambda request, *args, **kwargs:\
 				is_mentor(request, *args, **kwargs) or 
 				is_event_worker(request, *args, **kwargs) or
 				is_teacher(request, *args, **kwargs) or
-				is_regular(request, *args, **kwargs))
+				is_regular(request, *args, **kwargs) or
+				request.user.is_staff)
 
 	#decorators
 
@@ -55,47 +56,46 @@ userdata decorators
 
 	#false functions
 
-not_has_data = lambda request, *args, **kwargs: redirect('edit_userdata')
+not_has_filled_data = lambda request, *args, **kwargs: redirect('edit_userdata')
 
 	#condition functions
 
-has_data = lambda request, *args, **kwargs:\
-			request.user.UserData.modified\
-			if hasattr(request.user, 'UserData') else False
+has_filled_data = lambda request, *args, **kwargs:\
+			request.user.UserData.modified
 
 	#decorators
 
-should_have_data = partial(check_decorator,
-						   condition_func = has_data,
-						   false_func = not_has_data)
+should_have_filled_data = partial(check_decorator,
+						   condition_func = has_filled_data,
+						   false_func = not_has_filled_data)
 '''
 regular decorators
 '''
 
 	#false functons
 
-not_has_regular_attr = lambda request, *args, **kwargs: render(request, 'decorator.html',
+not_is_regular_possibly_unfilled = lambda request, *args, **kwargs: render(request, 'decorator.html',
 {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Regular"})
 
 
 def not_regular(request, *args, **kwargs):
-	if not(has_data(request)): 
-		return not_has_data(request)
-	elif not(hasattr(request.user.UserData, 'RegularUser')):
-		return not_has_regular_attr(request)
+	if not(has_filled_data(request)): 
+		return not_has_filled_data(request)
+	elif not(is_regular_possibly_unfilled(request)):
+		return not_is_regular_possibly_unfilled(request)
 	else:
 		return redirect('edit_regular')
 
 
 	#condition functions
 
-has_regular_attr = lambda request, *args, **kwargs:\
-				hasattr(request.user.UserData, 'RegularUser')
-
+is_regular_possibly_unfilled = lambda request, *args, **kwargs:\
+								request.user.UserData.RegularUser.is_active
+				
 is_regular = lambda request, *args, **kwargs:\
 				request.user.UserData.RegularUser.modified\
-				if hasattr(request.user.UserData, 'RegularUser')\
-				and  has_data(request) else False
+				if is_regular_possibly_unfilled(request)\
+				and  has_filled_data(request) else False
 
 
 	#decorators
@@ -104,10 +104,9 @@ should_be_regular = partial(check_decorator,
 							condition_func = is_regular,
 							false_func = not_regular)
 
-
-should_have_regular_attr = partial(check_decorator,
-						   condition_func = has_regular_attr,
-						   false_func = not_has_regular_attr)
+should_be_regular_possibly_unfilled = partial(check_decorator,
+						  	condition_func = is_regular_possibly_unfilled,
+						   	false_func = not_is_regular_possibly_unfilled)
 
 '''
 teacher decorators
@@ -121,8 +120,8 @@ not_teacher = lambda request, *args, **kwargs: render(request, 'decorator.html',
 	#condition functions
 
 is_teacher = lambda request, *args, **kwargs:\
-				request.user.UserData.is_teacher\
-				if has_data(request) else False
+				request.user.UserData.Teacher.is_active\
+				if has_filled_data(request) else False
 
 	#decorators
 
@@ -142,8 +141,8 @@ not_event_worker = lambda request, *args, **kwargs: render(request, 'decorator.h
 	#condition fucntions
 
 is_event_worker = lambda request, *args, **kwargs:\
-				request.user.UserData.is_event_worker\
-				if has_data(request) else False
+				request.user.UserData.EventWorker.is_active\
+				if has_filled_data(request) else False
 
 	#decorators
 
@@ -162,8 +161,8 @@ not_mentor = lambda request, *args, **kwargs: render(request, 'decorator.html', 
 	#condition functions
 
 is_mentor = lambda request, *args, **kwargs:\
-				request.user.UserData.is_mentor\
-				if has_data(request) else False
+				request.user.UserData.Mentor.is_active\
+				if has_filled_data(request) else False
 
 	#decorators
 
@@ -183,8 +182,8 @@ not_observer = lambda request, *args, **kwargs: render(request, 'decorator.html'
 	#condition functions
 
 is_observer = lambda request, *args, **kwargs:\
-				request.user.UserData.is_observer\
-				if has_data(request) else False
+				request.user.UserData.Observer.is_active\
+				if has_filled_data(request) else False
 
 	#decorators
 

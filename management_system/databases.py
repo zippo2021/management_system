@@ -11,5 +11,5 @@ subdoms = ['sub1', 'sub2']
 databases = {
 	'sub1' : 'sub1',
 	'sub2' : 'sub2',
-	'core_db' : 'default',
+	'schools_db' : 'default',
 }

@@ -3,13 +3,14 @@ from dashboard.regular.models import RegularUser
 from dashboard.regular.forms import RegularUserForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from decorators import should_have_regular_attr, should_be_regular, should_be_defined,should_be_staff
+from decorators import  should_be_regular, should_be_defined,should_be_staff
 from django.core.exceptions import ObjectDoesNotExist
+from decorators import should_be_regular_possibly_unfilled, should_be_regular
 
 # Create your views here.
 
 @login_required
-@should_have_regular_attr
+@should_be_regular_possibly_unfilled
 def edit(request):
 	if request.method == 'POST':
 		form = RegularUserForm(request.POST,
