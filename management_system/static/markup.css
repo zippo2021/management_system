@@ -51,10 +51,9 @@ html, body {
 }
 
 #content{
-	float: right;
 	padding-top: 30px;
-	padding-left: 5%;
-	width: 75%;
+	float : right;
+	width: 80%;
 	height: 470px;
 	background: #b2b2b2;
 }
