@@ -9,28 +9,8 @@
 <div class="modal-body"> 
 <h2>Базовая информация</h2>
 
-<form id="userdata_form" method='post' action="{% url 'dialog_userdata_form' %}" enctype='multipart/form-data'>
+<form id="userdata_form" method='post' class="form"  action="{% url 'userdata_edit' %}" enctype='multipart/form-data'>
 {{ form|bootstrap }}
-
-{% comment %}
-
-
-{{ form.non_field_errors }}
-<dl class="userdata">
-{% for field in form %}
-    <dt>{{ field.label }}</dt>
-    <dd class="clearfix">
-    {{ field }}
-    {% if field.help_text %}
-         <div class="clearfix">{{ field.help_text}}</div>
-    {% endif %}
-    {% if field.errors %}
-    <div class="myerrors clearfix">{{field.errors }}</div>
-    {% endif %}
-    </dd>
-{% endfor %}
-</dl>
-{% endcomment %}
 <div class="modal-footer">
     <input type="submit" class="btn btn-primary" value="Cохранить" class="clearfix">
     <input type="reset" class="btn btn-primary" value="Отменить изменения" class="clearfix">
@@ -43,7 +23,7 @@ var form_options = {
         target: '#modal',
         success: function() { } 
     } 
-$('#item_update_form').ajaxForm(form_options); 
+$('#userdata_form').ajaxForm(form_options); 
 </script> 
 
 </div>

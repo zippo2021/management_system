@@ -7,11 +7,11 @@ from django.http import HttpResponse
 # Create your views here.
 
 @login_required
-def edit(request):
-	return render(request, 'userdata_edit.html', {})
+def tmp_base(request):
+	return render(request, 'tmp_base.html', {})
 
 @login_required
-def dialog_userdata(request):
+def edit(request):
     if request.method == 'POST':
 		#userdata always exists if we passed should_have_data
 		form = UserDataForm(request.POST, instance = request.user.UserData)

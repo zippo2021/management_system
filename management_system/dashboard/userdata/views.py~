@@ -7,11 +7,11 @@ from django.http import HttpResponse
 # Create your views here.
 
 @login_required
-def edit(request):
-	return render(request, 'userdata_edit.html', {})
+def tmp_base(request):
+	return render(request, 'tmp_base.html', {})
 
 @login_required
-def dialog_userdata(request):
+def userdata_edit(request):
     if request.method == 'POST':
 		#userdata always exists if we passed should_have_data
 		form = UserDataForm(request.POST, instance = request.user.UserData)
@@ -20,11 +20,11 @@ def dialog_userdata(request):
 			user_data = form.save(commit = False)
 			user_data.modified = True
 			user_data.save()
-			return HttpResponse('<script type="text/javascript">window.close(); window.parent.location.href = "/";</script>')
+			return render(request, 'userdata_completed.html', {})
     else:		
         form = UserDataForm(instance = request.user.UserData)
 
-	return HttpResponse(render(request, 'userdata_form.html', {'form' : form}))
+	return render(request, 'userdata_form.html', {'form' : form})
     
 
 @login_required

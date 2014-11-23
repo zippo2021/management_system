@@ -7,7 +7,6 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
-    <script src="http://malsup.github.com/jquery.form.js"></script>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css">
 	{% block extrahead %}{% endblock %}
@@ -20,20 +19,23 @@
 		{% if user.UserData %}
 			you are <font color="blue">{{ user.username }} </font>
 			<font color="red">
-			{% if user.UserData.is_teacher %}
-				Teacher!
+			{% if user.UserData.EventWorker.is_active %}
+				{{ perms_to_language.event_worker }}
 			{% endif %}
-			{% if user.UserData.is_event_worker %}
-				EventWorker!
+			{% if user.UserData.Teacher.is_active %}
+				{{ perms_to_language.teacher }}
 			{% endif %}
-			{% if user.UserData.is_mentor %}
-				Mentor!
+			{% if user.UserData.Mentor.is_active %}
+				{{ perms_to_language.mentor }}
 			{% endif %}
-			{% if user.UserData.is_observer %}
-				Observer!
+			{% if user.UserData.Observer.is_active %}
+				{{ perms_to_language.observer }}
 			{% endif %}
-			{% if user.UserData.RegularUser %}
-				RegularUser!
+			{% if user.UserData.RegularUser.is_active %}
+				{{ perms_to_language.regular }}
+			{% endif %}
+			{% if user.is_staff %}
+				Администратор
 			{% endif %}
 			</font>
 		{% endif %}
