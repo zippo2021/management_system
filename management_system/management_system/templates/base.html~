@@ -3,7 +3,8 @@
 {% load staticfiles %}
 <html>
 <head>
-	<link rel="stylesheet" href="{% static "markup.css" %}">
+	<link rel="stylesheet" href="{% static 'markup.css' %}">
+    <script src="{% static 'ajax_form.js' %}"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
@@ -13,6 +14,24 @@
 </head>
 
 <body>
+    {% if request.session.UserDataModal == "on" %}
+        
+        <div class="modal fade" id="Regular_modal" tabindex="-1" role="dialog" aria-labelledby="RegularModalLabel" aria-hidden="true"> 
+        </div>
+       
+        <div id="dialog-form"></div>
+        <script type="text/javascript">
+            $(window).load(function(){
+            
+            $("#Regular_modal").modal({ remote: "{% url 'edit_regular' %}" });
+            });
+            
+            }
+        </script>
+        
+    {% endif %}
+    {% if request.session.showRegular == "yes" %}
+    {% endif %}
 	<div id="container">
 		<div id="top_menu">
 		Top menu:
@@ -70,4 +89,7 @@
 			Footer
 		</div>
 
-	</div>	
+	</div>
+<script src="{% static 'toggle_modal.js' %}"></script>	
+</body>
+</html>

@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from decorators import  should_be_regular, should_be_defined,should_be_staff
 from django.core.exceptions import ObjectDoesNotExist
 from decorators import should_be_regular_possibly_unfilled, should_be_regular
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -28,10 +29,11 @@ def edit(request):
 @login_required
 @should_be_regular
 def completed(request):
+        request.session['UserDataModal'] = 'off'
 	return render(request, 'regular_completed.html')
 
 @login_required
-@should_be_regular
+@should_be_regular_possibly_unfilled
 def self_profile_view(request):
         base_data = request.user.UserData
         regular_data = request.user.UserData.RegularUser
@@ -48,10 +50,14 @@ def regular_profile_view(request,uid):
         else:
             return render( request, 'regular_profile_view.html' , {})                                                  
                                      	
-
+@login_required
 def regular_profile_view(request):
         data = request.user.UserData.RegularUser
         return render(request, 'regular_profile.html', {'user_data' : data})	
 
+@login_required
+def toggle_regular_modal(request):
+    request.session['UserDataModal'] = 'on'
+    return HttpResponse('UserData',mimetype = 'text/html' )
 
 

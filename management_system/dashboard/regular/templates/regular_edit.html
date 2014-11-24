@@ -1,22 +1,30 @@
-{% extends "base.html" %}
-{% block content %}
-<form method="post" class="form-container" action="">
+{% load i18n bootstrap %}
+
+
+<div class="modal-dialog modal-lg">
+<div class="modal-content"> 
+<div class="modal-header"> 
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> 
+<h3 class="modal-title" id="RegularModalLabel">Информация об ученике.</h3> 
+</div>
+<div class="modal-body"> 
+<form id="regular_form" method='post' class="form"  action="{% url 'edit_regular' %}" enctype='multipart/form-data'>
+{{ form|bootstrap }}
+<div class="modal-footer">
+    <input type="submit" class="btn btn-primary" value="Cохранить" class="clearfix">
+    <input type="reset" class="btn btn-primary" value="Отменить изменения" class="clearfix">
+</div>
 {% csrf_token %}
-{{ form.non_field_errors }}
-<dl class="teacher">
-{% for field in form %}
-    <dt>{{ field.label }}</dt>
-    <dd class="clearfix">
-    {{ field }}
-    {% if field.help_text %}
-         <div class="clearfix">{{ field.help_text}}</div>
-    {% endif %}
-    {% if field.errors %}
-    <div class="myerrors clearfix">{{field.errors }}</div>
-    {% endif %}
-    </dd>
-{% endfor %}
-</dl>
-<input type="submit" value="Сохранить" class="clearfix">
 </form>
-{% endblock %}
+<script> 
+jQuery('.modal-content .calendar').datepicker({ dateFormat: "yy-mm-dd" }); 
+var form_options = { 
+        target: '#Regular_modal',
+        success: function() { } 
+    } 
+$('#regular_form').ajaxForm(form_options); 
+</script> 
+
+</div>
+</div>
+</div>

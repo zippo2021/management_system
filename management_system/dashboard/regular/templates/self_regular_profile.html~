@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="modal fade" id="special_data_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
+</div>
+<a class="fa fa-pencil" data-toggle="modal" href="{% url 'userdata_edit' %}" data-target="#modal" title="edit item" data-tooltip>
+        Редактировать UserData
+</a> 
+
+<div id="dialog-form"></div>
 <table>
 <tr valign="top">
     <td width=25%>
@@ -18,11 +25,11 @@
         <p>ФИО отца:<br><b> {{ regular_data.parent_1 }}</b></p>
         <p>Телефон отца:<br><b> {{ regular_data.parent_1_phone }}</b></p>
         <p>ФИО матери:<br><b> {{ regular_data.parent_2 }}</b></p>
-        <p>Телефон матери:<br><b> {{ user.parent_2_phone }}</b></p>
+        <p>Телефон матери:<br><b> {{ regular_data.parent_2_phone }}</b></p>
     </td>
     <td width=25%>
-        <p>Дата рождения:<br><b> {{ additional_data.birthdate }}</b></p>
-        <p>Город рождения:<br><b> {{ additional_data.birthplace }}</b></p>
+        <p>Дата рождения:<br><b> {{ regular_data.birthdate }}</b></p>
+        <p>Город рождения:<br><b> {{ regular_data.birthplace }}</b></p>
         <p>Год выпуска:<br><b> {{ regular_data.grad_date }} </b></p>
         <p>Школа:<br><b> {{ regular_data.school }}</b></p>
         <p>Учитель физики(истории):<br><b> {{ regular_data.phys_teacher_initial }}</b></p>

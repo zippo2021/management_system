@@ -5,10 +5,10 @@
 <div class="modal-content"> 
 <div class="modal-header"> 
 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> 
-<h3 class="modal-title" id="myModalLabel">Базовая информация</h3> 
+<h3 class="modal-title" id="myModalLabel">Информация об ученике.</h3> 
 </div>
 <div class="modal-body"> 
-<form id="userdata_form" method='post' class="form"  action="{% url 'userdata_edit' %}" enctype='multipart/form-data'>
+<form id="regular_form" method='post' class="form"  action="{% url 'edit_regular' %}" enctype='multipart/form-data'>
 {{ form|bootstrap }}
 <div class="modal-footer">
     <input type="submit" class="btn btn-primary" value="Cохранить" class="clearfix">
@@ -19,10 +19,10 @@
 <script> 
 jQuery('.modal-content .calendar').datepicker({ dateFormat: "yy-mm-dd" }); 
 var form_options = { 
-        target: '#modal',
+        target: '#Regular_modal',
         success: function() { } 
     } 
-$('#userdata_form').ajaxForm(form_options); 
+$('#regular_form').ajaxForm(form_options); 
 </script> 
 
 </div>
