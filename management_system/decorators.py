@@ -56,7 +56,7 @@ userdata decorators
 
 	#false functions
 
-not_has_filled_data = lambda request, *args, **kwargs: redirect('edit_userdata')
+not_has_filled_data = lambda request, *args, **kwargs: redirect('userdata_edit')
 
 	#condition functions
 

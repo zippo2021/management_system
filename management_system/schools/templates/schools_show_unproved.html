@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<ul>
+{% for each in schools %}
+{% if not each.approved %}
+	<li>
+	<p>
+	{{ each.name }}<br>
+	{{ each.city }}<br>
+	{{ each.country }}<br>
+	<a href="{% url 'schools_edit' each.id %}">Редактировать и подтвердить</a>
+	<a href="{% url 'schools_approve' each.id %}">Подствердить</a>
+	</p>
+	</li>
+{% endif %}
+{% empty %}
+Нет записей!
+{% endfor %}
+{% endblock %}

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm, RegexField
 from dashboard.regular.models import RegularUser
 
@@ -13,9 +14,9 @@ class RegularUserForm(ModelForm):
 		cd = super(RegularUserForm, self).clean()
 		if not((cd['parent_1'] and cd['parent_1_phone']) or 
 			   (cd['parent_2'] and cd['parent_2_phone'])):
-			   raise ValidationError('Информация о хотя бы одном родителе должна бть заполнена', code = 'invalid' )
+			   raise ValidationError('Информация о хотя бы одном родителе должна быть заполнена', code = 'invalid' )
 		else: return cd
 	
 	class Meta:
 		model = RegularUser
-		exclude = ['user', 'modified', 'is_active']
+		exclude = ['data', 'modified', 'is_active']
