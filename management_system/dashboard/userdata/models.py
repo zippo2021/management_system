@@ -82,3 +82,35 @@ def create_additional_data(instance, created, **kwargs):
 		for key in perms_to_classes.keys():
 			globals()[key] = globals()[perms_to_classes[key]](data = instance)
 			globals()[key].save()
+
+class OtherDoc(models.Model):
+    data = models.OneToOneField(UserData, primary_key=True)
+    type = models.CharField(verbose_name='Тип', max_length=255)
+    ser = models.CharField(verbose_name='Серия',max_length=255)
+    number = models.CharField(verbose_name='Номер',max_length=255)
+    issued_by = models.CharField(verbose_name="Кем выдан",max_length=255,)
+    when_issued = models.DateField(verbose_name="Когда выдан")
+
+class Passport(models.Model):
+    data = models.OneToOneField(UserData,primary_key=True)
+    ser = models.PositiveIntegerField(verbose_name='Серия',max_length=4)
+    number = models.PositiveIntegerField(verbose_name='Номер',max_length=6)
+    issued_by = models.CharField(verbose_name="Кем выдан",max_length=255,)
+    when_issued = models.DateField(verbose_name="Когда выдан")
+    code = models.CharField(verbose_name="Код подразделения",max_length=30)
+
+class BirthCert(models.Model):
+    data = models.OneToOneField(UserData,primary_key=True)
+    ser = models.CharField(verbose_name='Серия',max_length=8)
+    number = models.PositiveIntegerField(verbose_name='Номер',max_length=6)
+    issued_by = models.CharField(verbose_name="Кем выдано",max_length=255)
+    when_issued = models.DateField(verbose_name="Когда выдано")
+
+class Zagran(models.Model):
+    data = models.OneToOneField(UserData,primary_key=True)
+    ser = models.PositiveIntegerField(verbose_name='Серия',max_length=2)
+    number = models.PositiveIntegerField(verbose_name='Номер',max_length=7)
+    issued_by = models.CharField(verbose_name="Кем выдан",max_length=255)
+    when_issued = models.DateField(verbose_name="Когда выдан")
+    exp_date = models.DateField(verbose_name="Срок действия")
+

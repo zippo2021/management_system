@@ -26,6 +26,35 @@ def check_decorator(view=None,
     return decorator(view) if view else decorator
 
 '''
+document decorators
+'''
+
+    #false functions
+
+not_has_document = lambda request, *args, **kwags: redirect('edit document')
+
+    #condition functions
+
+has_document = lambda request, *args, **kwargs:\
+	            if not(has_filled_data(request)): 
+		            return not_has_filled_data(request)
+                else:
+                    if request.user.UserData.Zagran or\
+                       request.user.UserData.BirthCert or\
+                       request.user.UserData.Passport or\
+                       request.user.UserData.OtherDoc:
+                        return True
+                    else:
+                        return False
+
+    #decorators
+
+should_be_defined = partial(check_decorator,
+							condition_func = has_document,
+							false_func = not_has_document)
+
+
+'''
 define decorators
 '''
 
@@ -199,7 +228,11 @@ Staff decorator
     #condition functions
 
 is_staff = lambda request, *args, **kwargs:True\
-				if is_teacher(request) or is_mentor(request) or is_observer(request) or is_event_worker(request) else False 
+				if is_teacher(request) or\
+                is_mentor(request) or\
+                is_observer(request) or\
+                is_event_worker(request)\
+                else False 
     #false functions
 
 not_staff = lambda request, *args, **kwargs: render(request, 'decorator.html', {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT staff"})
