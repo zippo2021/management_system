@@ -26,7 +26,8 @@ class UserForm(Form):
 
 
 class EditPermissionsForm(UserForm):
-	admin_hidden = BooleanField(required = False, widget = HiddenInput())
+    #admin hidden has no label
+	admin_hidden = BooleanField(required = False, label = '')
 	
 	def __init__(self, *args, **kwargs):
 		editor = kwargs.pop('editor')
@@ -35,26 +36,31 @@ class EditPermissionsForm(UserForm):
 		'''
 		condition:
 		if someone tries to edit permissions, but he is not able
-		to edit admin status, then this hides admin field and
+		to edit admin status, then this blocks admin field and
 		saves current admin status in hidden field
 		'''
+        #we should always hide this
+		self.fields['admin_hidden'].widget.attrs['hidden'] = True
 		if 'initial' in kwargs.keys():
 			initial = kwargs['initial']
 			initial_admin = initial['admin']
-			if not(editor.is_superuser) or edited.is_superuser:
+			if not(editor.UserData.Admin.is_active) or\
+               edited.UserData.Admin.is_superadmin:
 				self.fields['admin'].widget.attrs['disabled'] = True
 				self.fields['admin_hidden'].initial = initial_admin
 		'''
 		and now if condition* happend we extract hidden field's value to
 		cleaned data normal field value.
-		This way view has no need to think about what happend. It works
+		This way view has no need to think about what happened. It works
 		with this form as if there wasn't any hidden field
 		'''
+
 	def clean(self):
 		cleaned_data = super(EditPermissionsForm, self).clean()
 		if not(hasattr(cleaned_data, 'admin')):
 			cleaned_data['admin'] = cleaned_data.pop('admin_hidden')
-			return cleaned_data
+		return cleaned_data
+
 
 class CreateUserForm(UserForm):
 	email = EmailField(required = True, label = "e-mail")

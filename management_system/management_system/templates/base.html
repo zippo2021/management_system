@@ -51,7 +51,8 @@
 			{% if user.UserData.RegularUser.is_active %}
 				{{ perms_to_language.regular }}
 			{% endif %}
-			{% if user.is_staff %}
+			{% if user.UserData.Admin.is_active %}
+				{% if user.UserData.Admin.is_superadmin %}Главный{% endif %}
 				Администратор
 			{% endif %}
 			</font>

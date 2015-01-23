@@ -24,7 +24,6 @@ def create(request):
 							  password = password,
 					 		  email = form.cleaned_data['email'],
 						  	  perms = perms,
-							  admin = form.cleaned_data['admin']
 			)
 			#sending mail
 			send_templated_email(subject = 'Создан аккаунт', 
@@ -50,9 +49,6 @@ def completed(request):
 
 #@staff_member_required
 def show_all(request):
-	request.user.is_superuser = True
-	request.user.is_staff = True
-	request.user.save()
 	staff_members = get_staff_members()
 	return render(request,
 				  'user_manager_show_all.html',
@@ -69,13 +65,12 @@ def edit_permissions(request, user_id):
 		if form.is_valid():
 			cleaned_data = form.cleaned_data
 			#set new permissions
-			admin = cleaned_data.pop('admin')
-			user.UserData.set_permissions(cleaned_data, admin, False)
+			user.UserData.set_permissions(cleaned_data)
 			return redirect('show_all_staff_members')
 	else:
 		#load permissions to form
-		perms, admin, superadmin = user.UserData.get_permissions()
-		perms.update({'admin' : admin})
+		perms = user.UserData.get_permissions()
+		print perms
 		form = EditPermissionsForm(initial = perms,
 								   editor = request.user,
 								   edited = user)
@@ -86,8 +81,8 @@ def edit_permissions(request, user_id):
 @user_passes_test(lambda u: u.is_superuser)
 def deactivate(request, user_id):
 	user = User.objects.get(id = user_id)
-	#we can not deactivate superuser
-	if not(user.is_superuser):
+	#we can not deactivate superadmin
+	if not(user.UserData.Admin.is_superadmin):
 		user.is_active = not(user.is_active)
 		user.save()
 	else: pass #FIXME
