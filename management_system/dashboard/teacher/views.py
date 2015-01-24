@@ -3,6 +3,8 @@ from decorators import should_be_teacher
 from django.contrib.auth.decorators import login_required
 from dashboard.teacher.forms import TeacherForm
 from dashboard.teacher.models import Teacher
+from django.contrib.auth.models import User
+
 # Create your views here.
 
 @login_required
@@ -24,8 +26,14 @@ def completed(request):
 	return render(request, 'teacher_completed.html')
 
 @login_required
-@should_be_teacher
-def self_profile_view(request):
-        base_data = request.user.UserData
-        teacher_data = request.user.UserData.Teacher
-        return render( request, 'self_profile_view.html' , {'base_data' : base_data , 'additional_data' : teacher_data })
+def profile_view(request,uid):
+        if request.user.id == int(uid):
+            user = request.user
+            edit_perm = True
+        else:
+            user = User.objects.get(id = uid)
+            edit_perm = False
+        base_data = user.UserData
+        teacher_data = user.UserData.Teacher
+        
+        return render( request, 'teacher_profile_view.html' , {'base_data' : base_data , 'additional_data' : teacher_data, 'edit_perm':edit_perm })
