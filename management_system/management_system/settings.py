@@ -62,6 +62,7 @@ INSTALLED_APPS = (
     'schools',
     'search',
 	'user_manager',
+    'news',
 )
 
 MIDDLEWARE_CLASSES = (  

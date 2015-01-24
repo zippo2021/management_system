@@ -5,9 +5,10 @@
 <div class="modal-content"> 
 <div class="modal-header"> 
 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> 
-<h3 class="modal-title" id="myModalLabel">Базовая информация</h3> 
 </div>
 <div class="modal-body"> 
+<h2>Базовая информация</h2>
+
 <form id="userdata_form" method='post' class="form"  action="{% url 'userdata_edit' %}" enctype='multipart/form-data'>
 {{ form|bootstrap }}
 <div class="modal-footer">

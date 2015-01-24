@@ -65,7 +65,18 @@
 		</div>
 		
 		<div id="navigation">
-		Main menu
+		    <style>
+                li {
+                    display: inline;
+                }
+            </style>
+            <ul>
+                <li><a href="{% url 'userdata_edit' %}">UserData </a></li>
+                <li><a href="{% url 'create_user' %}">Управление персоналом </a></li>
+                <li><a href="{% url 'news_main' %}">Новости </a> </li>
+                <li><a href="{% url 'base_profile_view'%}">Базовый Профиль/ЛК </a></li>
+                
+            </ul>
 		</div>
 
 		<div id="sidebar">
