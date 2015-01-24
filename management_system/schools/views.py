@@ -5,11 +5,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from schools.forms import SchoolForm
 from schools.models import School
-from decorators import should_be_regular
+from decorators import should_be_defined, should_be_regular
 # Create your views here.
 
 @login_required
-@should_be_regular
+@should_be_defined
 def add(request):
     if request.method == 'POST':
         form = SchoolForm(request.POST)
@@ -27,7 +27,7 @@ def approve_completed(request):
     return render(request, 'schools_approve_completed.html')
 
 @login_required
-@should_be_regular
+@should_be_defined
 def add_completed(request):
     return render(request, 'schools_add_completed.html')
 

@@ -1,4 +1,4 @@
-from dashboard.userdata.models import UserData
+from dashboard.userdata.models import UserData, Admin
 from dashboard.event_worker.models import EventWorker
 from dashboard.teacher.models import Teacher
 from dashboard.mentor.models import Mentor
@@ -13,11 +13,8 @@ def create_user(username, password, email = None,
 								'mentor' : False,
 								'observer' : False,
 								'regular' : False,
-					  },
-					  admin = False,
-					  superadmin = False
-					  ):
-
+                                'admin' : False,
+					  }):
 	#creating User
 	user = User.objects.create_user(
 		username = username
@@ -30,12 +27,12 @@ def create_user(username, password, email = None,
 	user.save()
 	
 	#setting permissions
-	user.UserData.set_permissions(perms, admin, superadmin)
+	user.UserData.set_permissions(perms)
 	return user
 
 def get_staff_members():
-	staff = list(User.objects.filter(is_staff = True))
-	#no regular users here
+	staff = []
+    #no regular users here
 	staff_perms_list = perms_to_classes.keys()
 	staff_perms_list.remove('regular')
 	for key in staff_perms_list:

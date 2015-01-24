@@ -26,13 +26,37 @@ def check_decorator(view=None,
     return decorator(view) if view else decorator
 
 '''
+document decorators
+'''
+
+    #false functions
+
+not_has_document = lambda request, *args, **kwags: redirect('edit document')
+
+    #condition functions
+
+has_document = lambda request, *args, **kwargs: not_has_filled_data(request)\
+               if not has_filled_data(request)\
+               else request.user.UserData.Zagran\
+                or request.user.UserData.BirthCert\
+                or request.user.UserData.Passport\
+                or request.user.UserData.OtherDoc
+                
+    #decorators
+
+should_be_defined = partial(check_decorator,
+							condition_func = has_document,
+							false_func = not_has_document)
+
+
+'''
 define decorators
 '''
 
 	#false functions
 
 not_defined = lambda request, *args, **kwargs: not_regular(request)\
-				if has_filled_data(request) else not_has_data(request)
+				if has_filled_data(request) else not_has_filled_data(request)
 
 	#condition functions
 
@@ -42,7 +66,7 @@ is_defined = lambda request, *args, **kwargs:\
 				is_event_worker(request, *args, **kwargs) or
 				is_teacher(request, *args, **kwargs) or
 				is_regular(request, *args, **kwargs) or
-				request.user.is_staff)
+				is_admin(request, *args, **kwargs))
 
 	#decorators
 
@@ -192,14 +216,39 @@ should_be_observer =  partial(check_decorator,
                               condition_func = is_observer,
 							  false_func = not_observer)
 
+'''
+Admin decorator
+'''
+    #false functions
+not_admin = lambda request, *args, **kwargs: render(request, 'decorator.html', 
+{'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Admin"})
+
+
+
+    #condition functions
+
+is_admin = lambda request, *args, **kwargs:\
+             request.user.UserData.Admin.is_active\
+             if has_filled_data(request) else False
+	
+    #decorators
+
+should_be_admin =  partial(check_decorator,
+                           condition_func = is_admin,
+						   false_func = not_admin)
 
 '''
 Staff decorator
 '''
     #condition functions
 
-is_staff = lambda request, *args, **kwargs:True\
-				if is_teacher(request) or is_mentor(request) or is_observer(request) or is_event_worker(request) else False 
+is_staff = lambda request, *args, **kwargs: True\
+				if is_teacher(request) or\
+                is_mentor(request) or\
+                is_observer(request) or\
+                is_event_worker(request) or\
+                is_admin(request)\
+                else False 
     #false functions
 
 not_staff = lambda request, *args, **kwargs: render(request, 'decorator.html', {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT staff"})

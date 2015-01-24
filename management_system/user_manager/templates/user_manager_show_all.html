@@ -10,9 +10,9 @@
 			<font color = "red">Отключен</font>
 		{% endif %}
 		<ul>
-		{% if each.is_staff %}
+		{% if each.UserData.Admin.is_active %}
 		<li>
-			{% if each.is_superuser %}
+			{% if each.UserData.Admin.is_superadmin %}
 				<font color = "red">Главный Администратор</font>
 			{% else %}
 				<font color = "red">Администратор</font>
@@ -48,7 +48,7 @@
 		<a href="{% url 'edit_user_permissions' each.id %}">
 			Изменить права
 		</a><br>
-		{% if user.is_superuser and not each.is_superuser %}
+		{% if user.UserData.Admin.is_active and not each.UserData.Admin.is_superadmin %}
 			<a href="{% url 'deactivate_user' each.id %}">
 				{% if each.is_active %}
 				Отключить

@@ -19,16 +19,12 @@ class UserData(models.Model):
 	def get_permissions(self):
 		perms = {key : getattr(self, perms_to_classes[key]).is_active
 				for key in perms_to_classes.keys()}
-		admin = self.user.is_staff
-		superadmin = self.user.is_superuser
-		return perms, admin, superadmin
+		return perms
 	
-	def set_permissions(self, perms, admin, superadmin):
+	def set_permissions(self, perms):
 		for key in perms_to_classes.keys():
 			getattr(self, perms_to_classes[key]).is_active = perms[key]
 			getattr(self, perms_to_classes[key]).save()
-		self.user.is_staff = admin
-		self.user.is_superuser = superadmin
 		self.user.save()
 	
 	def __str__ (self):
@@ -72,7 +68,7 @@ def create_userdata(instance, created, **kwargs):
 		data.save()
 
 @receiver(user_activated)
-def create_regular_user(user, **kwargs):
+def activate_regular_user(user, **kwargs):
 	user.UserData.RegularUser.is_active = True
 	user.UserData.RegularUser.save()
 
@@ -82,3 +78,43 @@ def create_additional_data(instance, created, **kwargs):
 		for key in perms_to_classes.keys():
 			globals()[key] = globals()[perms_to_classes[key]](data = instance)
 			globals()[key].save()
+
+class Admin(models.Model):
+    data = models.OneToOneField(UserData, related_name = 'Admin')
+    is_superadmin = models.BooleanField(default = False)
+    is_active = models.BooleanField(default = False)
+
+admin.site.register(Admin)
+
+    
+class OtherDoc(models.Model):
+    data = models.OneToOneField(UserData, primary_key=True)
+    type = models.CharField(verbose_name='Тип', max_length=255)
+    ser = models.CharField(verbose_name='Серия',max_length=255)
+    number = models.CharField(verbose_name='Номер',max_length=255)
+    issued_by = models.CharField(verbose_name="Кем выдан",max_length=255,)
+    when_issued = models.DateField(verbose_name="Когда выдан")
+
+class Passport(models.Model):
+    data = models.OneToOneField(UserData,primary_key=True)
+    ser = models.PositiveIntegerField(verbose_name='Серия',max_length=4)
+    number = models.PositiveIntegerField(verbose_name='Номер',max_length=6)
+    issued_by = models.CharField(verbose_name="Кем выдан",max_length=255,)
+    when_issued = models.DateField(verbose_name="Когда выдан")
+    code = models.CharField(verbose_name="Код подразделения",max_length=30)
+
+class BirthCert(models.Model):
+    data = models.OneToOneField(UserData,primary_key=True)
+    ser = models.CharField(verbose_name='Серия',max_length=8)
+    number = models.PositiveIntegerField(verbose_name='Номер',max_length=6)
+    issued_by = models.CharField(verbose_name="Кем выдано",max_length=255)
+    when_issued = models.DateField(verbose_name="Когда выдано")
+
+class Zagran(models.Model):
+    data = models.OneToOneField(UserData,primary_key=True)
+    ser = models.PositiveIntegerField(verbose_name='Серия',max_length=2)
+    number = models.PositiveIntegerField(verbose_name='Номер',max_length=7)
+    issued_by = models.CharField(verbose_name="Кем выдан",max_length=255)
+    when_issued = models.DateField(verbose_name="Когда выдан")
+    exp_date = models.DateField(verbose_name="Срок действия")
+

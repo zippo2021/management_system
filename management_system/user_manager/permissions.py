@@ -10,12 +10,14 @@ perms_to_language = {'event_worker' : 'Управляющий событиями
 					'teacher' : 'Учитель',
 					'mentor' : 'Воспитатель',
 					'observer' : 'Наблюдатель',
-					'regular' : 'Ученик'
+					'regular' : 'Ученик',
+                    'admin' : 'Администратор',
 					}
 
 perms_to_classes = {'event_worker' : 'EventWorker',
 					'teacher' : 'Teacher',
 					'mentor' : 'Mentor',
 					'observer' : 'Observer',
-					'regular' : 'RegularUser'
+					'regular' : 'RegularUser',
+                    'admin' : 'Admin',
 					}
