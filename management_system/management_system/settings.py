@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'dashboard.observer',
     'dashboard.event_worker',
     'dashboard.userdata',
+    'dashboard.common_profile',
 	'events.comments',
     'events.events_admin',
     'events.notes',

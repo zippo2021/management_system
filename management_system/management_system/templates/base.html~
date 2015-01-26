@@ -51,7 +51,8 @@
 			{% if user.UserData.RegularUser.is_active %}
 				{{ perms_to_language.regular }}
 			{% endif %}
-			{% if user.is_staff %}
+			{% if user.UserData.Admin.is_active %}
+				{% if user.UserData.Admin.is_superadmin %}Главный{% endif %}
 				Администратор
 			{% endif %}
 			</font>
@@ -74,8 +75,8 @@
                 <li><a href="{% url 'userdata_edit' %}">UserData </a></li>
                 <li><a href="{% url 'create_user' %}">Управление персоналом </a></li>
                 <li><a href="{% url 'news_main' %}">Новости </a> </li>
-                <li><a href="{% url 'base_profile_view'%}">Базовый Профиль/ЛК </a></li>
-                <li><a href="{% url 'regular_profile_view'%}">Ученический Профиль/ЛК </a></li>
+                <li><a href="{% url 'view_profile' %}/{{ user.id }}">Базовый Профиль/ЛК </a></li>
+                
             </ul>
 		</div>
 
