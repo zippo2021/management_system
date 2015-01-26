@@ -1,13 +1,6 @@
-{% load i18n bootstrap %}
+{% extends 'base.html' %}
 
-
-<div class="modal-dialog modal-lg">
-<div class="modal-content"> 
-<div class="modal-header"> 
-<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> 
-<h3 class="modal-title" id="RegularModalLabel">Информация об ученике.</h3> 
-</div>
-<div class="modal-body"> 
+{% block content %}
 <form id="regular_form" method='post' class="form"  action="{% url 'edit_regular' %}" enctype='multipart/form-data'>
 {{ form|bootstrap }}
 <div class="modal-footer">
@@ -16,15 +9,4 @@
 </div>
 {% csrf_token %}
 </form>
-<script> 
-jQuery('.modal-content .calendar').datepicker({ dateFormat: "yy-mm-dd" }); 
-var form_options = { 
-        target: '#Regular_modal',
-        success: function() { } 
-    } 
-$('#regular_form').ajaxForm(form_options); 
-</script> 
-
-</div>
-</div>
-</div>
+{% endblock %}

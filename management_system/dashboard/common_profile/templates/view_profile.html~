@@ -14,8 +14,9 @@
     {% if edit_perm == True %}<td><a href = "{% url 'userdata_edit' %}">Редактировать</a></td> {% endif %}
 </tr>
 </table>
+<!--
 {% if additional_data.teacher_data %}
-
+    <h2>Учитель</h2>
     <p>Информация:<br><b> {{ additional_data.info }}</b></p>  
         
    
@@ -24,6 +25,7 @@
 
 {% endif %}
 {% if additional_data.regular_data %}
+        <h2>Ученик</h2>
         <p>ФИО отца:<br><b> {{ additional_data.regular_data.parent_1 }}</b></p>
         <p>Телефон отца:<br><b> {{ additional_data.regular_dataparent_1_phone }}</b></p>
         <p>ФИО матери:<br><b> {{ additional_data.regular_dataparent_2 }}</b></p>
@@ -41,13 +43,21 @@
 {% endif %}
 
 {% if additional_data.observer_data %}
-
+<h2>Наблюдатель</h2>
 {% endif %}
 
 {% if additional_data.mentor_data %}
-   
+<h2>Воспитатель</h2>   
 {% endif %}
-
+-->
+{% for key,value in additional_data %}
+    {{ value }}
+    <p><b>{{ key }}</b></p>
+    {% for name,item in value %}
+        
+        <p>{{ name }}<br><b>{{ item }}</b></p>
+    {% endfor %}
+{% endfor %}
 {% endblock %}
 
 
