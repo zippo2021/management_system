@@ -12,7 +12,9 @@ urlpatterns = patterns('',
     url(r'^helpdesk/', include('helpdesk.urls')),
     url(r'^userdata/', include('dashboard.userdata.urls')),
     url(r'^teacher/', include('dashboard.teacher.urls')),
+    url(r'^profile/', include('dashboard.common_profile.urls')),
     url(r'^regular/', include('dashboard.regular.urls')),
 	url(r'^user_manager/', include('user_manager.urls')),
-    url(r'^schools/', include('schools.urls'))
+    url(r'^schools/', include('schools.urls')),
+    url(r'^news/', include('news.urls')),
 )

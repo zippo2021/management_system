@@ -11,7 +11,7 @@ def tmp_base(request):
 	return render(request, 'tmp_base.html', {})
 
 @login_required
-def userdata_edit(request):
+def edit(request):
     if request.method == 'POST':
 		#userdata always exists if we passed should_have_data
 		form = UserDataForm(request.POST, instance = request.user.UserData)
@@ -20,12 +20,11 @@ def userdata_edit(request):
 			user_data = form.save(commit = False)
 			user_data.modified = True
 			user_data.save()
-			return render(request, 'userdata_completed.html', {})
+			return render(request, 'userdata_form.html', {})
     else:		
         form = UserDataForm(instance = request.user.UserData)
 
 	return render(request, 'userdata_form.html', {'form' : form})
-    
 
 @login_required
 @should_be_defined

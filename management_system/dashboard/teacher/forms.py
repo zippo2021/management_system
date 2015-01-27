@@ -6,4 +6,4 @@ from dashboard.teacher.models import Teacher
 class TeacherForm(ModelForm):
 	class Meta:
 		model = Teacher
-		exclude = ['data']
+		exclude = ['data','is_active']

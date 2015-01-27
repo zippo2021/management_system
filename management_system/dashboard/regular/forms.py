@@ -3,11 +3,12 @@
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, RegexField
 from dashboard.regular.models import RegularUser
+from django.core.exceptions import ValidationError 
 
 class RegularUserForm(ModelForm):
-	parent_1_phone = RegexField(regex = r'^\+?1?\d{9,15}$',
+	parent_1_phone = RegexField(regex = r'^\+?1?\d{9,15}$', label = "Телефон отца",
 	                       		error_message = ("Телефонный номер должен иметь формат +99999999999. Может содержать до 15 цифр"))
-	parent_2_phone = RegexField(regex = r'^\+?1?\d{9,15}$',
+	parent_2_phone = RegexField(regex = r'^\+?1?\d{9,15}$', label = "Телефон матери",
 	                       		error_message = ("Телефонный номер должен иметь формат +99999999999. Может содержать до 15 цифр"))
 
 	def clean(self):

@@ -44,7 +44,6 @@ INSTALLED_APPS = (
     'markdown_deux',  # Required for Knowledgebase item formatting
     'helpdesk', 
     'bootstrap_toolkit',
-    'bootstrapform',
     'markdown_deux',    
     'dashboard.teacher',
     'dashboard.regular',
@@ -52,6 +51,7 @@ INSTALLED_APPS = (
     'dashboard.observer',
     'dashboard.event_worker',
     'dashboard.userdata',
+    'dashboard.common_profile',
 	'events.comments',
     'events.events_admin',
     'events.notes',
@@ -63,6 +63,7 @@ INSTALLED_APPS = (
     'schools',
     'search',
 	'user_manager',
+    'news',
 )
 
 MIDDLEWARE_CLASSES = (  

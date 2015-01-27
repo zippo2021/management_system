@@ -1,3 +1,4 @@
+{% load i18n bootstrap %}
 <div class="modal-dialog modal-lg">
 <div class="modal-content"> 
 <div class="modal-header"> 
@@ -8,7 +9,7 @@
 <p>Данные успешно сохранены</p>
 <script> 
 setTimeout(function() 
-    { jQuery('#modal').modal('hide'); }, 1000); $('body').on('hidden.bs.modal', '.modal', function () 
+    { jQuery('#modal').modal('hide'); }, 3000); $('body').on('hidden.bs.modal', '.modal', function () 
         { $(this).removeData('bs.modal'); 
         }); 
 </script> </div> <div class="modal-footer"> 

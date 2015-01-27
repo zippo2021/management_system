@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<table>
+<tr valign="top">
+    <td width=25%>
+        <img src="{{ base_data.avatar }}"/> 
+    </td>
+
+    
+    <td width=25%>
+        <p>ФИО:<br><b> {{ base_data.last_name }} {{ base_data.first_name }} {{ base_data.middle_name }} </b></p>
+        <p>Телефон:<br><b> {{ base_data.phone }}</b></p>
+    </td>
+    {% if edit_perm == True %}<td><a href = "{% url 'userdata_edit' %}">Редактировать</a></td> {% endif %}
+</tr>
+</table>
+<!--
+{% if additional_data.teacher_data %}
+    <h2>Учитель</h2>
+    <p>Информация:<br><b> {{ additional_data.info }}</b></p>  
+        
+   
+    {% if edit_perm %}<a href = "{% url 'edit_teacher' %}">Редактировать</a> {% endif %}
+
+
+{% endif %}
+{% if additional_data.regular_data %}
+        <h2>Ученик</h2>
+        <p>ФИО отца:<br><b> {{ additional_data.regular_data.parent_1 }}</b></p>
+        <p>Телефон отца:<br><b> {{ additional_data.regular_dataparent_1_phone }}</b></p>
+        <p>ФИО матери:<br><b> {{ additional_data.regular_dataparent_2 }}</b></p>
+        <p>Телефон матери:<br><b> {{ additional_data.regular_dataparent_2_phone }}</b></p>
+
+        <p>Дата рождения:<br><b> {{ additional_data.regular_databirthdate }}</b></p>
+        <p>Город рождения:<br><b> {{ additional_data.regular_databirthplace }}</b></p>
+        <p>Год выпуска:<br><b> {{ additional_data.regular_datagrad_date }} </b></p>
+        <p>Школа:<br><b> {{ additional_data.regular_dataschool }}</b></p>
+        <p>Учитель физики(истории):<br><b> {{ additional_data.regular_dataphys_teacher_initial }}</b></p>
+        <p>Учитель математики(обществознания):<br><b> {{ additional_data.regular_datamaths_teacher_initial }}</b></p>
+        <p>Директор школы:<br><b> {{ additional_data.regular_dataprinciple_initial }}</b></p>
+    {% if edit_perm %}<a href = "{% url 'edit_regular' %}">Редактировать</a> {% endif %}
+
+{% endif %}
+
+{% if additional_data.observer_data %}
+<h2>Наблюдатель</h2>
+{% endif %}
+
+{% if additional_data.mentor_data %}
+<h2>Воспитатель</h2>   
+{% endif %}
+-->
+
+{% endblock %}
+
+
+
+
+

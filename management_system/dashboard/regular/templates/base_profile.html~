@@ -9,8 +9,6 @@
     
     <td width=25%>
         <p>ФИО:<br><b> {{ base_data.last_name }} {{ base_data.first_name }} {{ base_data.middle_name }} </b></p>
-        <p>Дата рождения:<br><b> {{ additional_data.birthdate }}</b></p>
-        <p>Город рождения:<br><b> {{ additional_data.birthplace }}</b></p>
         <p>Телефон:<br><b> {{ base_data.phone }}</b></p>
     </td>
 </tr>

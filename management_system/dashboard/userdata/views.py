@@ -25,7 +25,6 @@ def edit(request):
         form = UserDataForm(instance = request.user.UserData)
 
 	return render(request, 'userdata_form.html', {'form' : form})
-    
 
 @login_required
 @should_be_defined

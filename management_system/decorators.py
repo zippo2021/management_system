@@ -1,5 +1,5 @@
 from functools import partial, wraps
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render, redirect
 from dashboard import userdata
 from dashboard import regular
@@ -104,11 +104,12 @@ not_is_regular_possibly_unfilled = lambda request, *args, **kwargs: render(reque
 
 def not_regular(request, *args, **kwargs):
 	if not(has_filled_data(request)): 
-		return not_has_filled_data(request)
+            return not_has_filled_data(request)
 	elif not(is_regular_possibly_unfilled(request)):
-		return not_is_regular_possibly_unfilled(request)
+            return not_is_regular_possibly_unfilled(request)
 	else:
-		return redirect('edit_regular')
+            request.session['UserDataModal'] = 'on'
+            return (request.path)
 
 
 	#condition functions
