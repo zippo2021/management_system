@@ -18,7 +18,7 @@
 
 {% for role, fields in additional_data.items %}
 	{% for key, value in fields.items %}
-		<p> {% model_field_verbose_name from role.key %}:  : {{ value }} </p>
+		<p> {{ key }} : {{ value }} </p>
 	{% endfor %}
 {% endfor %}
 
