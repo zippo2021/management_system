@@ -17,7 +17,6 @@ def view_profile(request,uid):
     base_data = user.UserData
  
     additional_data = create_info(request.user, user, restr)
-    print additional_data['RegularUser']['city']
     return render( request, 'view_profile.html' ,\
                    {'base_data' : base_data ,\
                    'additional_data' : additional_data,\
