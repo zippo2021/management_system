@@ -1,4 +1,4 @@
-field_perms = { 'Teacher':{
+field_perms = {     'Teacher':{
                         'info':[
                             'Teacher',
                             'RegularUser',
@@ -69,5 +69,7 @@ field_perms = { 'Teacher':{
                     'Observer':{
                     },
                     'Mentor':{
-                    },                   
+                    },
+                    'Admin':{
+                    }
     }
