@@ -11,3 +11,4 @@ class UserDataForm(ModelForm):
 		exclude = ['user',
 				   'modified',
 				   ]
+
