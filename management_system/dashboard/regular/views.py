@@ -74,32 +74,6 @@ def completed(request):
         request.session['UserDataModal'] = 'off'
 	return render(request, 'regular_completed.html')
 
-@login_required
-@should_be_regular_possibly_unfilled
-def self_profile_view(request):
-        base_data = request.user.UserData
-        regular_data = request.user.UserData.RegularUser
-        return render( request, 'self_regular_profile.html' , {'base_data' : base_data , 'regular_data' : regular_data })
 
-@login_required
-@should_be_staff
-def regular_profile_view(request,uid):
-        user = User.objects.get(id = uid)
-        if hasattr(user.UserData, 'RegularUser'):
-            base_data = user.UserData
-            regular_data = user.UserData.RegularUser
-            return render( request, 'regular_profile_view.html' , {'base_data' : base_data , 'regular_data' : regular_data })
-        else:
-            return render( request, 'regular_profile_view.html' , {})                                                  
-                                     	
-@login_required
-def regular_profile_view(request):
-        data = request.user.UserData.RegularUser
-        return render(request, 'regular_profile.html', {'user_data' : data})	
-
-@login_required
-def toggle_regular_modal(request):
-    request.session['UserDataModal'] = 'on'
-    return HttpResponse('UserData', mimetype = 'text/html' )
 
 
