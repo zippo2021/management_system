@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm, RegexField
 from dashboard.regular.models import RegularUser
 from django.core.exceptions import ValidationError 
+from django.utils.safestring import mark_safe
 
 class RegularUserForm(ModelForm):
 	parent_1_phone = RegexField(regex = r'^\+?1?\d{9,15}$', label = "Телефон отца",
@@ -28,9 +29,11 @@ Forms for Wizard
 '''
 
 class RegularUserFormStep1(ModelForm):
+    
     class Meta:
         model = RegularUser
         fields = ('school', 'grad_date',)
+        help_texts = { 'school' : mark_safe('<a href=\'/schools/add\'>Добавить Школу</a>')}
 
 class RegularUserFormStep2(ModelForm):
     class Meta:
@@ -45,16 +48,15 @@ class RegularUserFormStep2(ModelForm):
 
 class RegularUserFormStep3(ModelForm):
     #for some reason the fields below don't work !FIXIT!
-    '''
     parent_1_phone = RegexField(regex = r'^\+?1?\d{9,15}$', label = "Телефон отца",
-	                       		error_message = ("Телефонный номер должен иметь формат +99999999999. Может содержать до 15 цифр"))
+	                       		error_message = ("Телефонный номер должен иметь формат +99999999999. Может содержать до 15 цифр"), required = False)
     parent_2_phone = RegexField(regex = r'^\+?1?\d{9,15}$', label = "Телефон матери",
-	                       		error_message = ("Телефонный номер должен иметь формат +99999999999. Может содержать до 15 цифр"))
-    '''
+	                       		error_message = ("Телефонный номер должен иметь формат +99999999999. Может содержать до 15 цифр"), required = False)
+     
     def clean(self):
 		cd = super(RegularUserFormStep3, self).clean()
-		if not((cd['parent_1'] and cd['parent_1_phone']) or 
-			   (cd['parent_2'] and cd['parent_2_phone'])):
+		if not(cd.get('parent_1') and cd.get('parent_1_phone') or 
+			   cd.get('parent_2') and cd.get('parent_2_phone')):
 			   raise ValidationError('Информация о хотя бы одном родителе должна быть заполнена', code = 'invalid' )
 		return cd
     
