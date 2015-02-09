@@ -2,6 +2,8 @@ from django.conf.urls import url
 from schools import views
 
 urlpatterns = [
+    #test url: index
+    url(r'^index', views.index, name = 'schools_index'),
     url(r'^add', views.add, name = 'schools_add'),
     url(r'^edit/(?P<school_id>\d+)', views.edit, name = 'schools_edit'),
     url(r'^approve/(?P<school_id>\d+)',

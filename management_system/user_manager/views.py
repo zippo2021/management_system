@@ -12,6 +12,10 @@ from django.contrib.auth.decorators import user_passes_test
 from user_manager.permissions import perms_to_classes
 
 @staff_member_required
+def index(request):
+    return render(request, 'user_manager_index.html')
+
+@staff_member_required
 def create(request):
 	if request.method == 'POST':
 		form = CreateUserForm(request.POST)

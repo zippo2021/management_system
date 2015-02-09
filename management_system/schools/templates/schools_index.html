@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
+<a href = "{% url 'schools_add' %}">Добавить школу</a><br>
+<a href = "{% url 'schools_show_unproved' %}">Показать неодобренные</a><br>
+{% endblock %}
