@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm, RegexField
 from dashboard.regular.models import RegularUser
 from django.core.exceptions import ValidationError 
+from django.utils.safestring import mark_safe
 
 class RegularUserForm(ModelForm):
 	parent_1_phone = RegexField(regex = r'^\+?1?\d{9,15}$', label = "Телефон отца",
@@ -28,9 +29,11 @@ Forms for Wizard
 '''
 
 class RegularUserFormStep1(ModelForm):
+    
     class Meta:
         model = RegularUser
         fields = ('school', 'grad_date',)
+        help_texts = { 'school' : mark_safe('<a href=\'/schools/add\'>Добавить Школу</a>')}
 
 class RegularUserFormStep2(ModelForm):
     class Meta:
