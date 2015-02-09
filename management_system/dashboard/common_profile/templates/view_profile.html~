@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load model_field %}
 {% block content %}
 <table>
 <tr valign="top">
@@ -14,50 +15,14 @@
     {% if edit_perm == True %}<td><a href = "{% url 'userdata_edit' %}">Редактировать</a></td> {% endif %}
 </tr>
 </table>
-<!--
-{% if additional_data.teacher_data %}
-    <h2>Учитель</h2>
-    <p>Информация:<br><b> {{ additional_data.info }}</b></p>  
-        
-   
-    {% if edit_perm %}<a href = "{% url 'edit_teacher' %}">Редактировать</a> {% endif %}
 
-
-{% endif %}
-{% if additional_data.regular_data %}
-        <h2>Ученик</h2>
-        <p>ФИО отца:<br><b> {{ additional_data.regular_data.parent_1 }}</b></p>
-        <p>Телефон отца:<br><b> {{ additional_data.regular_dataparent_1_phone }}</b></p>
-        <p>ФИО матери:<br><b> {{ additional_data.regular_dataparent_2 }}</b></p>
-        <p>Телефон матери:<br><b> {{ additional_data.regular_dataparent_2_phone }}</b></p>
-
-        <p>Дата рождения:<br><b> {{ additional_data.regular_databirthdate }}</b></p>
-        <p>Город рождения:<br><b> {{ additional_data.regular_databirthplace }}</b></p>
-        <p>Год выпуска:<br><b> {{ additional_data.regular_datagrad_date }} </b></p>
-        <p>Школа:<br><b> {{ additional_data.regular_dataschool }}</b></p>
-        <p>Учитель физики(истории):<br><b> {{ additional_data.regular_dataphys_teacher_initial }}</b></p>
-        <p>Учитель математики(обществознания):<br><b> {{ additional_data.regular_datamaths_teacher_initial }}</b></p>
-        <p>Директор школы:<br><b> {{ additional_data.regular_dataprinciple_initial }}</b></p>
-    {% if edit_perm %}<a href = "{% url 'edit_regular' %}">Редактировать</a> {% endif %}
-
-{% endif %}
-
-{% if additional_data.observer_data %}
-<h2>Наблюдатель</h2>
-{% endif %}
-
-{% if additional_data.mentor_data %}
-<h2>Воспитатель</h2>   
-{% endif %}
--->
-{% for key,value in additional_data %}
-    {{ value }}
-    <p><b>{{ key }}</b></p>
-    {% for name,item in value %}
-        
-        <p>{{ name }}<br><b>{{ item }}</b></p>
-    {% endfor %}
+{% for role, fields in additional_data.items %}
+	{% for key, value in fields.items %}
+		<p> {{ key }} : {{ value }} </p>
+	{% endfor %}
 {% endfor %}
+
+
 {% endblock %}
 
 

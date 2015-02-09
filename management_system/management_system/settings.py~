@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'etc',
     'django.contrib.humanize',  # Required for elapsed time formatting
     'registration',
     'customuseradmin',
@@ -51,6 +52,7 @@ INSTALLED_APPS = (
     'dashboard.observer',
     'dashboard.event_worker',
     'dashboard.userdata',
+    'dashboard.common_profile',
 	'events.comments',
     'events.events_admin',
     'events.notes',

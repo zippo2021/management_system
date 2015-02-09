@@ -28,7 +28,6 @@ def completed(request):
 @login_required
 def profile_view(request,uid):
         if request.user.id == int(uid):
-            print request.user.id,' ',uid
             user = request.user
             edit_perm = True
         else:

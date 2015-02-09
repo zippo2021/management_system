@@ -1,18 +1,4 @@
-{% load i18n bootstrap %}
-<div class="modal-dialog modal-lg">
-<div class="modal-content"> 
-<div class="modal-header"> 
-<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> 
-<h4 class="modal-title" id="myModalLabel">Сохранено!</h4> 
-</div> 
-<div class="modal-body"> 
+{% extends base.html %}
+{% block content %}
 <p>Данные успешно сохранены</p>
-<script> 
-setTimeout(function() 
-    { jQuery('#modal').modal('hide'); }, 3000); $('body').on('hidden.bs.modal', '.modal', function () 
-        { $(this).removeData('bs.modal'); 
-        }); 
-</script> </div> <div class="modal-footer"> 
-</div> 
-</div><!-- /.modal-content --> 
-</div><!-- /.modal-dialog --> 
+{% endblock %}

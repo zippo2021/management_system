@@ -16,12 +16,14 @@ def create_info(viewer, user, restr):
     if restr:
         for uperm in user_perms:
             for key in field_perms[uperm]:
+                model = getattr(user.UserData,uperm)
+                v_name = model._meta.get_field(key).verbose_name
                 if list(set(field_perms[uperm][key]) & set(viewer_perms)):
-                    result[uperm][key] = getattr(getattr(user.UserData,\
-                                                            uperm), key)
+                    result[uperm][v_name] = getattr(model, key)
     else:
        for uperm in user_perms:
            for key in field_perms[uperm]:
-               result[uperm][key] = getattr(getattr(user.UserData,\
-                                                        uperm), key)
+               model = getattr(user.UserData,uperm)
+               v_name = model._meta.get_field(key).verbose_name
+               result[uperm][v_name] = getattr(model, key)
     return result

@@ -25,15 +25,3 @@ def edit(request):
 def completed(request):
 	return render(request, 'teacher_completed.html')
 
-@login_required
-def profile_view(request,uid):
-        if request.user.id == int(uid):
-            user = request.user
-            edit_perm = True
-        else:
-            user = User.objects.get(id = uid)
-            edit_perm = False
-        base_data = user.UserData
-        teacher_data = user.UserData.Teacher
-        
-        return render( request, 'teacher_profile_view.html' , {'base_data' : base_data , 'additional_data' : teacher_data, 'edit_perm':edit_perm })
