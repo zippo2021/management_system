@@ -19,7 +19,7 @@ def add(request):
         form = SchoolForm(request.POST)
         if form.is_valid():
             school = form.save()
-            return render(request, 'schools_add_completed.html', {})
+            return redirect('edit_regular')
     else:       
         form = SchoolForm()
     return render(request, 'schools_add_form.html', {'form' : form})
