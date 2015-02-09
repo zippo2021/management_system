@@ -2,26 +2,42 @@
 
 {% block content %}
 <table>
-<tr valign="top">
+<tr>
     <td width=25%>
         <img src="{{ base_data.avatar }}"/> 
     </td>
-
-    
-    <td width=25%>
+    <td>
         <p>ФИО:<br><b> {{ base_data.last_name }} {{ base_data.first_name }} {{ base_data.middle_name }} </b></p>
         <p>Телефон:<br><b> {{ base_data.phone }}</b></p>
     </td>
     {% if edit_perm == True %}<td><a href = "{% url 'userdata_edit' %}">Редактировать</a></td> {% endif %}
 </tr>
-</table>
 
+<tr>
+{% for role,fields in additional_data.items %}
+    {% if fields %}
+    <td>
+        <p>{{ role }}</p>
+        {% if edit_perm == True %}
+            <a href = "{% url 'edit_common' role %}">Редактировать</a>
+        {% endif %}
+    </td>
+    {% endif %}
+{% endfor %}
+</tr>
+<tr>
 {% for role, fields in additional_data.items %}
+    {% if fields %}
+    <td>
 	{% for key, value in fields.items %}
 		<p> {{ key }} : {{ value }} </p>
 	{% endfor %}
+    </td>
+    
+    {% endif %}
 {% endfor %}
-
+</tr>
+</table>
 
 {% endblock %}
 

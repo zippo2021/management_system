@@ -14,22 +14,7 @@
 </head>
 
 <body>
-    {% if request.session.UserDataModal == "on" %}
-        
-        <div class="modal fade" id="Regular_modal" tabindex="-1" role="dialog" aria-labelledby="RegularModalLabel" aria-hidden="true"> 
-        </div>
-       
-        <div id="dialog-form"></div>
-        <script type="text/javascript">
-            $(window).load(function(){
-            
-            $("#Regular_modal").modal({ remote: "{% url 'edit_regular' %}" });
-            });
-        </script>
-        
-    {% endif %}
-    {% if request.session.showRegular == "yes" %}
-    {% endif %}
+    
 	<div id="container">
 		<div id="top_menu">
 		Top menu:
