@@ -9,6 +9,10 @@ from decorators import should_be_defined, should_be_regular
 # Create your views here.
 
 @login_required
+def index(request):
+    return render(request, 'schools_index.html')
+
+@login_required
 @should_be_defined
 def add(request):
     if request.method == 'POST':
