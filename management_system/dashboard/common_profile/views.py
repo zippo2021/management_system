@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from dashboard.common_profile.source_functions import create_info
 # Create your views here.
 
+@login_required
 def view_profile(request,uid):
     restr = True
     if request.user.id == int(uid):
@@ -22,3 +23,12 @@ def view_profile(request,uid):
                    'additional_data' : additional_data,\
                    'edit_perm':edit_perm }
                  )
+
+@login_required
+def edit(request,role):
+    if role == 'Teacher':
+        url_role = 'teacher'
+    if role == 'RegularUser':
+        url_role = 'regular'
+    
+    return redirect('edit_'+url_role)
