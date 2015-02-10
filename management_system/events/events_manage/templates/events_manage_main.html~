@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+{{ name }}
+
+<a href="{% url 'invite' eid %}">Пригласить участников</a>
+{% endblock %}

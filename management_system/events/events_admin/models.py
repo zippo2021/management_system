@@ -17,7 +17,7 @@ class Event(models.Model):
     is_journey = models.BooleanField()
     is_payed = models.BooleanField()
     event_workers = models.ManyToManyField('event_worker.EventWorker')
-    subject_workers = models.ManyToManyField('teacher.Teacher')
+    teachers = models.ManyToManyField('teacher.Teacher')
     mentors = models.ManyToManyField('mentor.Mentor')
     observers = models.ManyToManyField('observer.Observer')
 

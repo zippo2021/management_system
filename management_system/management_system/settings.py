@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'dashboard.common_profile',
 	'events.comments',
     'events.events_admin',
+    'events.events_manage',
     'events.notes',
     'events.raps',
     'events.study_groups',

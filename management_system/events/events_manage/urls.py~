@@ -1,0 +1,6 @@
+from django.conf.urls import url
+from dashboard.teacher import views
+
+urlpatterns = [
+	url(r'^main/(?P<eid>\d+)/$', views.main, name = 'events_manage_main'),
+]

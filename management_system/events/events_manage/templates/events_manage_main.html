@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+{{ name }}
+
+<a href="{% url 'invite_teachers' eid %}">Пригласить учителей</a>
+<p>
+<a href="{% url 'invite_mentors' eid %}">Пригласить воспитателей</a>
+<p>
+<a href="{% url 'invite_regulars' eid %}">Пригласить учеников</a>
+<a href="{% url 'invite_observers' eid %}">Пригласить наблюдателей</a>
+{% endblock %}
