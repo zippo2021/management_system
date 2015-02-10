@@ -71,5 +71,7 @@ field_perms = {     'Teacher':{
                     'Mentor':{
                     },
                     'Admin':{
-                    }
+                    },
+                    'EventWorker':{
+                    },
     }

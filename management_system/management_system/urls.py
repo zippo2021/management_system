@@ -18,4 +18,5 @@ urlpatterns = patterns('',
 	url(r'^user_manager/', include('user_manager.urls')),
     url(r'^news/', include('news.urls')),
     url(r'^events_manage/', include('events.events_manage.urls')),
+    url(r'^events/', include('events.events_admin.urls')),
 )
