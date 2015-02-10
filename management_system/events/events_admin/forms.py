@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from django.forms import ModelForm
-from event.event_admin.models import Event, JourneyData
+from django.forms import ModelForm, Form, BooleanField
+from events.events_admin.models import Event, JourneyData
 
 class EventForm(ModelForm):
     class Meta:
@@ -15,4 +15,8 @@ class EventForm(ModelForm):
 class JourneyDataForm(ModelForm):
     class Meta:
         model = JourneyData
-        exclude = ['event']
+        exclude = ['event', 'tickets']
+
+#should be cut from here !FIXIT!
+class EventMailForm(Form):
+    mail = BooleanField(label = 'Проводить рассылку')

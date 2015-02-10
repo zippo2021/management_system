@@ -138,8 +138,11 @@ teacher decorators
 '''
 
 	#false functions
-
-not_teacher = lambda request, *args, **kwargs: render(request, 'decorator.html',
+def not_teacher(request):
+    if not(has_filled_data(request)):
+        return not_has_filled_data(request)
+    else:
+        render(request, 'decorator.html',
 {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Teacher"})
 
 	#condition functions
@@ -160,7 +163,11 @@ event_worker decorators
 
 	#false functions
 
-not_event_worker = lambda request, *args, **kwargs: render(request, 'decorator.html',
+def not_event_worker(request):
+    if not(has_filled_data(request)):
+        return not_has_filled_data(request)
+    else:
+        return render(request, 'decorator.html',
 {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT EventWorker"})
 
 	#condition fucntions
@@ -181,7 +188,11 @@ mentor decorators
 
 	#false functions
 
-not_mentor = lambda request, *args, **kwargs: render(request, 'decorator.html', {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Mentor"})
+def not_mentor(request):
+    if not(has_filled_data(request)):
+        return not_has_filled_data(request)
+    else:
+        return render(request, 'decorator.html', {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Mentor"})
 
 	#condition functions
 
@@ -201,7 +212,11 @@ observer decorators
 
 	#false functions
 
-not_observer = lambda request, *args, **kwargs: render(request, 'decorator.html', 
+def not_observer(request):
+    if not(has_filled_data(request)):
+        return not_has_filled_data(request)
+    else:
+        return render(request, 'decorator.html', 
 {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Observer"})
 
 	#condition functions
@@ -220,7 +235,11 @@ should_be_observer =  partial(check_decorator,
 Admin decorator
 '''
     #false functions
-not_admin = lambda request, *args, **kwargs: render(request, 'decorator.html', 
+def not_admin(request):
+    if not(has_filled_data(request)):
+        return not_has_filled_data(request)
+    else:
+        return render(request, 'decorator.html', 
 {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Admin"})
 
 
