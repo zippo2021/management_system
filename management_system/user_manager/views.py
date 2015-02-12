@@ -74,7 +74,6 @@ def edit_permissions(request, user_id):
 	else:
 		#load permissions to form
 		perms = user.UserData.get_permissions()
-		print perms
 		form = EditPermissionsForm(initial = perms,
 								   editor = request.user,
 								   edited = user)
