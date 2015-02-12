@@ -5,21 +5,20 @@ from django.contrib.auth.models import User
 
 trans = {'Teacher':'teachers','Observer':'observers','Mentor':'mentors'}
 
-def notify
 
 def main(request,eid):
     event = Event.objects.get(id = eid)
     context = {'name':event.name, 'eid':eid}
     return render('events_manage_main.html',context)
 
-def event_show_users(request,role,eid):
+def show_users(request,eid,role):
     event = Event.objects.get(id = eid)
     if role != 'RegularUser':
         users = getattr(event,trans[role]).objects.all()
     else:
         group = Event.objects.get(event = event)
         users =  group.users.objects.all()
-    context = {'ename':event.name,'users':users}
+    context = {'ename':event.name,'eid':eid,'users':users,'role':role}
     return render('users_list.html',context)
 
 def invite(request,eid,uid,role):           #for everyone except RegularUser

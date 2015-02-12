@@ -4,7 +4,13 @@
 {% for each in users  %}
 <tr>
     <td>
-        <a href="{% url 'view_profile' each.id %}">{{ each.UserData.last_name }} {{ each.UserData.first_name }} {{ each.UserData.middle_name }}</a>
+        <a href="{% url 'view_profile' each.id %}">{{ each.UserData.last_name }} {{ each.UserData.first_name }} {{ each.UserData.middle_name }}</a>        
+    </td>
+    <td>
+        {{ role }}
+    </td>
+    <td>
+        <a href="{% url 'event_invite' eid each.id role %}" > Пригласить</a>
     </td>
 </tr>
 {% endfor %}
