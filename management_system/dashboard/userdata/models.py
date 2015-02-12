@@ -94,6 +94,7 @@ class OtherDoc(models.Model):
     number = models.CharField(verbose_name='Номер',max_length=255)
     issued_by = models.CharField(verbose_name="Кем выдан",max_length=255,)
     when_issued = models.DateField(verbose_name="Когда выдан")
+admin.site.register(OtherDoc)
 
 class Passport(models.Model):
     data = models.OneToOneField(UserData,primary_key=True)
@@ -102,6 +103,7 @@ class Passport(models.Model):
     issued_by = models.CharField(verbose_name="Кем выдан",max_length=255,)
     when_issued = models.DateField(verbose_name="Когда выдан")
     code = models.CharField(verbose_name="Код подразделения",max_length=30)
+admin.site.register(Passport)
 
 class BirthCert(models.Model):
     data = models.OneToOneField(UserData,primary_key=True)
@@ -109,6 +111,7 @@ class BirthCert(models.Model):
     number = models.PositiveIntegerField(verbose_name='Номер',max_length=6)
     issued_by = models.CharField(verbose_name="Кем выдано",max_length=255)
     when_issued = models.DateField(verbose_name="Когда выдано")
+admin.site.register(BirthCert)
 
 class Zagran(models.Model):
     data = models.OneToOneField(UserData,primary_key=True)
@@ -117,4 +120,5 @@ class Zagran(models.Model):
     issued_by = models.CharField(verbose_name="Кем выдан",max_length=255)
     when_issued = models.DateField(verbose_name="Когда выдан")
     exp_date = models.DateField(verbose_name="Срок действия")
+admin.site.register(Zagran)
 
