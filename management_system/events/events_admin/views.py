@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from events.events_admin.models import Event
 from decorators import should_be_admin
 from django.contrib.formtools.wizard.views import SessionWizardView
-from events.events_admin.forms import EventForm, JourneyDataForm, EventMailForm
+from events.events_admin.forms import EventForm, EventEditForm, JourneyDataForm, EventMailForm
 from events.price_groups.forms import PriceGroupForm
 from django.contrib.auth.decorators import login_required
 
@@ -15,16 +15,6 @@ so you can access wizard as a simple view, named regular_user_wizard
 class EventWizard(SessionWizardView):
     template_name = 'event_wizard.html'
         
-    def process_step(self, form):
-        if self.steps.step1 == 1:
-            if form.cleaned_data['is_journey'] == False:
-                self.form_list.pop('1')
-            if form.cleaned_data['is_payed'] == False:
-                self.form_list.pop('2')
-        print self.form_list
-        print self.steps
-        return self.get_form_step_data(form)
-
     def done(self, form_list, **kwargs):
         
         event = form_list[0].save()
@@ -32,10 +22,6 @@ class EventWizard(SessionWizardView):
             journey = form_list[1].save(commit = False)
             journey.event = event
             journey.save()
-        if form_list[0].cleaned_data['is_payed'] == True:
-            price_group = form_list[2].save(commit = False)
-            price_group.event = event
-            price_group.save()
         
         return redirect('event_added')
 
@@ -43,25 +29,53 @@ def add_journey_data_condition(wizard):
     cleaned_data = wizard.get_cleaned_data_for_step('0') or {}
     return cleaned_data.get('is_journey', True)
 
-def add_price_groups_condition(wizard):
-    cleaned_data = wizard.get_cleaned_data_for_step('0') or {}
-    return cleaned_data.get('is_payed', True)
 
 @login_required
 @should_be_admin
 def event_wizard(request):
     forms = [EventForm,
              JourneyDataForm,
-             PriceGroupForm,
              EventMailForm,
              ]
-    cond_dict = {'1': add_journey_data_condition,
-                 '2': add_price_groups_condition,
+    cond_dict = {'1' : add_journey_data_condition,
                 }
     return EventWizard.as_view(forms, condition_dict = cond_dict)(request)
 '''
 end of Wizard
 '''
+
+@login_required
+@should_be_admin
+def edit(request, event_id, base_or_journey):
+    event = Event.objects.get(id = event_id)
+    if base_or_journey == 'journey':
+        instance = event.JourneyData
+        form_class = JourneyDataForm
+    elif base_or_journey == 'base':
+        instance = event
+        form_class = EventEditForm
+    else:
+        pass
+        #!FIXIT! raise error
+    
+    if request.method == 'POST':
+        form = form_class(request.POST, instance = instance)
+        if form.is_valid():
+            obj = form.save()
+            return redirect('event_added')
+    else:
+        form = form_class(instance = instance)
+    
+    return render(request, 'schools_add_form.html', {'form' : form})
+
+@login_required
+@should_be_admin
+def delete(request, event_id):
+    event = Event.objects.get(id = event_id)
+    if hasattr(event, 'JourneyData'):
+        event.JourneyData.delete()
+    event.delete()
+    return redirect('show_all_events')
 
 @login_required
 @should_be_admin
