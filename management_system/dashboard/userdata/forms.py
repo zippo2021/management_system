@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from django.forms import ModelForm, RegexField
-from dashboard.userdata.models import UserData
+from django.forms import ModelForm, RegexField, ChoiceField, Form
+from dashboard.userdata.models import UserData, Passport, Zagran, BirthCert, OtherDoc
 
 class UserDataForm(ModelForm):
 	phone = RegexField(regex = r'^\+?1?\d{9,15}$', required = True,
@@ -12,3 +12,37 @@ class UserDataForm(ModelForm):
 				   'modified',
 				   ]
 
+'''
+Document type select form
+'''
+choices = (('P' , 'Паспорт'),
+           ('Z', 'Загран. паспорт'),
+           ('B', 'Свидетельство о рождении'),
+           ('O', 'Другой документ'))
+
+class DocumentTypeForm(Form):
+    type = ChoiceField(label = 'Тип документa', choices = choices)
+'''
+end of document type select form
+'''
+
+class PassportForm(ModelForm):
+    class Meta:
+        model = Passport
+        exclude = ['data']
+
+class ZagranForm(ModelForm):
+    class Meta:
+        model = Zagran
+        exclude = ['data']
+
+class BirthCertForm(ModelForm):
+    class Meta:
+        model = BirthCert
+        exclude = ['data']
+
+class OtherDocForm(ModelForm):
+    class Meta:
+        model = OtherDoc
+        exclude = ['data']
+      
