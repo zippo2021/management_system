@@ -8,10 +8,10 @@
         <a href="{% url 'view_profile' each.data.id %}">{{ each.data.last_name }} {{ each.data.first_name }} {{ each.data.middle_name }}</a>        
     </td>
     <td>
-        {{ role }}
+       {% if accept  %} <a href="{% url 'accept' eid each.data.id %}" > Одобрить</a>{% endif %}
     </td>
     <td>
-        <a href="{% url 'event_invite' eid each.data.id role %}" > Пригласить</a>
+        <a href="{% url 'event_invite' eid each.data.id role %}" > </a>
     </td>
 </tr>
 {% endfor %}

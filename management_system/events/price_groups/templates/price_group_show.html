@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<table>
+{% for each in p_groups %}
+    <tr>
+        <td>{{ each.price }}</td>
+        <td> Название </td>
+    </tr>
+{% endfor %}
+</table>
+
+<a href="{% url 'price_group_add' eid %}">Добавить ценовую группу</a>
+{% endblock %}

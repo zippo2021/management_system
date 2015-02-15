@@ -18,7 +18,7 @@ class EventEditForm(ModelForm):
 class EventForm(ModelForm):
     class Meta:
         model = Event
-        exclude = ['teachers',
+        exclude = ['subject_workers',
                    'mentors',
                    'observers',
                    ]

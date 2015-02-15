@@ -10,7 +10,6 @@ def add(request,eid):
         if form.is_valid():
             event = Event.objects.get(id = eid)
             pg = PriceGroup(event = event, price = form.cleaned_data['price'])
-            pg.save()
             return render(request,"price_group_completed.html",{'eid':eid})
     else:
         form = PriceGroupForm()
