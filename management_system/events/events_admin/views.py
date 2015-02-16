@@ -17,7 +17,9 @@ class EventWizard(SessionWizardView):
         
     def done(self, form_list, **kwargs):
         
-        event = form_list[0].save()
+        event = form_list[0].save(commit = False)
+        event.is_active = True
+        event.save()
         if form_list[0].cleaned_data['is_journey'] == True:
             journey = form_list[1].save(commit = False)
             journey.event = event
@@ -76,6 +78,14 @@ def delete(request, event_id):
         event.JourneyData.delete()
     event.delete()
     return redirect('show_all_events')
+
+@login_required
+@should_be_admin
+def deactivate(request, event_id):
+    event = Event.objects.get(id = event_id)
+    event.is_active = not(event.is_active)
+    return redirect('show_all_events')
+
 
 @login_required
 @should_be_admin
