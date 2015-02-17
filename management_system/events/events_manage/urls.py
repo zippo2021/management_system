@@ -3,6 +3,8 @@ from events.events_manage import views
 
 urlpatterns = [
 	url(r'^main/(?P<eid>\d+)/$', views.main, name = 'events_manage_main'),
+    url(r'^edit_or_create_result/(?P<event_id>\d+)/(?P<user_id>\d+)',
+        views.edit_or_create_result, name = 'edit_or_create_result'),
     url(r'^show/(?P<eid>\d+)/(?P<role>\w+)/$', views.show_users, name = 'events_show_users'),
     url(r'^main/(?P<eid>\d+)/(?P<uid>\d+)/(?P<role>\w+)/$', views.invite, name = 'event_invite'),
     url(r'^requests/(?P<eid>\d+)/$', views.show_requests, name = 'events_show_requests'),

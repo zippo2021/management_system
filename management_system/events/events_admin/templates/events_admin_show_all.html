@@ -9,7 +9,14 @@
 <a href="{% url 'edit_event' event.id 'journey' %}">Редактировать выездное</a>
 <br>
 {% endif %}
-<a href="{% url 'deactivate_event' event.id %}">Закрыть событие</a><br>
+<a href="{% url 'deactivate_event' event.id %}">
+{% if event.is_active %}
+Закрыть событие
+{% else %}
+Открыть событие
+{% endif %}
+</a><br>
+
 <a href="{% url 'delete_event' event.id %}">Удалить событие</a>
 {% endfor %}
 {% endblock %}

@@ -84,6 +84,7 @@ def delete(request, event_id):
 def deactivate(request, event_id):
     event = Event.objects.get(id = event_id)
     event.is_active = not(event.is_active)
+    event.save()
     return redirect('show_all_events')
 
 
