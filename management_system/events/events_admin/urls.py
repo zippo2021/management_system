@@ -10,5 +10,7 @@ urlpatterns = [
     url(r'^edit/(?P<event_id>\d+)/(?P<base_or_journey>\w+)',
         views.edit, name = 'edit_event'),
     url(r'^delete/(?P<event_id>\d+)', views.delete, name = 'delete_event'),
+    url(r'^deactivate/(?P<event_id>\d+)', views.deactivate,
+        name = 'deactivate_event'),
 ]
 

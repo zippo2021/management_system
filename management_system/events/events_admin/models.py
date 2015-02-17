@@ -15,14 +15,16 @@ class Event(models.Model):
 			     max_length = 100)
     opened = models.DateField(verbose_name = 'Создано')
     closed = models.DateField(verbose_name = 'Закрыто')
-    is_private = models.BooleanField()
-    is_journey = models.BooleanField()
-    is_payed = models.BooleanField()
-    event_workers = models.ManyToManyField('event_worker.EventWorker')
+    is_private = models.BooleanField(verbose_name = 'Добавление по заявкам')
+    is_journey = models.BooleanField(verbose_name = 'Выездное')
+    is_payed = models.BooleanField(verbose_name = 'Оплачиваемое')
+    has_journal = models.BooleanField(verbose_name = 'Вести журнал')
+    event_workers = models.ManyToManyField('event_worker.EventWorker',
+                                          verbose_name = 'Управляющие событием')
     teachers = models.ManyToManyField('teacher.Teacher')
     mentors = models.ManyToManyField('mentor.Mentor')
     observers = models.ManyToManyField('observer.Observer')
-    
+    is_active = models.BooleanField() 
 admin.site.register(Event)
 
 
@@ -44,7 +46,7 @@ admin.site.register(JourneyData)
 if event is private
 '''
 class Requests(models.Model):
-    event = models.ForeignKey(Event, related_name = 'Requests')
+    event = models.OneToOneField(Event, related_name = 'Requests')
     users = models.ManyToManyField('regular.RegularUser',
 								   related_name = 'Requests')
 
@@ -54,3 +56,10 @@ class Contract(models.Model):
     '''
     it has to be completed
     '''
+
+class Result(models.Model):
+    event = models.ForeignKey(Event, related_name = 'Result')
+    user = models.ForeignKey('regular.RegularUser', related_name = 'Result')
+    result = models.CharField(verbose_name = 'Результат',
+                              max_length = 1000,
+    )
