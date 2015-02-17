@@ -14,5 +14,11 @@
     <td>
         <a href="{% url 'price_groups_show' eid %}">Управление ценовыми группами</a>
     </td>
+</tr>
+<tr>
+    <td>
+        <a href="{% url 'events_show_users' eid 'Teacher' %}">Управление завками </a>
+    </td>
+</tr>    
 </table>
 {% endblock %}

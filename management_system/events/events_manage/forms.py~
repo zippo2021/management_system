@@ -1,7 +1,10 @@
-from django.forms import ModelForm
-from events.event_admin.models import Event
-class PriceChoice(ModelForm):
-    class Meta:
-        model = Event
-        include = ['PriceGroup'
-                  ]
+from django import forms
+from events.events_admin.models import Event
+class PriceChoice(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(PriceChoice, self).__init__(*args, **kwargs)
+        eid = kwargs.pop('event_id', None)
+        event = Event.objects.get(id = eid)
+        self.fields['PriceGroup'] = forms.ModelChoiceField(queryset=event.PriceGroup.all())
+    
+        

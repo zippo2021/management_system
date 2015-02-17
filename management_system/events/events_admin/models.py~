@@ -2,7 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib import admin
-from dashboard.userdata.models import UserData
+from dashboard.teacher.models import Teacher
 
 
 class Event(models.Model):
@@ -18,10 +18,10 @@ class Event(models.Model):
     is_private = models.BooleanField()
     is_journey = models.BooleanField()
     is_payed = models.BooleanField()
-    event_workers = models.ManyToManyField(UserData ,related_name = 'Event')
-    teachers = models.ManyToManyField(UserData ,related_name = 'Event')
-    mentors = models.ManyToManyField(UserData, related_name = 'Event')
-    observers = models.ManyToManyField(UserData,related_name = 'Event')
+    event_workers = models.ManyToManyField('event_worker.EventWorker')
+    teachers = models.ManyToManyField('teacher.Teacher')
+    mentors = models.ManyToManyField('mentor.Mentor')
+    observers = models.ManyToManyField('observer.Observer')
     
 admin.site.register(Event)
 

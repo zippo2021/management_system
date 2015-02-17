@@ -10,38 +10,37 @@ from dashboard.observer.models import Observer
 from events.events_manage.forms import PriceChoice
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
-
+from decorators import should_be_event_worker,should_be_regular
+from django.contrib.auth.decorators import login_required
 trans = {'Teacher':'teachers','Observer':'observers','Mentor':'mentors'}
 
-
+@login_required
+@should_be_event_worker
 def main(request,eid):
     event = Event.objects.get(id = eid)
     context = {'name':event.name, 'eid':eid}
     return render(request,'events_manage_main.html',context)
 
+@login_required
+@should_be_event_worker
 def show_users(request,eid,role):
     event = Event.objects.get(id = eid)
-    if role !="RegularUser":
-        users = globals()[role].objects.filter(~Q(event=eid),is_active = True)
-    else:
-        users = globals()[role].objects.filter(~Q(StudyGroup=eid))#FIXME
+    users = globals()[role].objects.filter(~Q(event=eid),is_active = True)
     context = {'ename':event.name,'eid':eid,'users':users,'role':role}
     return render(request,'users_list.html',context)
 
+@login_required
+@should_be_event_worker
 def invite(request,eid,uid,role):           
     event = Event.objects.get(id = eid)
     user = User.objects.get(id = uid)
     spec = getattr(user.UserData,role)
-    if role !="RegularUser":
-        field = getattr(event,trans[role])
-        field.add(spec)
-    else:
-        group = event.StudyGroup.get(label='All')
-        group.users.add(spec)
+    field = getattr(event,trans[role])
+    field.add(spec)   
     return redirect('events_show_users',role = role,eid = eid)
 
-
-
+@login_required
+@should_be_event_worker
 def show_requests(request,eid):
     event = Event.objects.get(id = eid)
     requests = Requests.objects.get(event = eid)
@@ -49,13 +48,15 @@ def show_requests(request,eid):
         accept = True
     else:
         accept = False
-    context = {'ename':event.name,'eid':eid,'users':requests,'accept':accept}
-    return render(request,'users_list.html',context)
+    context = {'ename':event.name,'eid':eid,'users':requests.users.all(),'accept':accept}
+    return render(request,'requests.html',context)
 
-def accept(request,eid,uid,price):
+@login_required
+@should_be_event_worker
+def accept(request,eid,uid):
     event = Event.objects.get(id = eid)
     if request.method == "POST":
-        form = PriceChoice(request.POST,instance=event)
+        form = PriceChoice(request.POST,event_id=eid)
         if form.is_valid():
             user = User.objects.get(id = uid)
             spec = user.UserData.RegularUser
@@ -65,9 +66,15 @@ def accept(request,eid,uid,price):
             p_group.users.add(spec)
             return redirect('events_show_requests',eid = eid)
     else:
-        form = PriceChoice(instance=event) 
-        return render(request,'price_choice_form.html',{'form':form,'eid':eid})
+        form = PriceChoice(event_id=eid) 
+    return render(request,'price_choice_form.html',{'form':form,'eid':eid})
+
+def deny_request(request,eid,uid):
+    event = Event.objects.get(id = eid)
+    #FIXME обсудить про отказ и статус
     
+@login_required
+@should_be_regular
 def place_request(request,eid):
     event = Event.objects.get(id = eid)
     try:
@@ -78,6 +85,8 @@ def place_request(request,eid):
     e_request.users.add(request.user.UserData.RegularUser)
     return redirect('request_completed',eid=eid )
 
+@login_required
+@should_be_regular
 def request_completed(request,eid):
     return render(request,'request_completed.html')
 
