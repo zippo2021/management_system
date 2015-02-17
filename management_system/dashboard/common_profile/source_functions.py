@@ -11,19 +11,19 @@ def perms_to_list(perms):
 def create_info(viewer, user, restr):
     result = {"Teacher":{},"RegularUser":{},\
               "Observer":{},"Mentor":{},"Admin":{}}
-    viewer_perms = perms_to_list(viewer.UserData.get_permissions())
-    user_perms = perms_to_list(user.UserData.get_permissions())
+    viewer_perms = perms_to_list(viewer.get_permissions())
+    user_perms = perms_to_list(user.get_permissions())
     if restr:
         for uperm in user_perms:
             for key in field_perms[uperm]:
-                model = getattr(user.UserData,uperm)
+                model = getattr(user,uperm)
                 v_name = model._meta.get_field(key).verbose_name
                 if list(set(field_perms[uperm][key]) & set(viewer_perms)):
                     result[uperm][v_name] = getattr(model, key)
     else:
        for uperm in user_perms:
            for key in field_perms[uperm]:
-               model = getattr(user.UserData,uperm)
+               model = getattr(user,uperm)
                v_name = model._meta.get_field(key).verbose_name
                result[uperm][v_name] = getattr(model, key)
     return result

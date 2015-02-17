@@ -21,7 +21,7 @@ class Event(models.Model):
     has_journal = models.BooleanField(verbose_name = 'Вести журнал')
     event_workers = models.ManyToManyField('event_worker.EventWorker',
                                           verbose_name = 'Управляющие событием')
-    subject_workers = models.ManyToManyField('teacher.Teacher')
+    teachers = models.ManyToManyField('teacher.Teacher')
     mentors = models.ManyToManyField('mentor.Mentor')
     observers = models.ManyToManyField('observer.Observer')
     is_active = models.BooleanField() 

@@ -7,7 +7,7 @@ from events.events_admin.models import Event, JourneyData, Result
 class EventEditForm(ModelForm):
     class Meta:
         model = Event
-        exclude = ['subject_workers',
+        exclude = ['teachers',
                    'mentors',
                    'observers',
                    'is_private',
@@ -19,7 +19,7 @@ class EventEditForm(ModelForm):
 class EventForm(ModelForm):
     class Meta:
         model = Event
-        exclude = ['subject_workers',
+        exclude = ['teachers',
                    'mentors',
                    'observers',
                    'is_active',

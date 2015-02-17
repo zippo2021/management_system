@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<table>
+{% for each in users  %}
+<tr>
+    <td>
+        {{ each.UserData }}
+        <a href="{% url 'view_profile' each.data.id %}">{{ each.data.last_name }} {{ each.data.first_name }} {{ each.data.middle_name }}</a>        
+    </td>
+    <td>
+        {{ role }}
+    </td>
+    <td>
+        <a href="{% url 'event_invite' eid each.data.id role %}" > Пригласить</a>
+    </td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

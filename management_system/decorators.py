@@ -163,7 +163,7 @@ event_worker decorators
 
 	#false functions
 
-def not_event_worker(request):
+def not_event_worker(request,*args, **kwargs):
     if not(has_filled_data(request)):
         return not_has_filled_data(request)
     else:
