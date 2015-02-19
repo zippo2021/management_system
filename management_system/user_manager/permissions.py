@@ -21,3 +21,4 @@ perms_to_classes = {'event_worker' : 'EventWorker',
 					'regular' : 'RegularUser',
                     'admin' : 'Admin',
 					}
+classes_to_perm = { value : key for key, value in perms_to_classes.items() }

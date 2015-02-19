@@ -28,7 +28,8 @@ class UserForm(Form):
 class EditPermissionsForm(UserForm):
     #admin hidden has no label
     admin_hidden = BooleanField(required = False, label = '')
-	
+    use_admin_hidden = BooleanField(required = False, label = '')
+
     def __init__(self, *args, **kwargs):
         editor = kwargs.pop('editor')
         edited = kwargs.pop('edited')
@@ -38,12 +39,14 @@ class EditPermissionsForm(UserForm):
         '''
         #we should always hide this
         self.fields['admin_hidden'].widget.attrs['hidden'] = True
+        self.fields['use_admin_hidden'].widget.attrs['hidden'] = True
         if 'initial' in kwargs.keys():
             initial = kwargs['initial']
             initial_admin = initial['admin']
             if not(editor.UserData.Admin.is_active) or\
                 edited.UserData.Admin.is_superadmin:
                 self.fields['admin'].widget.attrs['disabled'] = True
+                self.fields['use_admin_hidden'].initial = True
             self.fields['admin_hidden'].initial = initial_admin
         '''
         whatever happens, we extract hidden field value to cleaned_data
@@ -51,7 +54,10 @@ class EditPermissionsForm(UserForm):
 
     def clean(self):
         cleaned_data = super(EditPermissionsForm, self).clean()
-        cleaned_data['admin'] = cleaned_data.pop('admin_hidden')
+        print cleaned_data
+        if cleaned_data['use_admin_hidden']:
+            print 'YES!'
+            cleaned_data['admin'] = cleaned_data.pop('admin_hidden')
         return cleaned_data
 
 

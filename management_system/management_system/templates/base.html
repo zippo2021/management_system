@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 {% load i18n %}
+{% load custom_template_filters %}
 {% load staticfiles %}
 <html>
 <head>
 	<link rel="stylesheet" href="{% static 'markup.css' %}">
-    <script src="{% static 'ajax_form.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+	<script src="{% static 'ajax_form.js' %}"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
@@ -16,32 +18,13 @@
 <body>
     
 	<div id="container">
-		<div id="top_menu">
-		Top menu:
-		{% if user.UserData %}
-			you are <font color="blue">{{ user.username }} </font>
-			<font color="red">
-			{% if user.UserData.EventWorker.is_active %}
-				{{ perms_to_language.event_worker }}
-			{% endif %}
-			{% if user.UserData.Teacher.is_active %}
-				{{ perms_to_language.teacher }}
-			{% endif %}
-			{% if user.UserData.Mentor.is_active %}
-				{{ perms_to_language.mentor }}
-			{% endif %}
-			{% if user.UserData.Observer.is_active %}
-				{{ perms_to_language.observer }}
-			{% endif %}
-			{% if user.UserData.RegularUser.is_active %}
-				{{ perms_to_language.regular }}
-			{% endif %}
-			{% if user.UserData.Admin.is_active %}
-				{% if user.UserData.Admin.is_superadmin %}Главный{% endif %}
-				Администратор
-			{% endif %}
-			</font>
-		{% endif %}
+		<div id="top">
+			Ваш логин: <font color="blue">{{ user }}</font>,
+			Вы обладаете следующими правами:
+			{% for each in user_permissions %}
+				<font color="red">{{ perms_to_language|get_item:each }}</font>
+				{% if not forloop.last %},{% endif %}
+			{% endfor %}
 		</div>
 		
 		<div id="org_info">
@@ -51,14 +34,11 @@
 		</div>
 		
 		<div id="navigation">
-		    <style>
-                li {
-                    display: inline;
-                }
-            </style>
-            <ul>
-                <li><a href="{% url 'schools_index' %}">Школы</a></li>
-                <li><a href="{% url 'user_manager_index' %}">Управление персоналом </a></li>
+            <ul id="main_menu">
+                <li><a href="{% url 'schools_show_unproved' %}">Школы</a></li>
+                <li><a href="{% url 'show_all_staff_members' %}">
+					Управление персоналом 
+				</a></li>
                 <li><a href="{% url 'news_main' %}">Новости </a> </li>
                 <li><a href="{% url 'view_profile'  user.id %}">Профиль</a></li>
             	<li><a href="{% url 'events_admin_index' %}">События</a></li>    

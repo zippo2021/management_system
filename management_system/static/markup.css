@@ -14,7 +14,7 @@ html, body {
 	height: 100%
 }
 
-#top_menu{
+#top{
 	height: 50px;
 	width: 100%;
 	background: #aaaaaa;
@@ -46,7 +46,8 @@ html, body {
 #sidebar{
 	float: left;
 	width: 20%;
-	height: 500px;
+	min-height: 500px;
+	height: 100%;
 	background: #c2c2c2;
 }
 
@@ -55,7 +56,8 @@ html, body {
 	padding-left: 30px;
 	float : right;
 	width: 80%;
-	height: 500px;
+	min-height: 500px;
+	height: 100%;
 	background: #b2b2b2;
 }
 
