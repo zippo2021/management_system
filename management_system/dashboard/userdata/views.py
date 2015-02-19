@@ -22,25 +22,25 @@ class DocumentWizard(SessionWizardView):
             if hasattr(self.request.user.UserData, 'Passport'):
                self.request.user.UserData.Passport.delete() 
             passport = form_list[1].save(commit = False)
-            passport.data = self.request.user.UserData
+            passport.user = self.request.user.UserData
             passport.save()
         elif form_list[0].cleaned_data['type'] == 'Z':
             if hasattr(self.request.user.UserData, 'Zagran'):
                self.request.user.UserData.Zagran.delete() 
             zagran = form_list[1].save(commit = False)
-            zagran.data = self.request.user.UserData
+            zagran.user = self.request.user.UserData
             zagran.save()
         elif form_list[0].cleaned_data['type'] == 'B':
             if hasattr(self.request.user.UserData, 'BirthCert'):
                self.request.user.UserData.BirthCert.delete() 
             birth_cert = form_list[1].save(commit = False)
-            birth_cert.data = self.request.user.UserData
+            birth_cert.user = self.request.user.UserData
             birth_cert.save()
         elif form_list[0].cleaned_data['type'] == 'O':
             if hasattr(self.request.user.UserData, 'OtherDoc'):
                self.request.user.UserData.BirthCert.delete() 
             other = form_list[1].save(commit = False)
-            other.data = self.request.user.UserData
+            other.user = self.request.user.UserData
             other.save()
         return redirect('userdata_edited')
 

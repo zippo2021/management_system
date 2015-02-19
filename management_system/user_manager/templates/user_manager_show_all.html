@@ -1,64 +1,67 @@
 {% extends 'base.html' %}
 {% block content %}
-<ul>
-{% for each in staff_members %}
-	<li>
-	<p>
-		{{ each.username }}<br>
-		{{ each.UserData.last_name}} {{each.UserData.first_name }}<br>
-		{% if not each.is_active %}
-			<font color = "red">Отключен</font>
+<p>
+	<a href="{% url 'create_user' %}">Создать нового пользователя</a>
+</p>
+<table>
+	<tr>
+	{% for key, value in staff_members.items %}
+		<td>
+			<table>
+				<tr>
+					<td>
+						<p>
+							<img src="{{ key.UserData.avatar }}">
+						</p>
+						<p>
+							<a href="{% url 'edit_user_permissions' key.id %}">
+								Изменить права
+							</a>
+							<br>
+							{% if user.UserData.Admin.is_superadmin and not key.UserData.Admin.is_superadmin %}
+								<a href="{% url 'deactivate_user' key.id %}">
+									{% if key.is_active %}
+										Отключить
+									{% else %}
+										Включить
+									{% endif %}
+								</a>
+							{% endif %}
+							{% if not key.is_active %}
+								<br>
+								<font color = "red">Отключен</font>
+							{% endif %}
+						</p>
+					</td>
+					<td>
+						Логин: 
+							<a href="{% url 'view_profile' key.id %}">
+							{{ key }}
+							</a>
+						<br>
+						ФИО:
+							{{ key.UserData.last_name}}
+							{{ key.UserData.first_name }}
+							{{ key.UserData.second_name }}
+						<br>
+						<ul>
+							{% for each in value %}
+								<li>
+									{{ perms_to_language|get_item:each }}<br>
+								</li>
+							{% endfor %}
+						</ul>
+					</td>
+				</tr>
+			</table>
+		<td>
+		{% if forloop.counter0|divisibleby:"2" %}
+			<td width=10%></td>
 		{% endif %}
-		<ul>
-		{% if each.UserData.Admin.is_active %}
-		<li>
-			{% if each.UserData.Admin.is_superadmin %}
-				<font color = "red">Главный Администратор</font>
-			{% else %}
-				<font color = "red">Администратор</font>
-			{% endif %}
-		</li>
+		{% if forloop.counter|divisibleby:"2" %}
+			</tr><tr>
 		{% endif %}
-		{% if each.UserData.EventWorker.is_active %}
-		<li>
-			<font color = "blue">Управляющий событиями</font>
-		</li>
-		{% endif %}
-		{% if each.UserData.Teacher.is_active %}
-		<li>
-			<font color = "blue">Учитель</font><br>
-		</li>
-		{% endif %}
-		{% if each.UserData.Mentor.is_active %}
-		<li>
-			<font color = "blue">Воспитатель</font><br>
-		</li>
-		{% endif %}
-		{% if each.UserData.Observer.is_active %}
-		<li>
-			<font color = "blue">Наблюдатель</font><br>
-		</li>
-		{% endif %}
-		{% if each.UserData.RegularUser.is_active %}
-		<li>
-			<font color = "blue">Ученик</font><br>
-		</li>
-		{% endif %}
-		</ul>
-		<a href="{% url 'edit_user_permissions' each.id %}">
-			Изменить права
-		</a><br>
-		{% if user.UserData.Admin.is_active and not each.UserData.Admin.is_superadmin %}
-			<a href="{% url 'deactivate_user' each.id %}">
-				{% if each.is_active %}
-				Отключить
-				{% else %}
-				Включить
-				{% endif %}
-			</a>
-		{% endif %}
-	</p>
-	</li>
-{% endfor %}
-</ul>
+	{% endfor %}
+	</tr>
+</table>
 {% endblock %}

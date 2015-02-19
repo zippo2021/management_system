@@ -7,7 +7,6 @@ from django.core.mail import send_mail
 from user_manager.source_functions import create_user, get_staff_members
 from base_source_functions import send_templated_email
 from django.contrib.auth.models import User
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import user_passes_test
 from user_manager.permissions import perms_to_classes
 

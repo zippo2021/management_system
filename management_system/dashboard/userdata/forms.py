@@ -29,20 +29,20 @@ end of document type select form
 class PassportForm(ModelForm):
     class Meta:
         model = Passport
-        exclude = ['data']
+        exclude = ['user']
 
 class ZagranForm(ModelForm):
     class Meta:
         model = Zagran
-        exclude = ['data']
+        exclude = ['user']
 
 class BirthCertForm(ModelForm):
     class Meta:
         model = BirthCert
-        exclude = ['data']
+        exclude = ['user']
 
 class OtherDocForm(ModelForm):
     class Meta:
         model = OtherDoc
-        exclude = ['data']
+        exclude = ['user']
       

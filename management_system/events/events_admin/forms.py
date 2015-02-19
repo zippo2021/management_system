@@ -14,6 +14,7 @@ class EventEditForm(ModelForm):
                    'is_payed',
                    'is_journey',
                    'is_active',
+                   'has_journal'
                   ]
 
 class EventForm(ModelForm):

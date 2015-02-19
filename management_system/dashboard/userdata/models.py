@@ -88,7 +88,7 @@ admin.site.register(Admin)
 
     
 class OtherDoc(models.Model):
-    data = models.OneToOneField(UserData, primary_key=True)
+    user = models.OneToOneField(UserData, related_name = 'OtherDoc')
     type = models.CharField(verbose_name='Тип', max_length=255)
     ser = models.CharField(verbose_name='Серия',max_length=255)
     number = models.CharField(verbose_name='Номер',max_length=255)
@@ -97,7 +97,7 @@ class OtherDoc(models.Model):
 admin.site.register(OtherDoc)
 
 class Passport(models.Model):
-    data = models.OneToOneField(UserData,primary_key=True)
+    user = models.OneToOneField(UserData, related_name='Passport')
     ser = models.PositiveIntegerField(verbose_name='Серия',max_length=4)
     number = models.PositiveIntegerField(verbose_name='Номер',max_length=6)
     issued_by = models.CharField(verbose_name="Кем выдан",max_length=255,)
@@ -106,7 +106,7 @@ class Passport(models.Model):
 admin.site.register(Passport)
 
 class BirthCert(models.Model):
-    data = models.OneToOneField(UserData,primary_key=True)
+    user = models.OneToOneField(UserData, related_name = 'BirthCert')
     ser = models.CharField(verbose_name='Серия',max_length=8)
     number = models.PositiveIntegerField(verbose_name='Номер',max_length=6)
     issued_by = models.CharField(verbose_name="Кем выдано",max_length=255)
@@ -114,7 +114,7 @@ class BirthCert(models.Model):
 admin.site.register(BirthCert)
 
 class Zagran(models.Model):
-    data = models.OneToOneField(UserData,primary_key=True)
+    user = models.OneToOneField(UserData, related_name = 'Zagran')
     ser = models.PositiveIntegerField(verbose_name='Серия',max_length=2)
     number = models.PositiveIntegerField(verbose_name='Номер',max_length=7)
     issued_by = models.CharField(verbose_name="Кем выдан",max_length=255)

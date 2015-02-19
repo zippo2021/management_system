@@ -1,5 +1,6 @@
 from django import forms
-from events.events_admin.models import Event
+from events.events_admin.models import Event, Result
+
 class PriceChoiceForm(forms.Form):
     def __init__(self, *args, **kwargs):
         eid = kwargs.pop('event_id', None)
@@ -7,4 +8,7 @@ class PriceChoiceForm(forms.Form):
         event = Event.objects.get(id = eid)
         self.fields['PriceGroup'] = forms.ModelChoiceField(queryset=event.PriceGroup.all())
     
-        
+class ResultForm(forms.ModelForm):
+    class Meta:
+        model = Result
+        exclude = ['event', 'user']

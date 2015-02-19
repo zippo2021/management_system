@@ -149,7 +149,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
             global_settings.TEMPLATE_CONTEXT_PROCESSORS +
             ('django.core.context_processors.request',
 			 'context_processors.organisation_settings_processor',
-			 'context_processors.permission_translation_processor',)
+			 'context_processors.permission_translation_processor',
+             'context_processors.events_processor',
+             'context_processors.documents_translation_processor',
+             'context_processors.user_permissions_processor',)
      )
 
 # Static files (CSS, JavaScript, Images)

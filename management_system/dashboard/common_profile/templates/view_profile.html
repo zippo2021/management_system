@@ -1,43 +1,87 @@
 {% extends "base.html" %}
-
 {% block content %}
 <table>
-<tr>
-    <td width=25%>
-        <img src="{{ base_data.avatar }}"/> 
-    </td>
-    <td>
-        <p>ФИО:<br><b> {{ base_data.last_name }} {{ base_data.first_name }} {{ base_data.middle_name }} </b></p>
-        <p>Телефон:<br><b> {{ base_data.phone }}</b></p>
-    </td>
-    {% if edit_perm == True %}<td><a href = "{% url 'userdata_edit' %}">Редактировать</a></td> {% endif %}
+	<thead>
+		<tr>
+			<td width=10%></td>
+			<td width=25%>
+				Базовая информация
+    			{% if edit_perm == True %}
+					<a href = "{% url 'userdata_edit' %}">Редактировать</a>
+				{% endif %}
+			</td>
+			<td width=25%>
+				Документы
+    			{% if edit_perm == True %}
+					<a href = "{% url 'add_userdata_document' %}">
+						Добавить/обновить
+					</a>
+				{% endif %}
+			</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+    		<td>
+        		<img src="{{ base_data.avatar }}"/> 
+    		</td>
+   			<td>
+        		<p>
+					ФИО:<br>
+					<b>
+					{{ base_data.last_name }}
+					{{ base_data.first_name }}
+					{{ base_data.middle_name }}
+					</b>
+				</p>
+        		<p>
+					Телефон:<br>
+					<b>
+					{{ base_data.phone }}
+					</b>
+				</p>
+    		</td>
+			<td>
+				<p>
+					{% for each in documents %}
+						{{ each }}<br>
+					{% endfor %}
+				</p>
+			</td>
 </tr>
-
-<tr>
-{% for role,fields in additional_data.items %}
-    {% if fields %}
-    <td>
-        <p>{{ role }}</p>
-        {% if edit_perm == True %}
-            <a href = "{% url 'edit_common' role %}">Редактировать</a>
-        {% endif %}
-    </td>
-    {% endif %}
-{% endfor %}
-</tr>
-<tr>
-{% for role, fields in additional_data.items %}
-    {% if fields %}
-    <td>
-	{% for key, value in fields.items %}
-		<p> {{ key }} : {{ value }} </p>
-	{% endfor %}
-    </td>
-    
-    {% endif %}
-{% endfor %}
-</tr>
+</tbody>
 </table>
+
+<table>
+	<tbody>
+		{% for role,fields in additional_data.items %}
+    		{% if fields %}
+			<tr>
+				<td width=25%>
+					<p>
+					{{ perms_to_language|get_item:role }}
+        			{% if edit_perm == True %}
+            			<a href = "{% url 'edit_common' role %}">
+							Редактировать
+						</a>
+       				{% endif %}
+					</p>
+				</td>
+				<td width=25%></td>
+				<td width=25%></td>
+			</tr>
+			<tr>
+			{% for key, value in fields.items %}
+				<td> {{ key }} : {{ value }} </td>
+				{% if forloop.counter|divisibleby:"3" %}
+					</tr><tr>
+				{% endif %}
+			{% endfor %}
+   			</tr>
+			{% endif %}
+		{% endfor %}
+	</tbody>
+</table>	
 
 {% endblock %}
 

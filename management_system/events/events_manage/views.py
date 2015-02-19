@@ -1,5 +1,6 @@
+#-*- coding: utf-8 *-*
 from django.shortcuts import render,redirect
-from events.events_admin.models import Event,Requests,Request
+from events.events_admin.models import Event, Requests, Result
 from events.study_groups.models import StudyGroup
 from events.price_groups.models import PriceGroup
 from django.contrib.auth.models import User
@@ -7,12 +8,29 @@ from dashboard.teacher.models import Teacher
 from dashboard.regular.models import RegularUser
 from dashboard.mentor.models import Mentor
 from dashboard.observer.models import Observer
-from events.events_manage.forms import PriceChoiceForm
+from events.events_manage.forms import PriceChoiceForm, ResultForm
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from decorators import should_be_event_worker,should_be_regular
 from django.contrib.auth.decorators import login_required
+
 trans = {'Teacher':'teachers','Observer':'observers','Mentor':'mentors'}
+
+@login_required
+@should_be_event_worker
+def edit_or_create_result(request, event_id, user_id):
+    user = RegularUser.objects.get(id = user_id)
+    event = Event.objects.get(id = event_id)
+    result, created = Result.objects.get_or_create(event = event, user = user)
+    if request.method == 'POST':
+        form = ResultForm(request.POST, instance = result)
+        if form.is_valid():
+            result = form.save()
+            #FIXME: bad completed page
+            return redirect('event_added')
+    else:
+        form = ResultForm(instance = result)
+    return render(request, 'edit_or_create_result.html', {'form' : form})
 
 @login_required
 @should_be_event_worker

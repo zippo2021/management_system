@@ -5,6 +5,7 @@ from dashboard.mentor.models import Mentor
 from dashboard.observer.models import Observer
 from django.contrib.auth.models import User
 from user_manager.permissions import perms_to_classes
+from dashboard.common_profile.source_functions import perms_to_list
 
 def create_user(username, password, email = None,
 					  perms = {
@@ -31,13 +32,16 @@ def create_user(username, password, email = None,
 	return user
 
 def get_staff_members():
-	staff = []
+    staff = []
     #no regular users here
-	staff_perms_list = perms_to_classes.keys()
-	staff_perms_list.remove('regular')
-	for key in staff_perms_list:
-		staff = staff +\
-		[each.data.user for each in globals()\
-		[perms_to_classes[key]].objects.filter(is_active = True)]
-	#c-style distinct() for lists
-	return list(set(staff))
+    staff_perms_list = perms_to_classes.keys()
+    staff_perms_list.remove('regular')
+    for key in staff_perms_list:
+        staff = staff +\
+        [each.data.user for each in globals()\
+        [perms_to_classes[key]].objects.filter(is_active = True)]
+    #c-style distinct() for lists
+    staff = list(set(staff))
+    staff = { each : perms_to_list(each.UserData.get_permissions())
+              for each in staff }
+    return staff
