@@ -74,33 +74,37 @@ def show_requests(request,eid):
 def accept(request,eid,uid):
     event = Event.objects.get(id = eid)
     if request.method == "POST":
-        form = PriceChoice(request.POST,event_id=eid)
+        form = PriceChoiceForm(request.POST,event_id=eid)
         if form.is_valid():
             user = User.objects.get(id = uid)
             spec = user.UserData.RegularUser
+            current_rq = event.Request.objects.get(user=spec)
+            current_rq.status = 'Accepted'
+            current_rq.save()
             s_group = event.StudyGroup.objects.get(label='All')
             s_group.users.add(spec)
             p_group = form.cleaned_data.PriceGroup
-            p_group.users.add(spec)
+            p_group.users.add(spec)            
             return redirect('events_show_requests',eid = eid)
     else:
         form = PriceChoice(event_id=eid) 
     return render(request,'price_choice_form.html',{'form':form,'eid':eid})
 
+
+@login_required
 def deny_request(request,eid,uid):
     event = Event.objects.get(id = eid)
-    #FIXME обсудить про отказ и статус
+    user = User.objects.get(id = uid)
+    current_rq = event.Request.objects.get(user=user.UserData.RegularUser)
+    current_rq.status = 'Declined'
+    current_rq.save() 
+    return redirect('events_show_requests',eid=eid)
     
 @login_required
 @should_be_regular
 def place_request(request,eid):
-    event = Event.objects.get(id = eid)
-    try:
-        e_request = event.Requests.get()
-    except ObjectDoesNotExist:
-        e_request = Requests(event = eid)
-        e_request.save()
-    e_request.users.add(request.user.UserData.RegularUser)
+    e_request = Request(event = eid, user = request.user.UserData.RegularUser,status = 'Processing')
+    e_request.save()
     return redirect('request_completed',eid=eid )
 
 @login_required

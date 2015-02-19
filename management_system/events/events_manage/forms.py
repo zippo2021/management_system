@@ -1,6 +1,7 @@
 from django import forms
 from events.events_admin.models import Event, Result
-class PriceChoice(forms.Form):
+
+class PriceChoiceForm(forms.Form):
     def __init__(self, *args, **kwargs):
         eid = kwargs.pop('event_id', None)
         super(PriceChoice, self).__init__(*args, **kwargs)        

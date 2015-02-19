@@ -50,6 +50,15 @@ class Requests(models.Model):
     users = models.ManyToManyField('regular.RegularUser',
 								   related_name = 'Requests')
 
+class Request(models.Model):
+    status = models.CharField(verbose_name = 'Статус',
+                            blank = True,
+                            max_length = 1000,
+    )
+    event = models.OneToOneField(Event, related_name = 'Request')
+    user = models.OneToOneField('regular.RegularUser',
+								   related_name = 'Request')
+
 class Contract(models.Model):
     event = models.ForeignKey(Event, related_name = 'Contract')
     user = models.ForeignKey('regular.RegularUser', related_name = 'Contract')

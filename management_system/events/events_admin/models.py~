@@ -15,21 +15,13 @@ class Event(models.Model):
 			     max_length = 100)
     opened = models.DateField(verbose_name = 'Создано')
     closed = models.DateField(verbose_name = 'Закрыто')
-<<<<<<< HEAD
-    is_private = models.BooleanField()
-    is_journey = models.BooleanField()
-    is_payed = models.BooleanField()
-    event_workers = models.ManyToManyField('event_worker.EventWorker')
-    teachers = models.ManyToManyField('teacher.Teacher')
-=======
     is_private = models.BooleanField(verbose_name = 'Добавление по заявкам')
     is_journey = models.BooleanField(verbose_name = 'Выездное')
     is_payed = models.BooleanField(verbose_name = 'Оплачиваемое')
     has_journal = models.BooleanField(verbose_name = 'Вести журнал')
     event_workers = models.ManyToManyField('event_worker.EventWorker',
                                           verbose_name = 'Управляющие событием')
-    subject_workers = models.ManyToManyField('teacher.Teacher')
->>>>>>> d15a9b737067c4750f29ccd509c1edbd3c69db14
+    teachers = models.ManyToManyField('teacher.Teacher')
     mentors = models.ManyToManyField('mentor.Mentor')
     observers = models.ManyToManyField('observer.Observer')
     is_active = models.BooleanField() 
@@ -57,6 +49,15 @@ class Requests(models.Model):
     event = models.OneToOneField(Event, related_name = 'Requests')
     users = models.ManyToManyField('regular.RegularUser',
 								   related_name = 'Requests')
+
+class Request(models.Model):
+    status = models.CharField(verbose_name = 'Статус',
+                            blank = True,
+                            max_length = 1000,
+    )
+    event = models.OneToOneField(Event, related_name = 'Request')
+    users = models.OneToOneField('regular.RegularUser',
+								   related_name = 'Request')
 
 class Contract(models.Model):
     event = models.ForeignKey(Event, related_name = 'Contract')
