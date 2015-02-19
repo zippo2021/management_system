@@ -8,7 +8,7 @@ from dashboard.teacher.models import Teacher
 from dashboard.regular.models import RegularUser
 from dashboard.mentor.models import Mentor
 from dashboard.observer.models import Observer
-from events.events_manage.forms import PriceChoice, ResultForm
+from events.events_manage.forms import PriceChoiceForm, ResultForm
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from decorators import should_be_event_worker,should_be_regular
