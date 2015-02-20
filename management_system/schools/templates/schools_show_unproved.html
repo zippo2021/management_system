@@ -1,26 +1,35 @@
 {% extends 'base.html' %}
 {% block content %}
 <table>
-	<tr>
-		{% for each in schools %}
+	<thead>
+		<tr>
+			<td>Название</td>
+			<td>Город</td>
+			<td>Страна</td>
+			<td></td>
+		</tr>
+	</thead>
+	<tbody>
+	{% for each in schools %}
+		<tr>
+			<td>{{ each.name }}</td>
+			<td>{{ each.city }}</td>
+			<td>{{ each.country }}</td>
 			<td>
-				{{ each.name }}<br>
-				{{ each.city }}<br>
-				{{ each.country }}<br>
 				<a href="{% url 'schools_edit' each.id %}">
 					Редактировать и подтвердить
 				</a>
 				<br>
 				<a href="{% url 'schools_approve' each.id %}">Подтвердить</a>
 			</td>
-			{% if forloop.counter|divisibleby:"3" %}
-				</tr><tr>
-			{% endif %}
-		{% empty %}
+		</tr>
+	{% empty %}
+		<tr>
 			<td>
 				Нет записей!
 			</td>
-		{% endfor %}
-	</tr>
+		</tr>
+	{% endfor %}
+	</tbody>
 </table>
 {% endblock %}
