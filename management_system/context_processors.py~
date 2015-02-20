@@ -26,15 +26,18 @@ def user_permissions_processor(request):
     perms = perms_to_list(request.user.UserData.get_permissions())
     return {'user_permissions' : perms}
 
-@login_required
 def events_processor(request):
     events = Event.objects.all()
-    user = request.user.UserData
-    if not(user.Admin.is_active):
-        events = events.filter(Q(event_workers = user.EventWorker)
-                                            | Q(teachers = user.Teacher)
-                                            | Q(mentors = user.Mentor)
-                                            | Q(observers = user.Observer))
-    active_events = events.filter(is_active = True)
-    archive_events = events.filter(is_active = False)
+    if request.user.is_authenticated():
+        user = request.user.UserData
+        if not(user.Admin.is_active):
+            events = events.filter(Q(event_workers = user.EventWorker)
+                                                | Q(teachers = user.Teacher)
+                                                | Q(mentors = user.Mentor)
+                                                | Q(observers = user.Observer))
+        active_events = events.filter(is_active = True)
+        archive_events = events.filter(is_active = False)
+    else:
+        active_events = None
+        archive_events = None
     return {'ative_events' : active_events, ' archive_events' : archive_events}
