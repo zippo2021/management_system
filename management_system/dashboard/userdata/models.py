@@ -16,68 +16,68 @@ from django.db.models.signals import post_save
 
 # Create your models here.
 class UserData(models.Model):
-	def get_permissions(self):
-		perms = {key : getattr(self, perms_to_classes[key]).is_active
-				for key in perms_to_classes.keys()}
-		return perms
+    def get_permissions(self):
+        perms = {key : getattr(self, perms_to_classes[key]).is_active
+                for key in perms_to_classes.keys()}
+        return perms
 	
-	def set_permissions(self, perms):
-		for key in perms_to_classes.keys():
-			getattr(self, perms_to_classes[key]).is_active = perms[key]
-			getattr(self, perms_to_classes[key]).save()
-		self.user.save()
+    def set_permissions(self, perms):
+        for key in perms_to_classes.keys():
+            getattr(self, perms_to_classes[key]).is_active = perms[key]
+            getattr(self, perms_to_classes[key]).save()
+        self.user.save()
 	
-	def __str__ (self):
-		return self.user.__str__()
-	
-	user = models.OneToOneField(User, related_name = 'UserData')
+    def __unicode__ (self):
+        return self.last_name +' '+ self.first_name
 
-	avatar = models.ImageField(
+    user = models.OneToOneField(User, related_name = 'UserData')
+
+    avatar = models.ImageField(
                     verbose_name = 'Аватар',
                     upload_to ='images/profile_pics',
                     blank = True,
                     null = True,
     )
 	
-	first_name = models.CharField(verbose_name = 'Имя', max_length = 255)
+    first_name = models.CharField(verbose_name = 'Имя', max_length = 255)
 	
-	middle_name = models.CharField(
+    middle_name = models.CharField(
                     verbose_name = 'Отчество',
                     max_length = 255,
                     blank = True,
                     null = True,
     )
 	
-	last_name = models.CharField(verbose_name = 'Фамилия',  max_length = 255)
+    last_name = models.CharField(verbose_name = 'Фамилия',  max_length = 255)
 	
-	phone  = models.CharField(
+    phone  = models.CharField(
                     verbose_name = 'Телефон',
                     max_length = 15,
                     null = True,
     )
 	
-	modified = models.BooleanField(default = False)
+    modified = models.BooleanField(default = False)
 
 
 admin.site.register(UserData)
 
 @receiver(post_save, sender = User)
 def create_userdata(instance, created, **kwargs):
-	if created:
-		data = UserData(user = instance)
-		data.save()
+    if created:
+        data = UserData(user = instance)
+        data.save()
 
 @receiver(user_activated)
 def activate_regular_user(user, **kwargs):
-	user.UserData.RegularUser.is_active = True
-	user.UserData.RegularUser.save()
+    user.UserData.RegularUser.is_active = True
+    user.UserData.RegularUser.save()
 
 @receiver(post_save, sender = UserData)
 def create_additional_data(instance, created, **kwargs):
-	if created:
-		for key in perms_to_classes.keys():
-			globals()[key] = globals()[perms_to_classes[key]](data = instance)
-			globals()[key].save()
+    if created:
+        for key in perms_to_classes.keys():
+            globals()[key] = globals()[perms_to_classes[key]](data = instance)
+            globals()[key].save()
 
 class Admin(models.Model):
     data = models.OneToOneField(UserData, related_name = 'Admin')

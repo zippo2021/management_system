@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 
-
-from django.forms import ModelForm, Form, BooleanField
+from dashboard.event_worker.models import EventWorker
+from django.forms import ModelForm, Form, BooleanField, ModelMultipleChoiceField
 from events.events_admin.models import Event, JourneyData, Result
 
 class EventEditForm(ModelForm):
+    event_workers = ModelMultipleChoiceField(label = 'Работники события',
+                            queryset=EventWorker.objects.filter(
+                            is_active = True, data__modified = True,
+                            data__user__is_active = True))
     class Meta:
         model = Event
         exclude = ['teachers',
@@ -18,6 +22,12 @@ class EventEditForm(ModelForm):
                   ]
 
 class EventForm(ModelForm):
+    event_workers = ModelMultipleChoiceField(label = 'Работники события',
+                            queryset=EventWorker.objects.filter(
+                            is_active = True, data__modified = True,
+                            data__user__is_active = True))
+
+    
     class Meta:
         model = Event
         exclude = ['teachers',

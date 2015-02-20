@@ -6,8 +6,8 @@ from dashboard.teacher.models import Teacher
 
 
 class Event(models.Model):
-    def __str__ (self):
-        return self.name.encode('utf-8')
+    def __unicode__ (self):
+        return self.name
     name = models.CharField(verbose_name = 'Название', max_length = 100)
     comment = models.CharField(verbose_name = 'Комментарий',
 			       max_length = 1000, blank = True)
@@ -29,6 +29,8 @@ admin.site.register(Event)
 
 
 class JourneyData(models.Model):
+    def __unicode__(self):
+        return self.event.name
     event = models.OneToOneField('events_admin.Event',
 								 related_name = 'JourneyData')
     tickets = models.ForeignKey('tickets.Ticket', related_name = 'JourneyData',
