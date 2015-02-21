@@ -108,8 +108,7 @@ def not_regular(request, *args, **kwargs):
 	elif not(is_regular_possibly_unfilled(request)):
             return not_is_regular_possibly_unfilled(request)
 	else:
-            request.session['UserDataModal'] = 'on'
-            return (request.path)
+            return redirect('edit_regular')
 
 
 	#condition functions
