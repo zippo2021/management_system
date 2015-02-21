@@ -66,7 +66,7 @@ def invite(request,eid,uid,role):
 def show_requests(request,eid):
     event = Event.objects.get(id = eid)
     requests = Request.objects.filter(event = eid)
-    if event.PriceGroup.all():
+    if (event.PriceGroup.all()) or(event.is_payed) :
         accept = True
     else:
         accept = False
@@ -79,36 +79,52 @@ def show_requests(request,eid):
 @login_required
 @should_be_event_worker
 def accept(request,eid,uid):
-    event = Event.objects.get(id = eid)            
-    if request.method == "POST":
-        form = PriceChoiceForm(request.POST,event_id=eid)
-        if form.is_valid():
-            user = User.objects.get(id = uid)
-            spec = user.UserData.RegularUser
-            current_rq = Request.objects.get(event=event,user=spec)
-            current_rq.status = 'Accepted'
-            p_group = form.cleaned_data['price_group']
-            files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
-            send_templated_email(
-                        subject='Подтверждение заявки',
-                        email_template_name='',
-                        email_context={
-                        'event': event.name,
-                        'price': p_group.price,                        
-                        },
-						recipients=user.email,
-                        fail_silently=False,
-						files=files,
-            )
-            current_rq.save()
-            #s_group = StudyGroup.objects.get(event=,label='All')
-            #s_group.users.add(spec)
-            p_group.users.add(spec)                       
-            return redirect('events_show_requests',eid = eid)
+    event = Event.objects.get(id = eid)  
+    if event.is_payed:          
+        if request.method == "POST":
+            form = PriceChoiceForm(request.POST,event_id=eid)
+            if form.is_valid():
+                user = User.objects.get(id = uid)
+                spec = user.UserData.RegularUser
+                current_rq = Request.objects.get(event=event,user=spec)
+                current_rq.status = 'Accepted'
+                p_group = form.cleaned_data['price_group']
+                files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(eid)), '*'))
+                send_templated_email(
+                            subject='Подтверждение заявки',
+                            email_template_name='',
+                            email_context={
+                            'event': event.name,
+                            'price': p_group.price,                        
+                            },
+		    				recipients=user.email,
+                            fail_silently=False,
+		    				files=files,
+                )
+                current_rq.save()
+                #s_group = StudyGroup.objects.get(event=,label='All')
+                #s_group.users.add(spec)
+                p_group.users.add(spec)                       
+                return redirect('events_show_requests',eid = eid)
+        else:
+            form = PriceChoiceForm(event_id=eid) 
+        return render(request,'price_choice_form.html',{'form':form,'eid':eid})
     else:
-        form = PriceChoiceForm(event_id=eid) 
-    return render(request,'price_choice_form.html',{'form':form,'eid':eid})
-
+        user = User.objects.get(id = uid)
+        spec = user.UserData.RegularUser
+        current_rq = Request.objects.get(event=event,user=spec)
+        current_rq.status = 'Accepted'
+        send_templated_email(
+                            subject='Подтверждение заявки',
+                            email_template_name='',
+                            email_context={
+                            'event': event.name,                        
+                            },
+		    				recipients=user.email,
+                            fail_silently=False,
+		    				files=files,
+                )
+        
 
 @login_required
 def decline_request(request,eid,uid):
