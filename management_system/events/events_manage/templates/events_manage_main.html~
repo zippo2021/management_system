@@ -17,7 +17,7 @@
 </tr>
 <tr>
     <td>
-        <a href="{% url 'events_show_users' eid 'Teacher' %}">Управление завками </a>
+        <a href="{% url 'events_show_requests' eid  %}">Управление завками </a>
     </td>
 </tr>    
 </table>

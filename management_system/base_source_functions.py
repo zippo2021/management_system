@@ -1,6 +1,6 @@
 
-def send_templated_email(subject, email_template_name, email_context,
-						recipients, sender=None,bcc=None, fail_silently=True,
+def send_templated_email(subject, email_context,recipients, email_template_name=None,template_file=None,
+						 sender=None,bcc=None, fail_silently=True,
 						files=None):
 	"""
 	send_templated_mail() is a wrapper around Django's e-mail routines that
@@ -28,9 +28,12 @@ def send_templated_email(subject, email_template_name, email_context,
 	c = Context(email_context)
 	if not sender:
 		sender = settings.DEFAULT_FROM_EMAIL
-		
-	template = loader.get_template(email_template_name)
-	text_part = strip_tags(template.render(c))
+
+        if email_template_name is not None:
+            template = loader.get_template(email_template_name)
+        else:
+            template = template_file	
+        text_part = strip_tags(template.render(c))
 	html_part = template.render(c)
 	if type(recipients) == str:
 		if recipients.find(','):

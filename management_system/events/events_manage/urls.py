@@ -12,4 +12,6 @@ urlpatterns = [
     url(r'^place_request/(?P<eid>\d+)/$', views.place_request, name = 'place_request'),
     url(r'^decline_request/(?P<eid>\d+)/(?P<uid>\d+)/$', views.decline_request, name = 'decline_request'),
     url(r'^request_completed/$', views.request_completed, name = 'request_completed'),
+    url(r'^create_acceptance_email_template/(?P<eid>\d+)/$', views.create_acceptance_email_template, name = 'create_acceptance_email_template'),
 ]
+

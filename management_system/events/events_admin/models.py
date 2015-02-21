@@ -75,3 +75,9 @@ class Result(models.Model):
     result = models.CharField(verbose_name = 'Результат',
                               max_length = 1000,
     )
+
+class AcceptanceEmailTemplate(models.Model):
+    event = models.ForeignKey(Event, related_name = 'AcceptanceEmailTemplate')
+    text = models.TextField(verbose_name = 'Результат',
+                              max_length = 4000,
+    )

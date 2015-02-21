@@ -60,9 +60,7 @@ class Request(models.Model):
     event = models.ForeignKey(Event, related_name = 'Request')
     user = models.ForeignKey('regular.RegularUser',
 								   related_name = 'Request')
-    email_status = models.CharField(verbose_name = 'Статус отправки email',
-                              max_length = 100,
-    )
+    
 
 class Contract(models.Model):
     event = models.ForeignKey(Event, related_name = 'Contract')
@@ -76,4 +74,10 @@ class Result(models.Model):
     user = models.ForeignKey('regular.RegularUser', related_name = 'Result')
     result = models.CharField(verbose_name = 'Результат',
                               max_length = 1000,
+    )
+
+class AcceptanceEmailTemplate(models.Model):
+    event = models.ForeignKey(Event, related_name = 'Result')
+    text = models.TextField(verbose_name = 'Результат',
+                              max_length = 4000,
     )
