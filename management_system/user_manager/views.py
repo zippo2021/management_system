@@ -50,7 +50,7 @@ def create(request):
 def completed(request):
 	return render(request, 'user_manager_completed.html')
 
-#@staff_member_required
+@staff_member_required
 def show_all(request):
 	staff_members = get_staff_members()
 	return render(request,

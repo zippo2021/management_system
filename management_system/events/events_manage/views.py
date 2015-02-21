@@ -121,7 +121,7 @@ def decline_request(request,eid,uid):
     
 @login_required
 @should_be_regular
-def place_request(request,eid):
+def place_request(request, eid):
     event = Event.objects.get(id = eid)
     e_request, created = Request.objects.get_or_create(event = event, user = request.user.UserData.RegularUser)
     if created:
@@ -134,7 +134,7 @@ def place_request(request,eid):
 @login_required
 @should_be_regular
 def request_completed(request):
-    return render(request,'request_completed.html',{})
+    return render(request, 'request_completed.html', {})
 
     
     

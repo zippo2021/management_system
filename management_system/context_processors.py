@@ -37,4 +37,4 @@ def events_processor(request):
                                             | Q(observers = user.Observer))
     active_events = events.filter(is_active = True)
     archive_events = events.filter(is_active = False)
-    return {'ative_events' : active_events, ' archive_events' : archive_events}
+    return {'active_events' : active_events, 'archive_events' : archive_events}
