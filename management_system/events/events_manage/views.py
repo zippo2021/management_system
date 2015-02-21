@@ -13,6 +13,7 @@ from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from decorators import should_be_event_worker,should_be_regular
 from django.contrib.auth.decorators import login_required
+from events.events_manage.source_functions import send_regular_email
 
 trans = {'Teacher':'teachers','Observer':'observers','Mentor':'mentors'}
 
@@ -83,11 +84,22 @@ def accept(request,eid,uid):
             spec = user.UserData.RegularUser
             current_rq = Request.objects.get(event=event,user=spec)
             current_rq.status = 'Accepted'
+            p_group = form.cleaned_data['price_group']
+            files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
+            current_rq.email_status = send_templated_email(
+                        subject='Подтверждение заявки',
+                        email_template_name='',
+                        email_context={
+                        'event' = event.name,
+                        'price' = p_group.price,                        
+                        },
+						recipients=user.email,
+                        fail_silently=False,
+						files=files):
             current_rq.save()
             #s_group = StudyGroup.objects.get(event=,label='All')
             #s_group.users.add(spec)
-            p_group = form.cleaned_data['price_group']
-            p_group.users.add(spec)            
+            p_group.users.add(spec)                       
             return redirect('events_show_requests',eid = eid)
     else:
         form = PriceChoiceForm(event_id=eid) 
@@ -103,8 +115,8 @@ def decline_request(request,eid,uid):
     current_rq.save() 
     return redirect('events_show_requests',eid=eid)
     
-#@login_required
-#@should_be_regular
+@login_required
+@should_be_regular
 def place_request(request,eid):
     event = Event.objects.get(id = eid)
     e_request, created = Request.objects.get_or_create(event = event, user = request.user.UserData.RegularUser)
@@ -113,12 +125,12 @@ def place_request(request,eid):
         e_request.save()
     else:
         pass #FIXME
-    return redirect('request_completed',eid=eid )
+    return redirect('request_completed')
 
 @login_required
 @should_be_regular
-def request_completed(request,eid):
-    return render(request,'request_completed.html')
+def request_completed(request):
+    return render(request,'request_completed.html',{})
 
     
     
