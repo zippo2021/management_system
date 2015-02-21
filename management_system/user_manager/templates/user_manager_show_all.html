@@ -2,7 +2,9 @@
 {% load custom_template_filters %}
 {% block content %}
 <p>
-	<a href="{% url 'create_user' %}">Создать нового пользователя</a>
+	<a href="{% url 'user_manager_create' %}">
+		Создать нового пользователя
+	</a>
 </p>
 <table>
 	<tr>
@@ -15,12 +17,16 @@
 							<img src="{{ key.UserData.avatar }}">
 						</p>
 						<p>
-							<a href="{% url 'edit_user_permissions' key.id %}">
+							<a href="
+							    {% url 'user_manager_edit_permissions' key.id %}
+							">
 								Изменить права
 							</a>
 							<br>
 							{% if user.UserData.Admin.is_superadmin and not key.UserData.Admin.is_superadmin %}
-								<a href="{% url 'deactivate_user' key.id %}">
+								<a href="
+									{% url 'user_manager_deactivate' key.id %}
+								">
 									{% if key.is_active %}
 										Отключить
 									{% else %}
@@ -36,7 +42,9 @@
 					</td>
 					<td>
 						Логин: 
-							<a href="{% url 'view_profile' key.id %}">
+							<a href="
+								{% url 'common_profile_view_profile' key.id %}
+							">
 							{{ key }}
 							</a>
 						<br>

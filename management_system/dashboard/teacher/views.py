@@ -15,13 +15,8 @@ def edit(request):
 			   instance = request.user.UserData.Teacher)
 		if form.is_valid():
 			teacher = form.save()
-			return redirect ('teacher_edited')
+			return redirect ('completed')
 	else:
 		form = TeacherForm(instance = request.user.UserData.Teacher)
 	return render(request, 'teacher_edit.html', {'form' : form})
-
-@login_required
-@should_be_teacher
-def completed(request):
-	return render(request, 'teacher_completed.html')
 

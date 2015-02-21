@@ -9,31 +9,17 @@ from decorators import should_be_defined, should_be_regular
 # Create your views here.
 
 @login_required
-def index(request):
-    return render(request, 'schools_index.html')
-
-@login_required
 @should_be_defined
 def add(request):
     if request.method == 'POST':
         form = SchoolForm(request.POST)
         if form.is_valid():
             school = form.save()
-            return redirect('edit_regular')
+            return redirect('regular_user_wizard')
     else:       
         form = SchoolForm()
     return render(request, 'schools_add_form.html', {'form' : form})
     
-
-@login_required
-@staff_member_required
-def approve_completed(request):
-    return render(request, 'schools_approve_completed.html')
-
-@login_required
-@should_be_defined
-def add_completed(request):
-    return render(request, 'schools_add_completed.html')
 
 @login_required
 @staff_member_required

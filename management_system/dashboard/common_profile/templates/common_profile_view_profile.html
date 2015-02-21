@@ -14,7 +14,7 @@
 			<td width=25%>
 				Документы
     			{% if edit_perm == True %}
-					<a href = "{% url 'add_userdata_document' %}">
+					<a href = "{% url 'userdata_document_wizard' %}">
 						Добавить/обновить
 					</a>
 				{% endif %}
@@ -62,7 +62,7 @@
 					<p>
 					{{ perms_to_language|get_item:role }}
         			{% if edit_perm == True %}
-            			<a href = "{% url 'edit_common' role %}">
+            			<a href = "{% url 'common_profile_edit' role %}">
 							Редактировать
 						</a>
        				{% endif %}
