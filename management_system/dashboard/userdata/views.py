@@ -42,7 +42,7 @@ class DocumentWizard(SessionWizardView):
             other = form_list[1].save(commit = False)
             other.user = self.request.user.UserData
             other.save()
-        return redirect('userdata_edited')
+        return redirect('completed')
 
 def add_passport_condition(wizard):
     cleaned_data = wizard.get_cleaned_data_for_step('0') or {}
@@ -79,10 +79,6 @@ end of Wizard
 '''
 
 @login_required
-def tmp_base(request):
-	return render(request, 'tmp_base.html', {})
-
-@login_required
 def edit(request):
     if request.method == 'POST':
 		#userdata always exists if we passed should_have_data
@@ -92,21 +88,8 @@ def edit(request):
 			user_data = form.save(commit = False)
 			user_data.modified = True
 			user_data.save()
-			return render(request, 'userdata_completed.html', {})
+			return redirect('completed')
     else:		
         form = UserDataForm(instance = request.user.UserData)
 
 	return render(request, 'userdata_form.html', {'form' : form})
-
-@login_required
-@should_be_defined
-def completed(request):
-	return render(request, 'userdata_completed.html')
-
-@login_required
-@should_be_defined
-def base_profile_view(request):
-        base_data = request.user.UserData
-        return render( request, 'base_profile.html' , {'base_data' : base_data})
-
-

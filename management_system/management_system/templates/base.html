@@ -36,14 +36,18 @@
 		<div id="navigation">
             <ul id="main_menu">
                 <li><a href="{% url 'news_main' %}">Новости </a> </li>
-                <li><a href="{% url 'view_profile'  user.id %}">Профиль</a></li>
+                <li>
+					<a href="{% url 'common_profile_view_profile'  user.id %}">
+						Профиль
+					</a>
+				</li>
                 {% if user.UserData.Admin.is_active %}
 					<li>
 						<a href="{% url 'schools_show_unproved' %}">Школы</a>
 					</li>
 				
                 	<li>
-						<a href="{% url 'show_all_staff_members' %}">
+						<a href="{% url 'user_manager_show_all' %}">
 							Управление персоналом 
 						</a>
 					</li>
@@ -55,7 +59,7 @@
 			{% block sidebar %}
 			<ul>
 				Sidebar<br>
-            	<a href="{% url 'events_admin_index' %}">События</a>
+            	<a href="{% url 'events_admin_show_all' %}">События</a>
 			</ul>
 			{% endblock %}
 		</div>

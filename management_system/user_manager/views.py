@@ -11,10 +11,6 @@ from django.contrib.auth.decorators import user_passes_test
 from user_manager.permissions import perms_to_classes
 
 @staff_member_required
-def index(request):
-    return render(request, 'user_manager_index.html')
-
-@staff_member_required
 def create(request):
 	if request.method == 'POST':
 		form = CreateUserForm(request.POST)
@@ -39,16 +35,12 @@ def create(request):
 				recipients = user.email,
 			)
 			
-			return redirect('user_created')
+			return redirect('completed')
 		
 	else:
 		form = CreateUserForm()
 		
 	return render(request, 'user_manager_create.html', {'form' : form})
-
-@staff_member_required
-def completed(request):
-	return render(request, 'user_manager_completed.html')
 
 @staff_member_required
 def show_all(request):
@@ -69,7 +61,7 @@ def edit_permissions(request, user_id):
 			cleaned_data = form.cleaned_data
 			#set new permissions
 			user.UserData.set_permissions(cleaned_data)
-			return redirect('show_all_staff_members')
+			return redirect('completed')
 	else:
 		#load permissions to form
 		perms = user.UserData.get_permissions()
@@ -88,4 +80,4 @@ def deactivate(request, user_id):
 		user.is_active = not(user.is_active)
 		user.save()
 	else: pass #FIXME
-	return redirect('show_all_staff_members')
+	return redirect('user_manager_show_all')

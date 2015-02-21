@@ -3,13 +3,13 @@
 {% for event in events %}
 <p>
 {{ event }}<br>
-<a href="{% url 'edit_event' event.id 'base' %}">Редактировать базовую инфу</a>
+<a href="{% url 'events_admin_edit' event.id 'base' %}">Редактировать базовую инфу</a>
 <br>
 {% if event.JourneyData %}
-<a href="{% url 'edit_event' event.id 'journey' %}">Редактировать выездное</a>
+<a href="{% url 'events_admin_edit' event.id 'journey' %}">Редактировать выездное</a>
 <br>
 {% endif %}
-<a href="{% url 'deactivate_event' event.id %}">
+<a href="{% url 'events_admin_deactivate' event.id %}">
 {% if event.is_active %}
 Закрыть событие
 {% else %}
@@ -17,6 +17,6 @@
 {% endif %}
 </a><br>
 
-<a href="{% url 'delete_event' event.id %}">Удалить событие</a>
+<a href="{% url 'events_admin_delete' event.id %}">Удалить событие</a>
 {% endfor %}
 {% endblock %}

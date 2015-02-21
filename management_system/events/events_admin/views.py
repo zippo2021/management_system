@@ -13,7 +13,7 @@ which imitates view function (also loads instances and forms)
 so you can access wizard as a simple view, named regular_user_wizard
 '''
 class EventWizard(SessionWizardView):
-    template_name = 'event_wizard.html'
+    template_name = 'events_admin_wizard.html'
         
     def done(self, form_list, **kwargs):
         
@@ -25,7 +25,7 @@ class EventWizard(SessionWizardView):
             journey.event = event
             journey.save()
         
-        return redirect('event_added')
+        return redirect('completed')
 
 def add_journey_data_condition(wizard):
     cleaned_data = wizard.get_cleaned_data_for_step('0') or {}
@@ -64,11 +64,11 @@ def edit(request, event_id, base_or_journey):
         form = form_class(request.POST, instance = instance)
         if form.is_valid():
             obj = form.save()
-            return redirect('event_added')
+            return redirect('completed')
     else:
         form = form_class(instance = instance)
     
-    return render(request, 'schools_add_form.html', {'form' : form})
+    return render(request, 'events_admin_edit.html', {'form' : form})
 
 @login_required
 @should_be_admin
@@ -77,7 +77,7 @@ def delete(request, event_id):
     if hasattr(event, 'JourneyData'):
         event.JourneyData.delete()
     event.delete()
-    return redirect('show_all_events')
+    return redirect('events_admin_show_all')
 
 @login_required
 @should_be_admin
@@ -85,21 +85,11 @@ def deactivate(request, event_id):
     event = Event.objects.get(id = event_id)
     event.is_active = not(event.is_active)
     event.save()
-    return redirect('show_all_events')
+    return redirect('events_admin_show_all')
 
-
-@login_required
-@should_be_admin
-def index(request):
-    return render(request, 'events_admin_index.html')
 
 @login_required
 @should_be_admin
 def show_all(request):
     events = Event.objects.all()
     return render(request, 'events_admin_show_all.html', { 'events' : events })
-
-@login_required
-@should_be_admin
-def completed(request):
-    return render(request, 'event_add_completed.html')

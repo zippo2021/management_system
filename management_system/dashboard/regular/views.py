@@ -18,7 +18,7 @@ which imitates view function (also loads instances and forms)
 so you can access wizard as a simple view, named regular_user_wizard
 '''
 class RegularUserWizard(SessionWizardView):
-    template_name = 'regular_edit_wizard.html'
+    template_name = 'regular_user_wizard.html'
     def done(self, form_list, **kwargs):
         '''
         it's a little bit funny, but there is no need to save first
@@ -33,7 +33,7 @@ class RegularUserWizard(SessionWizardView):
         regular = form_list[2].save(commit = False)
         regular.modified = True
         regular.save()
-        return redirect('regular_edited')
+        return redirect('completed')
 
 @login_required
 @should_be_regular_possibly_unfilled
@@ -51,29 +51,3 @@ def regular_user_wizard(request):
 '''
 end of Wizard
 '''
-
-@login_required
-@should_be_regular_possibly_unfilled
-def edit(request):
-    if request.method == 'POST':
-        form = RegularUserForm(request.POST,
-			   instance = request.user.UserData.RegularUser)
-        if form.is_valid():
-            regular = form.save(commit = False)
-            regular.modified = True
-            regular.save()
-            return redirect('regular_edited')
-    else:
-		form = RegularUserForm(instance = request.user.UserData.RegularUser)
-	
-    return render(request, 'regular_edit.html', {'form' : form})
-
-@login_required
-@should_be_regular
-def completed(request):
-        request.session['UserDataModal'] = 'off'
-	return render(request, 'regular_completed.html')
-
-
-
-
