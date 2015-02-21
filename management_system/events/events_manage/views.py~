@@ -1,5 +1,6 @@
+#-*- coding: utf-8 *-*
 from django.shortcuts import render,redirect
-from events.events_admin.models import Event,Requests,Request
+from events.events_admin.models import Event, Request, Result
 from events.study_groups.models import StudyGroup
 from events.price_groups.models import PriceGroup
 from django.contrib.auth.models import User
@@ -7,12 +8,33 @@ from dashboard.teacher.models import Teacher
 from dashboard.regular.models import RegularUser
 from dashboard.mentor.models import Mentor
 from dashboard.observer.models import Observer
-from events.events_manage.forms import PriceChoiceForm
+from events.events_manage.forms import PriceChoiceForm, ResultForm
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from decorators import should_be_event_worker,should_be_regular
 from django.contrib.auth.decorators import login_required
+from base_source_functions import send_templated_email
+import glob
+import os
+from django.conf import settings
+
 trans = {'Teacher':'teachers','Observer':'observers','Mentor':'mentors'}
+
+@login_required
+@should_be_event_worker
+def edit_or_create_result(request, event_id, user_id):
+    user = RegularUser.objects.get(id = user_id)
+    event = Event.objects.get(id = event_id)
+    result, created = Result.objects.get_or_create(event = event, user = user)
+    if request.method == 'POST':
+        form = ResultForm(request.POST, instance = result)
+        if form.is_valid():
+            result = form.save()
+            #FIXME: bad completed page
+            return redirect('event_added')
+    else:
+        form = ResultForm(instance = result)
+    return render(request, 'edit_or_create_result.html', {'form' : form})
 
 @login_required
 @should_be_event_worker
@@ -43,39 +65,56 @@ def invite(request,eid,uid,role):
 @should_be_event_worker
 def show_requests(request,eid):
     event = Event.objects.get(id = eid)
-    requests = Requests.objects.get(event = eid)
+    requests = Request.objects.filter(event = eid)
     if event.PriceGroup.all():
         accept = True
     else:
         accept = False
-    context = {'ename':event.name,'eid':eid,'users':requests.users.all(),'accept':accept}
+    users = []
+    for each in requests:
+        users.append({'status':each.status,'user':each.user})
+    context = {'ename':event.name,'eid':eid,'users':users,'accept':accept}
     return render(request,'requests.html',context)
 
 @login_required
 @should_be_event_worker
 def accept(request,eid,uid):
-    event = Event.objects.get(id = eid)
+    event = Event.objects.get(id = eid)            
     if request.method == "POST":
         form = PriceChoiceForm(request.POST,event_id=eid)
         if form.is_valid():
             user = User.objects.get(id = uid)
             spec = user.UserData.RegularUser
-            current_rq = event.Request.objects.get(user=spec)
+            current_rq = Request.objects.get(event=event,user=spec)
             current_rq.status = 'Accepted'
+            p_group = form.cleaned_data['price_group']
+            files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
+            send_templated_email(
+                        subject='Подтверждение заявки',
+                        email_template_name='',
+                        email_context={
+                        'event': event.name,
+                        'price': p_group.price,                        
+                        },
+						recipients=user.email,
+                        fail_silently=False,
+						files=files,
+            )
             current_rq.save()
-            s_group = event.StudyGroup.objects.get(label='All')
-            s_group.users.add(spec)
-            p_group = form.cleaned_data.PriceGroup
-            p_group.users.add(spec)            
+            #s_group = StudyGroup.objects.get(event=,label='All')
+            #s_group.users.add(spec)
+            p_group.users.add(spec)                       
             return redirect('events_show_requests',eid = eid)
     else:
-        form = PriceChoice(event_id=eid) 
+        form = PriceChoiceForm(event_id=eid) 
     return render(request,'price_choice_form.html',{'form':form,'eid':eid})
 
-def deny_request(request,eid,uid):
+
+@login_required
+def decline_request(request,eid,uid):
     event = Event.objects.get(id = eid)
     user = User.objects.get(id = uid)
-    current_rq = event.Request.objects.get(user=user.UserData.RegularUser)
+    current_rq = Request.objects.get(event=event,user=user.UserData.RegularUser)
     current_rq.status = 'Declined'
     current_rq.save() 
     return redirect('events_show_requests',eid=eid)
@@ -83,14 +122,19 @@ def deny_request(request,eid,uid):
 @login_required
 @should_be_regular
 def place_request(request,eid):
-    e_request = Request(event = eid, user = request.user.UserData.RegularUser,status = 'Processing')
-    e_request.save()
-    return redirect('request_completed',eid=eid )
+    event = Event.objects.get(id = eid)
+    e_request, created = Request.objects.get_or_create(event = event, user = request.user.UserData.RegularUser)
+    if created:
+        e_request.status = 'Processing'
+        e_request.save()
+    else:
+        pass #FIXME
+    return redirect('request_completed')
 
 @login_required
 @should_be_regular
-def request_completed(request,eid):
-    return render(request,'request_completed.html')
+def request_completed(request):
+    return render(request,'request_completed.html',{})
 
     
     

@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'dashboard.common_profile',
 	'events.comments',
     'events.events_admin',
+    'events.events_manage',
     'events.notes',
     'events.raps',
     'events.study_groups',
@@ -148,7 +149,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
             global_settings.TEMPLATE_CONTEXT_PROCESSORS +
             ('django.core.context_processors.request',
 			 'context_processors.organisation_settings_processor',
-			 'context_processors.permission_translation_processor',)
+			 'context_processors.permission_translation_processor',
+             'context_processors.events_processor',
+             'context_processors.documents_translation_processor',
+             'context_processors.user_permissions_processor',)
      )
 
 # Static files (CSS, JavaScript, Images)
@@ -158,3 +162,4 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+EVENT_ATTACHMENTS_DIR = os.path.join(BASE_DIR, "files/events"),

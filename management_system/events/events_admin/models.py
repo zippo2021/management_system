@@ -57,9 +57,10 @@ class Request(models.Model):
                             blank = True,
                             max_length = 1000,
     )
-    event = models.OneToOneField(Event, related_name = 'Request')
-    user = models.OneToOneField('regular.RegularUser',
+    event = models.ForeignKey(Event, related_name = 'Request')
+    user = models.ForeignKey('regular.RegularUser',
 								   related_name = 'Request')
+    
 
 class Contract(models.Model):
     event = models.ForeignKey(Event, related_name = 'Contract')

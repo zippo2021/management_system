@@ -4,6 +4,7 @@ from dashboard.userdata.documents import docs_to_language
 from dashboard.common_profile.source_functions import perms_to_list
 from events.events_admin.models import Event
 from middlewares import get_subdomain
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
 def organisation_settings_processor(request):
@@ -20,10 +21,12 @@ def permission_translation_processor(request):
 def documents_translation_processor(request):
     return {'docs_to_language' : docs_to_language}
 
+@login_required
 def user_permissions_processor(request):
     perms = perms_to_list(request.user.UserData.get_permissions())
     return {'user_permissions' : perms}
 
+@login_required
 def events_processor(request):
     events = Event.objects.all()
     user = request.user.UserData
