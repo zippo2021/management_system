@@ -25,8 +25,7 @@ def view_profile(request,uid):
             documents.append(docs_to_language[each])
     if hasattr(user, 'OtherDoc'):
         documents.append(user.OtherDoc.type)
-    print additional_data
-    return render( request, 'view_profile.html',
+    return render( request, 'common_profile_view_profile.html',
                    {'base_data' : base_data ,
                     'documents' : documents,
                     'additional_data' : additional_data,
@@ -35,4 +34,10 @@ def view_profile(request,uid):
 
 @login_required
 def edit(request,role):
-    return redirect('edit_'+role)
+    if role == 'teacher':
+        return redirect('teacher_edit')
+    elif role == 'regular':
+        return redirect('regular_user_wizard')
+    else:
+        pass
+        #FIXME raise exception
