@@ -5,11 +5,20 @@
 <tr>
     <td>
         {{ each.UserData }}
-        <a href="{% url 'view_profile' each.data.id %}">{{ each.data.last_name }} {{ each.data.first_name }} {{ each.data.middle_name }}</a>        
+        <a href="{% url 'view_profile' each.user.data.id %}">{{ each.user.data.last_name }} {{ each.user.data.first_name }} {{ each.user.data.middle_name }}</a>        
     </td>
     <td>
-       {% if accept  %} <a href="{% url 'events_accept_request' eid each.UserData.id %}" > Одобрить</a>{% endif %}
+    {{ each.status }}
     </td>
+    <td>
+       {% if accept  %} 
+       {% if each.status != 'Accepted'  %} 
+        <a href="{% url 'events_accept_request' eid each.user.data.id %}" > Одобрить</a>
+       {% else %}
+        <a href="{% url 'decline_request' eid each.user.data.id %}" > Отказать</a>
+       {% endif %}
+    </td>
+    
     
 </tr>
 {% endfor %}

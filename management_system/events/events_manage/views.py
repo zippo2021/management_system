@@ -13,7 +13,10 @@ from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from decorators import should_be_event_worker,should_be_regular
 from django.contrib.auth.decorators import login_required
-from events.events_manage.source_functions import send_regular_email
+from base_source_functions import send_templated_email
+import glob
+import os
+from django.conf import settings
 
 trans = {'Teacher':'teachers','Observer':'observers','Mentor':'mentors'}
 
@@ -62,14 +65,14 @@ def invite(request,eid,uid,role):
 @should_be_event_worker
 def show_requests(request,eid):
     event = Event.objects.get(id = eid)
-    requests = Request.objects.filter(status='Processing',event = eid)
+    requests = Request.objects.filter(event = eid)
     if event.PriceGroup.all():
         accept = True
     else:
         accept = False
     users = []
     for each in requests:
-        users.append(each.user)
+        users.append({'status':each.status,'user':each.user})
     context = {'ename':event.name,'eid':eid,'users':users,'accept':accept}
     return render(request,'requests.html',context)
 
@@ -85,17 +88,18 @@ def accept(request,eid,uid):
             current_rq = Request.objects.get(event=event,user=spec)
             current_rq.status = 'Accepted'
             p_group = form.cleaned_data['price_group']
-            files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
-            current_rq.email_status = send_templated_email(
+            files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(eid)), '*'))
+            send_templated_email(
                         subject='Подтверждение заявки',
                         email_template_name='',
                         email_context={
-                        'event' = event.name,
-                        'price' = p_group.price,                        
+                        'event': event.name,
+                        'price': p_group.price,                        
                         },
 						recipients=user.email,
                         fail_silently=False,
-						files=files):
+						files=files,
+            )
             current_rq.save()
             #s_group = StudyGroup.objects.get(event=,label='All')
             #s_group.users.add(spec)

@@ -60,9 +60,7 @@ class Request(models.Model):
     event = models.ForeignKey(Event, related_name = 'Request')
     user = models.ForeignKey('regular.RegularUser',
 								   related_name = 'Request')
-    email_status = models.CharField(verbose_name = 'Статус отправки email',
-                              max_length = 100,
-    )
+    
 
 class Contract(models.Model):
     event = models.ForeignKey(Event, related_name = 'Contract')
