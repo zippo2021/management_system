@@ -166,8 +166,26 @@ def create_acceptance_email_template(request,eid):
         form = EmailTemplateForm()
     return render(request,'acceptance_email_form.html',{'form':form})
 
-
-
+'''
+@login_required
+@should_be_event_worker
+def send_email_to_schools(request,eid):
+    event = Event.objects.get(id = eid)
+    users = Request.objects.filter(event = event, status = 'Accepted')
+    for each in users:
+        user = each.user
+        send_templated_email(
+                            subject='Подтверждение заявки',
+                            email_template_name='',
+                            email_context={
+                            'event': event.name,                        
+                            },
+		    				recipients=user.email,
+                            fail_silently=False,
+		    				files=files,
+                )
+    return render(request,'acceptance_email_form.html',{'form':form})
+'''
 @login_required
 @should_be_regular
 def request_completed(request):
