@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+{% load staticfiles %}
+{% csrf_token %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+    <link rel="stylesheet" type="text/css"  href="{% static 'external/css/bootstrap.min.css' %}"/>
+
+    <script type="text/javascript"  src="{% static 'external/js/jquery-1.11.1.min.js' %}"></script>
+    <script type="text/javascript"  src="{% static 'external/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript"  src="{% static 'js/common.js' %}"></script>
+    <script type="text/javascript"  src="{% static 'groups/js/groups.js' %}"></script>
+</head>
+<body>
+    <table border="2px">
+        <thead></thead>
+        <tbody>
+            <tr>
+                <td>
+                    <select size="10" id="groups_list" style="width: 200px">
+                        {% for group in groups %}
+                            <option>{{ group.label }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td valign="top" width="200px">
+                    <div id="pupils_list">
+                        {% for pupil in pupils %}
+                            <input type="checkbox" data-id="{{ pupil.id }}" value="">{{ pupil.data }}<br>
+                        {% endfor %}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="call_add_group_button">Добавить</button>
+                    <button id="call_delete_group_button">Удалить</button>
+                </td>
+                <td>
+                    <button id="call_save_group_button" disabled="true">Сохранить</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div id="add_window" hidden="hidden">
+        <input id="new_group_title" placeholder="Название группы" value=""/>
+    </div>
+    <input type="hidden" id="event_id" value="{{ event_id }}"/>
+</body>
+</html>

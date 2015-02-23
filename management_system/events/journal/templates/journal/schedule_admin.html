@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% csrf_token %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+    <link rel="stylesheet" type="text/css"  href="{% static 'external/css/bootstrap.min.css' %}"/>
+
+    <script type="text/javascript"  src="{% static 'external/js/jquery-1.11.1.min.js' %}"></script>
+    <script type="text/javascript"  src="{% static 'external/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript"  src="{% static 'js/common.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'external/js/jquery.timepicker.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'external/css/jquery.timepicker.css' %}"/>
+
+    <script type="text/javascript" src="{% static 'external/js/bootstrap-datepicker.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'external/css/bootstrap-datepicker.css' %}"/>
+
+    <script type="text/javascript"  src="{% static 'journal/js/schedule_admin.js' %}"></script>
+
+    <style type="text/css">
+        .datepicker{
+            z-index: 1100 !important;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="date_container">
+        <label for="from">From</label>
+        <input type="text" id="from" name="from" autocomplete="off">
+        <label for="to">to</label>
+        <input type="text" id="to" name="to" autocomplete="off">
+    </div>
+    <div id="group_select_container">
+        <select size="1" id="groups_list" style="width: 200px">
+        {% for group in groups %}
+            <option value="{{ group.id }}">{{ group.label }}</option>
+        {% endfor %}
+        </select>
+    </div>
+
+    <table border="2px">
+        <thead>
+            <tr>
+                <td></td>
+                <td>Дата</td>
+                <td>Время начала</td>
+                <td>Время конца</td>
+                <td>Группа</td>
+                <td>Предмет</td>
+                <td>Преподаватель</td>
+                <td>Аудитория</td>
+            </tr>
+        </thead>
+        <tbody id="lessons_list">
+        </tbody>
+    </table>
+
+    <button id="call_add_lesson_button">Добавить</button>
+
+    <div id="add_window" hidden="hidden">
+
+        <div id="date_container">
+            <label for="lesson_date">Date</label>
+            <input type="text" id="lesson_date" name="lesson_date" autocomplete="off">
+        </div>
+
+        <div id="time_container">
+            <input id="start_time" type="text" class="time ui-timepicker-input" autocomplete="off">
+            <input id="end_time" type="text" class="time ui-timepicker-input" autocomplete="off">
+        </div>
+
+        <div id="subject_select_container">
+            <select size="1" id="subject_list" style="width: 200px">
+            {% for subject in subjects %}
+                <option value="{{ subject.id }}">{{ subject.name }}</option>
+            {% endfor %}
+            </select>
+            <select size="1" id="teacher_list" style="width: 200px">
+                {% for teacher in teachers %}
+                    <option value="{{ teacher.id }}">{{ teacher.data }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <label for="lesson_place">Place</label>
+        <input id="lesson_place" type="text">
+        <div id="repeat_group" hidden="hidden">
+            <input id="repeat_box" type="checkbox">Repeat</input>
+            <select size="1" id="repeat_list" style="width: 200px">
+                <option value="1">Every day</option>
+                <option value="7">Every week</option>
+            </select>
+            <select size="1" id="until_list" style="width: 200px">
+                <option value="1">until event end</option>
+                <option value="2">times</option>
+            </select>
+            <select size="1" id="times_list" style="width: 50px">
+                {% for i in repeats %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <input type="hidden" id="event_id" value="{{ event_id }}"/>
+    <input type="hidden" id="event_start_date" value="{{ start_date }}"/>
+    <input type="hidden" id="event_end_date" value="{{ end_date }}"/>
+</body>
+</html>

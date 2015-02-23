@@ -1,5 +1,7 @@
 #-*- coding: utf-8 *-*
 from django.shortcuts import render,redirect
+from django.template.loader import get_template_from_string
+from django.template import Context, Template
 from events.events_admin.models import Event, Request, Result, AcceptanceEmailTemplate
 from events.study_groups.models import StudyGroup
 from events.price_groups.models import PriceGroup
@@ -65,27 +67,26 @@ def show_requests(request,eid):
         accept = True
     else:
         accept = False
-    users = []
-    for each in requests:
-        users.append({'status':each.status,'user':each.user})
-    context = {'ename':event.name,'eid':eid,'users':users,'accept':accept}
+    context = {'ename':event.name,'eid':eid,'users':requests,'accept':accept}
     return render(request,'requests.html',context)
 
 @login_required
-def accept(request,eid,uid):
-    event = Event.objects.get(id = eid)  
+@should_be_event_worker
+def accept(request,request_id):
+    current_rq = Request.objects.get(id=request_id)
+    user = current_rq.user
+    event = current_rq.event  
+    eid = event.id
     if event.is_payed:          
         if request.method == "POST":
             form = PriceChoiceForm(request.POST,event_id=eid)
             if form.is_valid():
-                user = User.objects.get(id = uid)
-                spec = user.UserData.RegularUser
-                current_rq = Request.objects.get(event=event,user=spec)
+                spec = current_rq.user                
                 current_rq.status = 'Accepted'
                 p_group = form.cleaned_data['price_group']
                 files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(eid)), '*'))
                 try:
-                    template_file = AcceptanceEmailTemplate.objects.get(event = event).text
+                    template_file = Template(get_template_from_string(AcceptanceEmailTemplate.objects.get(event = event).text))
                     send_templated_email(
                             subject='Подтверждение заявки',
                             template_file = template_file,
@@ -93,7 +94,7 @@ def accept(request,eid,uid):
                             'event': event.name,
                             'price': p_group.price,                        
                             },
-		    				recipients=user.email,
+		    				recipients=user.data.user.email,
                             fail_silently=False,
 		    				files=files,
                     )
@@ -128,13 +129,12 @@ def accept(request,eid,uid):
         
 
 @login_required
-def decline_request(request,eid,uid):
-    event = Event.objects.get(id = eid)
-    user = User.objects.get(id = uid)
-    current_rq = Request.objects.get(event=event,user=user.UserData.RegularUser)
+def decline_request(request,request_id):    
+    current_rq = Request.objects.get(id=request_id)
+    event = current_rq.event
     current_rq.status = 'Declined'
     current_rq.save() 
-    return redirect('events_show_requests',eid=eid)
+    return redirect('events_show_requests',eid=event.id)
     
 @login_required
 def place_request(request, eid):

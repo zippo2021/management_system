@@ -24,7 +24,7 @@ class Event(models.Model):
     teachers = models.ManyToManyField('teacher.Teacher')
     mentors = models.ManyToManyField('mentor.Mentor')
     observers = models.ManyToManyField('observer.Observer')
-    is_active = models.BooleanField() 
+    is_active = models.BooleanField()
 admin.site.register(Event)
 
 
@@ -60,7 +60,7 @@ class Request(models.Model):
     event = models.ForeignKey(Event, related_name = 'Request')
     user = models.ForeignKey('regular.RegularUser',
 								   related_name = 'Request')
-    
+admin.site.register(Request)
 
 class Contract(models.Model):
     event = models.ForeignKey(Event, related_name = 'Contract')
