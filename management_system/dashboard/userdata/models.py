@@ -80,6 +80,8 @@ def create_additional_data(instance, created, **kwargs):
             globals()[key].save()
 
 class Admin(models.Model):
+    def __unicode__(self):
+        return self.data.first_name + ' ' + self.data.last_name
     data = models.OneToOneField(UserData, related_name = 'Admin')
     is_superadmin = models.BooleanField(default = False)
     is_active = models.BooleanField(default = False)
