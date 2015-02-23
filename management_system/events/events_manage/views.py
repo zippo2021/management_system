@@ -84,8 +84,9 @@ def accept(request,eid,uid):
                 current_rq.status = 'Accepted'
                 p_group = form.cleaned_data['price_group']
                 files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(eid)), '*'))
-                template_file = AcceptanceEmailTemplate.objects.get(event = event).text
-                send_templated_email(
+                try:
+                    template_file = AcceptanceEmailTemplate.objects.get(event = event).text
+                    send_templated_email(
                             subject='Подтверждение заявки',
                             template_file = template_file,
                             email_context={
@@ -95,7 +96,9 @@ def accept(request,eid,uid):
 		    				recipients=user.email,
                             fail_silently=False,
 		    				files=files,
-                )
+                    )
+                except ObjectDoesNotExist:
+                    pass
                 current_rq.save()
                 #s_group = StudyGroup.objects.get(event=,label='All')
                 #s_group.users.add(spec)
@@ -163,7 +166,7 @@ def create_acceptance_email_template(request,eid):
 @should_be_event_worker
 def send_email_to_schools(request,eid):
     event = Event.objects.get(id = eid)
-    users = Request.objects.filter(event = event, status = 'Accepted')
+    users = User.objects.filter(event = event, status = 'Accepted')
     for each in users:
         user = each.user
         send_templated_email(
@@ -178,6 +181,7 @@ def send_email_to_schools(request,eid):
                 )
     return render(request,'acceptance_email_form.html',{'form':form})
 '''
+
 @login_required
 def request_completed(request):
     return render(request, 'request_completed.html', {})
