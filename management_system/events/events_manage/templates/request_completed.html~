@@ -1,5 +1,0 @@
-{% extends 'base.html' %}
-{% block content %}
-completed
-<a href="{% url 'price_groups_show' eid %}">Управление ценовыми группами</a>
-{% endblock %}
