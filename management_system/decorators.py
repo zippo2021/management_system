@@ -3,6 +3,9 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render, redirect
 from dashboard import userdata
 from dashboard import regular
+from dashboard.regular.models import RegularUser
+from user_manager.permissions import perms_to_classes
+from events.events_admin.models import Event
 
 
 def check_decorator(view=None,
@@ -276,3 +279,66 @@ not_staff = lambda request, *args, **kwargs: render(request, 'decorator.html', {
 should_be_staff = partial(check_decorator,
                               condition_func = is_staff,
 							  false_func = not_staff)
+
+'''
+event decorator
+'''
+
+    #condition functions
+
+def is_allowed_to_view_event(request, *args, **kwargs):
+    #if event is not private and we only want to see info, than we are allowed
+    if 'eid' in kwargs:
+        event = Event.objects.get(id = kwargs['eid'])
+    else:
+        return True
+
+    if event.is_private:
+        return is_allowed_for_event(request, *args, **kwargs)
+    else:
+        return True
+     
+
+def is_allowed_for_event(request, *args, **kwargs):
+    if 'eid' in kwargs:
+        event = Event.objects.get(id = kwargs['eid'])
+    else:
+        return True
+    
+    data = request.user.UserData
+    perms = data.get_permissions()
+    
+    if perms['admin']:
+        return True
+    
+    if perms['regular']:
+        event_regular_users = RegularUser.objects.filter(Request__event = event,
+            Request__status = 'Accepted')
+        if data.RegularUser in event_regular_users:
+            return True
+
+    perms_to_classes_copy = { key : value for key, value in\
+                                    perms_to_classes.items()\
+                                    if key not in ('admin','regular') }
+
+    for each in perms_to_classes_copy:
+        if perms[each]:
+            if getattr(data, perms_to_classes[each])\
+                in getattr(event, each + 's').all():
+                    return True
+
+    return False
+
+    # false functions
+
+not_allowed_for_event = lambda request, *args, **kwargs: render(request, 'decorator.html', {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT allowed for event"})
+
+    # decorators
+
+should_be_allowed_for_event = partial(check_decorator,
+                              condition_func = is_allowed_for_event,
+							  false_func = not_allowed_for_event)
+
+should_be_allowed_to_view_event = partial(check_decorator,
+                              condition_func = is_allowed_to_view_event,
+                              false_func = not_allowed_for_event)
