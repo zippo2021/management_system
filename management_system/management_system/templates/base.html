@@ -35,7 +35,7 @@
 		
 		<div id="navigation">
             <ul id="main_menu">
-                <li><a href="{% url 'news_main' %}">Новости </a> </li>
+                <li><a href="{% url 'news_main' as news %}">Новости </a> </li>
                 <li>
 					<a href="{% url 'common_profile_view_profile'  user.id %}">
 						Профиль
@@ -45,7 +45,7 @@
 					<li>
 						<a href="{% url 'schools_show_unproved' %}">Школы</a>
 					</li>
-				
+				{% if request.path ==  news %} AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA {% endif %}
                 	<li>
 						<a href="{% url 'user_manager_show_all' %}">
 							Управление персоналом 
