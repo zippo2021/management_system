@@ -42,8 +42,8 @@ def edit_or_create_result(request, event_id, user_id):
 @should_be_allowed_to_view_event
 def main(request,event_id):
     event = Event.objects.get(id = event_id)
-    context = {'name':event.name, 'event_id':event_id}
-    return render(request,'events_manage_main.html',context)
+    context = {'event' : event}
+    return render(request,'events_manage_main.html', context)
 
 @login_required
 def choose_users(request,event_id, role):

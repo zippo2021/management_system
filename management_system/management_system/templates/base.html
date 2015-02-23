@@ -37,7 +37,9 @@
         {% url 'user_manager_show_all' as user_manager_show_all %}
 		<div id="navigation">
             <ul id="main_menu" class="nav nav-pills">
-                <li {% if request.path == news_main %}class="active" {% endif %}><a href="{{ news_main }}">Новости </a> </li>
+                <li {% if request.path == news_main %}class="active" {% endif %}>
+					<a href="{{ news_main }}">Новости </a>
+				</li>
                 <li {% if request.path == common_profile_view_profile %}class="active" {% endif %}>
 					<a href="{{ common_profile_view_profile }}">
 						Профиль
