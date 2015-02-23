@@ -22,4 +22,7 @@ urlpatterns = patterns('',
     url(r'^events_admin/', include('events.events_admin.urls')),
     url(r'^events/price_groups', include('events.price_groups.urls')),
     url(r'^completed', views.completed, name = 'completed'),
+
+    url(r'^event/(?P<event_id>\d+)/', include('events.study_groups.urls')),
+    url(r'^event/(?P<event_id>\d+)/', include('events.journal.urls')),
 )
