@@ -11,7 +11,7 @@ from dashboard.observer.models import Observer
 from events.events_manage.forms import PriceChoiceForm, ResultForm, EmailTemplateForm
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
-from decorators import should_be_event_worker,should_be_regular
+from decorators import should_be_allowed_for_event, should_be_allowed_to_view_event
 from django.contrib.auth.decorators import login_required
 from base_source_functions import send_templated_email
 import glob
@@ -21,7 +21,6 @@ from django.conf import settings
 trans = {'Teacher':'teachers','Observer':'observers','Mentor':'mentors'}
 
 @login_required
-@should_be_event_worker
 def edit_or_create_result(request, event_id, user_id):
     user = RegularUser.objects.get(id = user_id)
     event = Event.objects.get(id = event_id)
@@ -30,21 +29,19 @@ def edit_or_create_result(request, event_id, user_id):
         form = ResultForm(request.POST, instance = result)
         if form.is_valid():
             result = form.save()
-            #FIXME: bad completed page
-            return redirect('event_added')
+            return redirect('completed')
     else:
         form = ResultForm(instance = result)
     return render(request, 'edit_or_create_result.html', {'form' : form})
 
 @login_required
-@should_be_event_worker
+@should_be_allowed_to_view_event
 def main(request,eid):
     event = Event.objects.get(id = eid)
     context = {'name':event.name, 'eid':eid}
     return render(request,'events_manage_main.html',context)
 
 @login_required
-@should_be_event_worker
 def show_users(request,eid,role):
     event = Event.objects.get(id = eid)
     users = globals()[role].objects.filter(~Q(event=eid),is_active = True)
@@ -52,7 +49,6 @@ def show_users(request,eid,role):
     return render(request,'users_list.html',context)
 
 @login_required
-@should_be_event_worker
 def invite(request,eid,uid,role):           
     event = Event.objects.get(id = eid)
     user = User.objects.get(id = uid)
@@ -62,7 +58,6 @@ def invite(request,eid,uid,role):
     return redirect('events_show_users',role = role,eid = eid)
 
 @login_required
-@should_be_event_worker
 def show_requests(request,eid):
     event = Event.objects.get(id = eid)
     requests = Request.objects.filter(event = eid)
@@ -77,7 +72,6 @@ def show_requests(request,eid):
     return render(request,'requests.html',context)
 
 @login_required
-@should_be_event_worker
 def accept(request,eid,uid):
     event = Event.objects.get(id = eid)  
     if event.is_payed:          
@@ -140,7 +134,6 @@ def decline_request(request,eid,uid):
     return redirect('events_show_requests',eid=eid)
     
 @login_required
-@should_be_regular
 def place_request(request, eid):
     event = Event.objects.get(id = eid)
     e_request, created = Request.objects.get_or_create(event = event, user = request.user.UserData.RegularUser)
@@ -152,7 +145,6 @@ def place_request(request, eid):
     return redirect('request_completed')
 
 @login_required
-@should_be_event_worker
 def create_acceptance_email_template(request,eid):
     event = Event.objects.get(id = eid)
     if request.method == "POST":
@@ -187,7 +179,6 @@ def send_email_to_schools(request,eid):
     return render(request,'acceptance_email_form.html',{'form':form})
 '''
 @login_required
-@should_be_regular
 def request_completed(request):
     return render(request, 'request_completed.html', {})
 
