@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'events.notes',
     'events.raps',
     'events.study_groups',
+    'events.journal',
     'events.price_groups',
     'events.tickets',
     'export',
