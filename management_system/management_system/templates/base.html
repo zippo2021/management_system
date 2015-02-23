@@ -36,11 +36,6 @@
         {% url 'schools_show_unproved' as schools_show_unproved %}
         {% url 'user_manager_show_all' as user_manager_show_all %}
 		<div id="navigation">
-<<<<<<< HEAD
-            <ul id="main_menu">
-                <li><a href="{% url 'news_main' as news %}">Новости </a> </li>
-                <li>
-					<a href="{% url 'common_profile_view_profile'  user.id %}
             <ul id="main_menu" class="nav nav-pills">
                 <li {% if request.path == news_main %}class="active" {% endif %}><a href="{{ news_main }}">Новости </a> </li>
                 <li {% if request.path == common_profile_view_profile %}class="active" {% endif %}>
@@ -52,6 +47,8 @@
 					<li {% if request.path == schools_show_unproved %}class="active" {% endif %}>
 						<a href="{{ schools_show_unproved }}">Школы</a>
 					</li>
+                    <li {% if request.path == user_manager_show_all %}class="active" {% endif %}>
+						<a href="{{ user_manager_show_all }}">
 							Управление персоналом 
 						</a>
 					</li>
