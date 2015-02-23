@@ -72,15 +72,6 @@ def edit(request, event_id, base_or_journey):
 
 @login_required
 @should_be_admin
-def delete(request, event_id):
-    event = Event.objects.get(id = event_id)
-    if hasattr(event, 'JourneyData'):
-        event.JourneyData.delete()
-    event.delete()
-    return redirect('events_admin_show_all')
-
-@login_required
-@should_be_admin
 def deactivate(request, event_id):
     event = Event.objects.get(id = event_id)
     event.is_active = not(event.is_active)
