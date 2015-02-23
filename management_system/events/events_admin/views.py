@@ -76,7 +76,7 @@ def deactivate(request, event_id):
     event = Event.objects.get(id = event_id)
     event.is_active = not(event.is_active)
     event.save()
-    return redirect('events_admin_show_all')
+    return redirect('events_manage_main', event_id)
 
 
 @login_required

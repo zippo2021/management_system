@@ -4,21 +4,30 @@
 <table>
 <tr>
     <td>
-        <a href="{% url 'events_show_users' event_id 'Teacher' %}">Пригласить учителей</a>
+        <a href="{% url 'events_manage_choose_users' event_id 'teacher' %}">
+			Пригласить учителей
+		</a>
         <p>
-        <a href="{% url 'events_show_users' event_id 'Mentor'%}">Пригласить воспитателей</a>
+        <a href="{% url 'events_manage_choose_users' event_id 'mentor'%}">
+			Пригласить воспитателей
+		</a>
         <p>
-        <a href="{% url 'events_show_users' event_id 'RegularUser' %}">Пригласить учеников</a>
-        <a href="{% url 'events_show_users' event_id 'Observer' %}">Пригласить наблюдателей</a>
+        <a href="{% url 'events_manage_choose_users' event_id 'observer' %}">
+			Пригласить наблюдателей
+		</a>
     </td>
     <td>
         <a href="{% url 'price_groups_show' event_id %}">Управление ценовыми группами</a>
-        <a href="{% url 'create_acceptance_email_template' event_id %}">Создать шаблон письма</a>
+        <a href="
+			{% url 'events_manage_create_acceptance_email_template' event_id %}
+		">Создать шаблон письма</a>
     </td>
 </tr>
 <tr>
     <td>
-        <a href="{% url 'events_show_requests' event_id  %}">Управление завками </a>
+        <a href="{% url 'events_manage_show_requests' event_id  %}">
+			Управление завками 
+		</a>
     </td>
 </tr>    
 </table>
