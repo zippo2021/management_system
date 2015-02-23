@@ -17,6 +17,7 @@
        {% else %}
         <a href="{% url 'decline_request' eid each.user.data.id %}" > Отказать</a>
        {% endif %}
+       {% endif %}
     </td>
     
     
