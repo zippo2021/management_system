@@ -1,3 +1,4 @@
+#-*- coding: utf-8 *-*
 from django import forms
 from events.events_admin.models import Event, Result
 
@@ -6,9 +7,12 @@ class PriceChoiceForm(forms.Form):
         eid = kwargs.pop('event_id', None)
         super(PriceChoiceForm, self).__init__(*args, **kwargs)        
         event = Event.objects.get(id = eid)
-        self.fields['PriceGroup'] = forms.ModelChoiceField(queryset=event.PriceGroup.all())
+        self.fields['price_group'] = forms.ModelChoiceField(queryset=event.PriceGroup.all())
     
 class ResultForm(forms.ModelForm):
     class Meta:
         model = Result
         exclude = ['event', 'user']
+
+class EmailTemplateForm(forms.Form):
+    text = forms.CharField(widget=forms.Textarea,verbose_name='Текст письма')

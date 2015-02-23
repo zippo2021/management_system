@@ -1,6 +1,6 @@
 #-*- coding: utf-8 *-*
 from django.shortcuts import render,redirect
-from events.events_admin.models import Event, Request, Result
+from events.events_admin.models import Event, Request, Result, AcceptanceEmailTemplate
 from events.study_groups.models import StudyGroup
 from events.price_groups.models import PriceGroup
 from django.contrib.auth.models import User
@@ -8,7 +8,7 @@ from dashboard.teacher.models import Teacher
 from dashboard.regular.models import RegularUser
 from dashboard.mentor.models import Mentor
 from dashboard.observer.models import Observer
-from events.events_manage.forms import PriceChoiceForm, ResultForm
+from events.events_manage.forms import PriceChoiceForm, ResultForm, EmailTemplateForm
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from decorators import should_be_event_worker,should_be_regular
@@ -66,7 +66,7 @@ def invite(request,eid,uid,role):
 def show_requests(request,eid):
     event = Event.objects.get(id = eid)
     requests = Request.objects.filter(event = eid)
-    if event.PriceGroup.all():
+    if (event.PriceGroup.all()) or(event.is_payed) :
         accept = True
     else:
         accept = False
@@ -79,36 +79,56 @@ def show_requests(request,eid):
 @login_required
 @should_be_event_worker
 def accept(request,eid,uid):
-    event = Event.objects.get(id = eid)            
-    if request.method == "POST":
-        form = PriceChoiceForm(request.POST,event_id=eid)
-        if form.is_valid():
-            user = User.objects.get(id = uid)
-            spec = user.UserData.RegularUser
-            current_rq = Request.objects.get(event=event,user=spec)
-            current_rq.status = 'Accepted'
-            p_group = form.cleaned_data['price_group']
-            files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(eid)), '*'))
-            send_templated_email(
-                        subject='Подтверждение заявки',
-                        email_template_name='',
-                        email_context={
-                        'event': event.name,
-                        'price': p_group.price,                        
-                        },
-						recipients=user.email,
-                        fail_silently=False,
-						files=files,
-            )
-            current_rq.save()
-            #s_group = StudyGroup.objects.get(event=,label='All')
-            #s_group.users.add(spec)
-            p_group.users.add(spec)                       
-            return redirect('events_show_requests',eid = eid)
+    event = Event.objects.get(id = eid)  
+    if event.is_payed:          
+        if request.method == "POST":
+            form = PriceChoiceForm(request.POST,event_id=eid)
+            if form.is_valid():
+                user = User.objects.get(id = uid)
+                spec = user.UserData.RegularUser
+                current_rq = Request.objects.get(event=event,user=spec)
+                current_rq.status = 'Accepted'
+                p_group = form.cleaned_data['price_group']
+                files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(eid)), '*'))
+                template_file = AcceptanceEmailTemplate.objects.get(event = event).text
+                send_templated_email(
+                            subject='Подтверждение заявки',
+                            template_file = template_file,
+                            email_context={
+                            'event': event.name,
+                            'price': p_group.price,                        
+                            },
+		    				recipients=user.email,
+                            fail_silently=False,
+		    				files=files,
+                )
+                current_rq.save()
+                #s_group = StudyGroup.objects.get(event=,label='All')
+                #s_group.users.add(spec)
+                p_group.users.add(spec)                       
+                return redirect('events_show_requests',eid = eid)
+        else:
+            form = PriceChoiceForm(event_id=eid) 
+        return render(request,'price_choice_form.html',{'form':form,'eid':eid})
     else:
-        form = PriceChoiceForm(event_id=eid) 
-    return render(request,'price_choice_form.html',{'form':form,'eid':eid})
-
+        user = User.objects.get(id = uid)
+        spec = user.UserData.RegularUser
+        current_rq = Request.objects.get(event=event,user=spec)
+        current_rq.status = 'Accepted'
+        files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(eid)), '*'))
+        send_templated_email(
+                            subject='Подтверждение заявки',
+                            email_template_name='',
+                            email_context={
+                            'event': event.name,                        
+                            },
+		    				recipients=user.email,
+                            fail_silently=False,
+		    				files=files,
+                )
+        current_rq.save()
+        return redirect('events_show_requests',eid = eid)
+        
 
 @login_required
 def decline_request(request,eid,uid):
@@ -130,6 +150,23 @@ def place_request(request, eid):
     else:
         pass #FIXME
     return redirect('request_completed')
+
+@login_required
+@should_be_event_worker
+def create_acceptance_email_template(request,eid):
+    event = Event.objects.get(id = eid)
+    if request.method == "POST":
+        form = EmailTemplateForm(request.POST)
+        if form.is_valid():
+            text = form.cleaned_data['text']
+            model = AcceptanceEmailTemplate(event = event, text = text)
+            model.save()
+            return redirect('request_completed')
+    else:
+        form = EmailTemplateForm()
+    return render(request,'acceptance_email_form.html',{'form':form})
+
+
 
 @login_required
 @should_be_regular
