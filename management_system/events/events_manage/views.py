@@ -1,5 +1,7 @@
 #-*- coding: utf-8 *-*
 from django.shortcuts import render,redirect
+from django.template.loader import get_template_from_string
+from django.template import Context, Template
 from events.events_admin.models import Event, Request, Result, AcceptanceEmailTemplate
 from events.study_groups.models import StudyGroup
 from events.price_groups.models import PriceGroup
@@ -11,7 +13,7 @@ from dashboard.observer.models import Observer
 from events.events_manage.forms import PriceChoiceForm, ResultForm, EmailTemplateForm
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
-from decorators import should_be_event_worker,should_be_regular
+from decorators import should_be_allowed_for_event, should_be_allowed_to_view_event
 from django.contrib.auth.decorators import login_required
 from base_source_functions import send_templated_email
 import glob
@@ -21,7 +23,6 @@ from django.conf import settings
 trans = {'Teacher':'teachers','Observer':'observers','Mentor':'mentors'}
 
 @login_required
-@should_be_event_worker
 def edit_or_create_result(request, event_id, user_id):
     user = RegularUser.objects.get(id = user_id)
     event = Event.objects.get(id = event_id)
@@ -30,21 +31,19 @@ def edit_or_create_result(request, event_id, user_id):
         form = ResultForm(request.POST, instance = result)
         if form.is_valid():
             result = form.save()
-            #FIXME: bad completed page
-            return redirect('event_added')
+            return redirect('completed')
     else:
         form = ResultForm(instance = result)
     return render(request, 'edit_or_create_result.html', {'form' : form})
 
 @login_required
-@should_be_event_worker
+@should_be_allowed_to_view_event
 def main(request,eid):
     event = Event.objects.get(id = eid)
     context = {'name':event.name, 'eid':eid}
     return render(request,'events_manage_main.html',context)
 
 @login_required
-@should_be_event_worker
 def show_users(request,eid,role):
     event = Event.objects.get(id = eid)
     users = globals()[role].objects.filter(~Q(event=eid),is_active = True)
@@ -52,7 +51,6 @@ def show_users(request,eid,role):
     return render(request,'users_list.html',context)
 
 @login_required
-@should_be_event_worker
 def invite(request,eid,uid,role):           
     event = Event.objects.get(id = eid)
     user = User.objects.get(id = uid)
@@ -62,7 +60,6 @@ def invite(request,eid,uid,role):
     return redirect('events_show_users',role = role,eid = eid)
 
 @login_required
-@should_be_event_worker
 def show_requests(request,eid):
     event = Event.objects.get(id = eid)
     requests = Request.objects.filter(event = eid)
@@ -70,38 +67,39 @@ def show_requests(request,eid):
         accept = True
     else:
         accept = False
-    users = []
-    for each in requests:
-        users.append({'status':each.status,'user':each.user})
-    context = {'ename':event.name,'eid':eid,'users':users,'accept':accept}
+    context = {'ename':event.name,'eid':eid,'users':requests,'accept':accept}
     return render(request,'requests.html',context)
 
 @login_required
 @should_be_event_worker
-def accept(request,eid,uid):
-    event = Event.objects.get(id = eid)  
+def accept(request,request_id):
+    current_rq = Request.objects.get(id=request_id)
+    user = current_rq.user
+    event = current_rq.event  
+    eid = event.id
     if event.is_payed:          
         if request.method == "POST":
             form = PriceChoiceForm(request.POST,event_id=eid)
             if form.is_valid():
-                user = User.objects.get(id = uid)
-                spec = user.UserData.RegularUser
-                current_rq = Request.objects.get(event=event,user=spec)
+                spec = current_rq.user                
                 current_rq.status = 'Accepted'
                 p_group = form.cleaned_data['price_group']
                 files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(eid)), '*'))
-                template_file = AcceptanceEmailTemplate.objects.get(event = event).text
-                send_templated_email(
+                try:
+                    template_file = Template(get_template_from_string(AcceptanceEmailTemplate.objects.get(event = event).text))
+                    send_templated_email(
                             subject='Подтверждение заявки',
                             template_file = template_file,
                             email_context={
                             'event': event.name,
                             'price': p_group.price,                        
                             },
-		    				recipients=user.email,
+		    				recipients=user.data.user.email,
                             fail_silently=False,
 		    				files=files,
-                )
+                    )
+                except ObjectDoesNotExist:
+                    pass
                 current_rq.save()
                 #s_group = StudyGroup.objects.get(event=,label='All')
                 #s_group.users.add(spec)
@@ -131,16 +129,14 @@ def accept(request,eid,uid):
         
 
 @login_required
-def decline_request(request,eid,uid):
-    event = Event.objects.get(id = eid)
-    user = User.objects.get(id = uid)
-    current_rq = Request.objects.get(event=event,user=user.UserData.RegularUser)
+def decline_request(request,request_id):    
+    current_rq = Request.objects.get(id=request_id)
+    event = current_rq.event
     current_rq.status = 'Declined'
     current_rq.save() 
-    return redirect('events_show_requests',eid=eid)
+    return redirect('events_show_requests',eid=event.id)
     
 @login_required
-@should_be_regular
 def place_request(request, eid):
     event = Event.objects.get(id = eid)
     e_request, created = Request.objects.get_or_create(event = event, user = request.user.UserData.RegularUser)
@@ -152,7 +148,6 @@ def place_request(request, eid):
     return redirect('request_completed')
 
 @login_required
-@should_be_event_worker
 def create_acceptance_email_template(request,eid):
     event = Event.objects.get(id = eid)
     if request.method == "POST":
@@ -171,7 +166,7 @@ def create_acceptance_email_template(request,eid):
 @should_be_event_worker
 def send_email_to_schools(request,eid):
     event = Event.objects.get(id = eid)
-    users = Request.objects.filter(event = event, status = 'Accepted')
+    users = User.objects.filter(event = event, status = 'Accepted')
     for each in users:
         user = each.user
         send_templated_email(
@@ -186,8 +181,8 @@ def send_email_to_schools(request,eid):
                 )
     return render(request,'acceptance_email_form.html',{'form':form})
 '''
+
 @login_required
-@should_be_regular
 def request_completed(request):
     return render(request, 'request_completed.html', {})
 
