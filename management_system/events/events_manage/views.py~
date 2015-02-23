@@ -90,8 +90,9 @@ def accept(request,eid,uid):
                 current_rq.status = 'Accepted'
                 p_group = form.cleaned_data['price_group']
                 files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(eid)), '*'))
-                template_file = AcceptanceEmailTemplate.objects.get(event = event).text
-                send_templated_email(
+                try:
+                    template_file = AcceptanceEmailTemplate.objects.get(event = event).text
+                    send_templated_email(
                             subject='Подтверждение заявки',
                             template_file = template_file,
                             email_context={
@@ -101,7 +102,9 @@ def accept(request,eid,uid):
 		    				recipients=user.email,
                             fail_silently=False,
 		    				files=files,
-                )
+                    )
+                except ObjectDoesNonExist:
+                    pass
                 current_rq.save()
                 #s_group = StudyGroup.objects.get(event=,label='All')
                 #s_group.users.add(spec)
@@ -166,7 +169,26 @@ def create_acceptance_email_template(request,eid):
         form = EmailTemplateForm()
     return render(request,'acceptance_email_form.html',{'form':form})
 
-
+'''
+@login_required
+@should_be_event_worker
+def send_email_to_schools(request,eid):
+    event = Event.objects.get(id = eid)
+    users = User.objects.filter(event = event, status = 'Accepted')
+    for each in users:
+        user = each.user
+        send_templated_email(
+                            subject='Подтверждение заявки',
+                            email_template_name='',
+                            email_context={
+                            'event': event.name,                        
+                            },
+		    				recipients=user.email,
+                            fail_silently=False,
+		    				files=files,
+                )
+    return render(request,'acceptance_email_form.html',{'form':form})
+'''
 
 @login_required
 @should_be_regular

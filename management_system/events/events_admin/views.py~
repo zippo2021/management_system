@@ -13,7 +13,7 @@ which imitates view function (also loads instances and forms)
 so you can access wizard as a simple view, named regular_user_wizard
 '''
 class EventWizard(SessionWizardView):
-    template_name = 'events_admin_event_wizard.html'
+    template_name = 'events_admin_wizard.html'
         
     def done(self, form_list, **kwargs):
         
