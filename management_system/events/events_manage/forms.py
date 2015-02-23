@@ -1,6 +1,6 @@
 #-*- coding: utf-8 *-*
 from django import forms
-from events.events_admin.models import Event, Result
+from events.events_admin.models import Event, Result, AcceptanceEmailTemplate
 
 class PriceChoiceForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -14,5 +14,7 @@ class ResultForm(forms.ModelForm):
         model = Result
         exclude = ['event', 'user']
 
-class EmailTemplateForm(forms.Form):
-    text = forms.CharField(widget=forms.Textarea,label='Текст письма')
+class AcceptanceEmailTemplateForm(forms.ModelForm):
+    class Meta:
+        model = AcceptanceEmailTemplate
+        exclude = ['event']

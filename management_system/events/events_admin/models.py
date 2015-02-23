@@ -81,3 +81,5 @@ class AcceptanceEmailTemplate(models.Model):
     text = models.TextField(verbose_name = 'Результат',
                               max_length = 4000,
     )
+    
+admin.site.register(AcceptanceEmailTemplate)
