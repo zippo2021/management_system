@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+{% extends 'base.html' %}
 {% load staticfiles %}
+{% block content %}
 {% csrf_token %}
 <html lang="en">
 <head>
@@ -78,3 +80,4 @@
     <input type="hidden" id="event_end_date" value="{{ end_date }}"/>
 </body>
 </html>
+{% endblock %}
