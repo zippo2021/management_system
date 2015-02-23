@@ -6,12 +6,11 @@
 <head>
 	<link rel="stylesheet" href="{% static 'markup.css' %}">
     <link rel="stylesheet" href="{% static 'main.css' %}">
-	<script src="{% static 'ajax_form.js' %}"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css">
+
+    <link rel="stylesheet" type="text/css"  href="{% static 'external/bootstrap/css/bootstrap.min.css' %}"/>
+    <script type="text/javascript"  src="{% static 'external/js/jquery-1.11.1.min.js' %}"></script>
+    <script type="text/javascript"  src="{% static 'external/bootstrap/js/bootstrap.min.js' %}"></script>
+
 	{% block extrahead %}{% endblock %}
 </head>
 
@@ -32,22 +31,27 @@
 				{{ organisation_settings.title }}
 			</div>
 		</div>
-		
+		{% url 'news_main' as news_main %}
+        {% url 'common_profile_view_profile' user.id as common_profile_view_profile %}
+        {% url 'schools_show_unproved' as schools_show_unproved %}
+        {% url 'user_manager_show_all' as user_manager_show_all %}
 		<div id="navigation">
+<<<<<<< HEAD
             <ul id="main_menu">
                 <li><a href="{% url 'news_main' as news %}">Новости </a> </li>
                 <li>
-					<a href="{% url 'common_profile_view_profile'  user.id %}">
+					<a href="{% url 'common_profile_view_profile'  user.id %}
+            <ul id="main_menu" class="nav nav-pills">
+                <li {% if request.path == news_main %}class="active" {% endif %}><a href="{{ news_main }}">Новости </a> </li>
+                <li {% if request.path == common_profile_view_profile %}class="active" {% endif %}>
+					<a href="{{ common_profile_view_profile }}">
 						Профиль
 					</a>
 				</li>
                 {% if user.UserData.Admin.is_active %}
-					<li>
-						<a href="{% url 'schools_show_unproved' %}">Школы</a>
+					<li {% if request.path == schools_show_unproved %}class="active" {% endif %}>
+						<a href="{{ schools_show_unproved }}">Школы</a>
 					</li>
-				{% if request.path ==  news %} AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA {% endif %}
-                	<li>
-						<a href="{% url 'user_manager_show_all' %}">
 							Управление персоналом 
 						</a>
 					</li>
@@ -59,7 +63,6 @@
 			{% block sidebar %}
 			<ul>
 				Sidebar<br>
-            	<a href="{% url 'events_admin_show_all' %}">События</a>
 			</ul>
 			{% endblock %}
 		</div>

@@ -13,9 +13,9 @@
     <td>
        {% if accept  %} 
        {% if each.status != 'Accepted'  %} 
-        <a href="{% url 'events_accept_request' each.id %}" > Одобрить</a>
+        <a href="{% url 'events_manage_accept_request' event_id each.id  %}" > Одобрить</a>
        {% else %}
-        <a href="{% url 'decline_request' each.id %}" > Отказать</a>
+        <a href="{% url 'events_manage_decline_request' event_id each.id %}" > Отказать</a>
        {% endif %}
        {% endif %}
     </td>
