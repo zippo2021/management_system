@@ -4,7 +4,7 @@
 {% for each in users  %}
 <tr>
     <td>
-        {{ each.UserData }}
+        {{ each.user.UserData }}
         <a href="{% url 'common_profile_view_profile' each.user.data.id %}">{{ each.user.data.last_name }} {{ each.user.data.first_name }} {{ each.user.data.middle_name }}</a>        
     </td>
     <td>
@@ -13,9 +13,9 @@
     <td>
        {% if accept  %} 
        {% if each.status != 'Accepted'  %} 
-        <a href="{% url 'events_accept_request' eid each.user.data.id %}" > Одобрить</a>
+        <a href="{% url 'events_accept_request' each.id %}" > Одобрить</a>
        {% else %}
-        <a href="{% url 'decline_request' eid each.user.data.id %}" > Отказать</a>
+        <a href="{% url 'decline_request' each.id %}" > Отказать</a>
        {% endif %}
        {% endif %}
     </td>

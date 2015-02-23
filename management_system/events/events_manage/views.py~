@@ -99,7 +99,7 @@ def accept(request,request_id):
                             'event': event.name,
                             'price': p_group.price,                        
                             },
-		    				recipients=user.data.user.email,
+		    				recipients=user.data.User.email,
                             fail_silently=False,
 		    				files=files,
                     )
