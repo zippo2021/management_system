@@ -18,12 +18,14 @@
     
 	<div id="container">
 		<div id="top">
+			{% if  user.is_authenticated %}
 			Ваш логин: <font color="blue">{{ user }}</font>,
 			Вы обладаете следующими правами:
 			{% for each in user_permissions %}
 				<font color="red">{{ perms_to_language|get_item:each }}</font>
 				{% if not forloop.last %},{% endif %}
 			{% endfor %}
+			{% endif %}
 		</div>
 		
 		<div id="org_info">
@@ -37,25 +39,27 @@
         {% url 'user_manager_show_all' as user_manager_show_all %}
 		<div id="navigation">
             <ul id="main_menu" class="nav nav-pills nav-justified">
-                <li {% if request.path == news_main %}class="active" {% endif %}>
+				<li {% if request.path == news_main %}class="active" {% endif %}>
 					<a href="{{ news_main }}">Новости </a>
 				</li>
-                <li {% if request.path == common_profile_view_profile %}class="active" {% endif %}>
-					<a href="{{ common_profile_view_profile }}">
-						Профиль
-					</a>
-				</li>
-                {% if user.UserData.Admin.is_active %}
-					<li {% if request.path == schools_show_unproved %}class="active" {% endif %}>
-						<a href="{{ schools_show_unproved }}">Школы</a>
-					</li>
-                    <li {% if request.path == user_manager_show_all %}class="active" {% endif %}>
-						<a href="{{ user_manager_show_all }}">
-							Управление персоналом 
+                {% if  user.is_authenticated %}
+                	<li {% if request.path == common_profile_view_profile %}class="active" {% endif %}>
+						<a href="{{ common_profile_view_profile }}">
+							Профиль
 						</a>
 					</li>
-				{% endif %}
-            </ul>
+       	        	{% if user.UserData.Admin.is_active %}
+						<li {% if request.path == schools_show_unproved %}class="active" {% endif %}>
+							<a href="{{ schools_show_unproved }}">Школы</a>
+						</li>
+            	        <li {% if request.path == user_manager_show_all %}class="active" {% endif %}>
+							<a href="{{ user_manager_show_all }}">
+								Управление персоналом 
+							</a>
+						</li>
+					{% endif %}
+            	{% endif %}
+			</ul>
 			{% block event_menu %}{% endblock %}
 		</div>
 

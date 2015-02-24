@@ -27,5 +27,7 @@ class Request(models.Model):
     event = models.ForeignKey(Event, related_name = 'Request')
     user = models.ForeignKey('regular.RegularUser',
 			   related_name = 'Request')
-    price_group = models.ForeignKey(PriceGroup, related_name = 'Request')
+    price_group = models.ForeignKey(PriceGroup,
+                                    related_name = 'Request',
+                                    null = True)
 admin.site.register(Request)

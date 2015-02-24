@@ -184,12 +184,12 @@ def create_acceptance_email_template(request,event_id):
     template, created = EmailTemplate.objects.\
                             get_or_create(event = event)
     if request.method == "POST":
-        form = EmailTemplateForm(request.POST, instance = template)
+        form = AcceptanceEmailTemplateForm(request.POST, instance = template)
         if form.is_valid():
             form.save()
             return redirect('completed')
     else:
-        form = EmailTemplateForm(instance = template)
+        form = AcceptanceEmailTemplateForm(instance = template)
     return render(request,
                   'events_manage_create_acceptance_email_form.html',
                   {'form':form, 'event' : event})

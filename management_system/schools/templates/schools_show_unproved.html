@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% if schools %}
 <table>
 	<thead>
 		<tr>
@@ -23,13 +24,10 @@
 				<a href="{% url 'schools_approve' each.id %}">Подтвердить</a>
 			</td>
 		</tr>
-	{% empty %}
-		<tr>
-			<td>
-				Нет записей!
-			</td>
-		</tr>
 	{% endfor %}
 	</tbody>
 </table>
+{% else %}
+	Нет записей
+{% endif %}
 {% endblock %}
