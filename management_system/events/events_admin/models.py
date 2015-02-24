@@ -17,7 +17,6 @@ class Event(models.Model):
     closed = models.DateField(verbose_name = 'Закрыто')
     is_private = models.BooleanField(verbose_name = 'Добавление по заявкам')
     is_journey = models.BooleanField(verbose_name = 'Выездное')
-    is_payed = models.BooleanField(verbose_name = 'Оплачиваемое')
     has_journal = models.BooleanField(verbose_name = 'Вести журнал')
     event_workers = models.ManyToManyField('event_worker.EventWorker',
                                           verbose_name = 'Управляющие событием')
