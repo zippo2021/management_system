@@ -11,6 +11,8 @@ urlpatterns = [
                     name = 'events_manage_choose_users'),
     url(r'^invite/(?P<uid>\d+)/(?P<role>\w+)/$', views.invite,
                     name = 'events_manage_invite'),
+    url(r'^exclude/(?P<uid>\d+)/(?P<role>\w+)/$', views.exclude,
+                    name = 'events_manage_exclude'),
     url(r'^requests', views.show_requests,
                     name = 'events_manage_show_requests'),
     url(r'^accept/(?P<request_id>\d+)/$', views.accept_request,

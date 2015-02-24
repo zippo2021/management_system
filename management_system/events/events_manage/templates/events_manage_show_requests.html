@@ -1,27 +1,36 @@
 {% extends 'base.html' %}
+{% block event_menu %}
+	{% include 'event_menu.html' %}
+{% endblock %}
 {% block content %}
 <table>
-{% for each in users  %}
-<tr>
-    <td>
-        {{ each.user.UserData }}
-        <a href="{% url 'common_profile_view_profile' each.user.data.id %}">{{ each.user.data.last_name }} {{ each.user.data.first_name }} {{ each.user.data.middle_name }}</a>        
-    </td>
-    <td>
-    {{ each.status }}
-    </td>
-    <td>
-       {% if accept  %} 
-       {% if each.status != 'Accepted'  %} 
-        <a href="{% url 'events_manage_accept_request' event_id each.id  %}" > Одобрить</a>
-       {% else %}
-        <a href="{% url 'events_manage_decline_request' event_id each.id %}" > Отказать</a>
-       {% endif %}
-       {% endif %}
-    </td>
-    
-    
-</tr>
-{% endfor %}
+<thead>
+	<tr>
+		<td width=25%></td>
+		<td width=25%></td>
+		<td width=25%></td>
+	</tr>
+</thead>
+<tbody>
+	{% for each in users  %}
+		<tr>
+    		<td>
+        		<a href="{% url 'common_profile_view_profile' each.user.data.id %}">{{ each.user.data.last_name }} {{ each.user.data.first_name }} {{ each.user.data.middle_name }}</a>        
+    		</td>
+    		<td>
+    			{{ each.status }}
+    		</td>
+    		<td>
+     			{% if accept  %} 
+   					{% if each.status != 'Accepted'  %} 
+      				    <a href="{% url 'events_manage_accept_request' event.id each.id  %}" > Одобрить</a>
+       				{% else %}
+        				<a href="{% url 'events_manage_decline_request' event.id each.id %}" > Отказать</a>
+					{% endif %}
+				{% endif %}
+			</td>
+    	</tr>
+	{% endfor %}
+</tbody>
 </table>
 {% endblock %}

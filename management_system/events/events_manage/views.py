@@ -43,14 +43,23 @@ def edit_or_create_result(request, event_id, user_id):
 def main(request,event_id):
     event = Event.objects.get(id = event_id)
     context = {'event' : event}
+    try:
+        rq = Request.objects.get(user = request.user.UserData.RegularUser,
+                                      event = event)
+        context.update({'rq' : rq})
+    except:
+        pass
     return render(request,'events_manage_main.html', context)
 
 @login_required
 def choose_users(request,event_id, role):
     event = Event.objects.get(id = event_id)
-    users = globals()[perms_to_classes[role]]\
+    free_users = globals()[perms_to_classes[role]]\
             .objects.filter(~Q(event=event_id),is_active = True)
-    context = {'ename':event.name,'event_id':event_id,'users':users,'role':role}
+    not_free_users = globals()[perms_to_classes[role]]\
+            .objects.filter(event=event_id)
+    context = {'event' : event, 'free_users' : free_users,
+               'not_free_users' : not_free_users, 'role':role}
     return render(request,
                   'events_manage_choose_users.html',
                   context)
@@ -67,6 +76,17 @@ def invite(request,event_id, uid, role):
                     event_id = event_id)
 
 @login_required
+def exclude(request, event_id, uid, role):
+    event = Event.objects.get(id = event_id)
+    user = User.objects.get(id = uid)
+    spec = getattr(user.UserData, perms_to_classes[role])
+    field = getattr(event, role + 's')
+    field.remove(spec)   
+    return redirect('events_manage_choose_users',
+                    role = role,
+                    event_id = event_id)
+
+@login_required
 def show_requests(request,event_id):
     event = Event.objects.get(id = event_id)
     requests = Request.objects.filter(event = event_id)
@@ -74,7 +94,7 @@ def show_requests(request,event_id):
         accept = True
     else:
         accept = False
-    context = {'ename':event.name,'event_id':event_id,'users':requests,'accept':accept}
+    context = {'event' : event, 'users':requests, 'accept':accept}
     return render(request,
                  'events_manage_show_requests.html',
                  context)
@@ -118,7 +138,7 @@ def accept_request(request, event_id, request_id):
         else:
             form = PriceChoiceForm(event_id=event_id) 
         return render(request,
-                      'price_choice_form.html',
+                      'events_manage_price_choice_form.html',
                       {'form':form,'event_id':event_id})
     else:
         spec = user
@@ -174,7 +194,7 @@ def create_acceptance_email_template(request,event_id):
         form = AcceptanceEmailTemplateForm(instance = template)
     return render(request,
                   'events_manage_create_acceptance_email_form.html',
-                  {'form':form})
+                  {'form':form, 'event' : event})
 
 '''
 @login_required
