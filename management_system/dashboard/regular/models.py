@@ -15,7 +15,7 @@ class RegularUser(models.Model):
 								 max_length=4, 
     )
 	
-    birthdate = models.DateField(verbose_name = 'Дата рождения')
+    birthdate = models.DateField(verbose_name = 'Дата рождения', null = True)
 	
     birthplace = models.CharField(
                     verbose_name = 'Место рождения',
