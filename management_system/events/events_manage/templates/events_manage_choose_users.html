@@ -1,19 +1,56 @@
 {% extends 'base.html' %}
+{% block event_menu %}
+	{% include 'event_menu.html' %}
+{% endblock %}
 {% block content %}
 <table>
-{% for each in users  %}
+<thead>
+	<tr>
+		<td width=25%>
+		</td>
+		<td width=25%>
+		</td>
+		<td width=25%>
+		</td>
+	</tr>
+</thead>
+<tbody>
+{% for each in not_free_users %}
 <tr>
     <td>
-        {{ each.UserData }}
-        <a href="{% url 'common_profile_view_profile' each.data.id %}">{{ each.data.last_name }} {{ each.data.first_name }} {{ each.data.middle_name }}</a>        
+        <a href="{% url 'common_profile_view_profile' each.data.id %}">
+			{{ each.data.last_name }} {{ each.data.first_name }} {{ each.data.middle_name }}
+		</a>        
     </td>
     <td>
-        {{ role }}
+    	Приглашен
+	</td>
+	<td>
+        <a href="
+			{% url 'events_manage_exclude' event.id each.data.id role %}
+		">
+			Отменить
+		</a>
+	</td>
+</tr>
+{% endfor %}
+{% for each in free_users %}
+<tr>
+    <td>
+        <a href="{% url 'common_profile_view_profile' each.data.id %}">
+			{{ each.data.last_name }} {{ each.data.first_name }} {{ each.data.middle_name }}
+		</a>        
     </td>
     <td>
-        <a href="{% url 'events_manage_invite' event_id each.data.id role %}" > Пригласить</a>
+    	Свободен
+	</td>
+	<td>
+        <a href="{% url 'events_manage_invite' event.id each.data.id role %}" >
+			Пригласить
+		</a>
     </td>
 </tr>
 {% endfor %}
+</tbody>
 </table>
 {% endblock %}

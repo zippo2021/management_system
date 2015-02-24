@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block event_menu %}
+	{% include 'event_menu.html' %}
+{% endblock %}
 {% block content %}
 <table>
 	<thead>
@@ -40,22 +43,23 @@
 				<p>Закрытие: {{ event.closed }}</p>
 				<p>Место проведения: {{ event.place }}</p>
 				<p>Комментарий: {{ event.comment }}</p>
-				{% if event.is_journey %}
-					<p>
-						Информация о поездке
-						{% if 'admin' in user_permissions %}
-							<a href="
-								{% url 'events_admin_edit' event.id 'journey' %}
-							">
-								Редактировать
-							</a>
-						{% endif %}
-					</p>
-					<p>Время отъезда: {{ event.JourneyData.departure_time }}</p>
-					<p>Информация: {{ event.JourneyData.info }}</p>
-				{% endif %}
 			</td>
 			<td>
+				{% if 'regular' in user_permissions %}
+					{% if rq %}
+						<p>
+							Информация о заявке: {{ rq.status }}
+						</p>
+					{% else %}
+						<p>
+							<a href="
+								{% url 'events_manage_place_request' event.id %}
+							">
+								Подать заявку
+							</a>
+						</p>
+					{% endif %}
+				{% endif %}
 				{% if 'event_worker' in user_permissions %}
         			<p>
 					<a href="
@@ -101,6 +105,25 @@
 						<font color = "red">Заморожено</font>
 					{% endif %}
 					</p>
+				{% endif %}
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				{% if event.is_journey %}
+					<p>
+						Информация о поездке
+						{% if 'admin' in user_permissions %}
+							<a href="
+								{% url 'events_admin_edit' event.id 'journey' %}
+							">
+								Редактировать
+							</a>
+						{% endif %}
+					</p>
+					<p>Время отъезда: {{ event.JourneyData.departure_time }}</p>
+					<p>Информация: {{ event.JourneyData.info }}</p>
 				{% endif %}
 			</td>
 		</tr>
