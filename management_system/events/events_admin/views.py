@@ -68,7 +68,8 @@ def edit(request, event_id, base_or_journey):
     else:
         form = form_class(instance = instance)
     
-    return render(request, 'events_admin_edit.html', {'form' : form})
+    return render(request, 'events_admin_edit.html',
+                    {'form' : form, 'event' : event})
 
 @login_required
 @should_be_admin

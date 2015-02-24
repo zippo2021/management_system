@@ -42,7 +42,7 @@
 				<p>Открытие: {{ event.opened }}</p>
 				<p>Закрытие: {{ event.closed }}</p>
 				<p>Место проведения: {{ event.place }}</p>
-				<p>Комментарий: {{ event.comment }}</p>
+				<p>Комментарий: {{ event.comment|linebreaks }}</p>
 			</td>
 			<td>
 				{% if 'regular' in user_permissions %}
@@ -123,7 +123,7 @@
 						{% endif %}
 					</p>
 					<p>Время отъезда: {{ event.JourneyData.departure_time }}</p>
-					<p>Информация: {{ event.JourneyData.info }}</p>
+					<p>Информация: {{ event.JourneyData.info|linebreaks }}</p>
 				{% endif %}
 			</td>
 		</tr>
