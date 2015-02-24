@@ -127,7 +127,7 @@ success : function(text)
 			</tr>
 			<tr>
 			{% for key, value in fields.items %}
-				<td> {{ key }} : {{ value }} </td>
+				<td> {{ key }} : {% if value %} {{ value }} {% endif %}</td>
 				{% if forloop.counter|divisibleby:"3" %}
 					</tr><tr>
 				{% endif %}

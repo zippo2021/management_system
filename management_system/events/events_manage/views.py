@@ -2,7 +2,8 @@
 from django.shortcuts import render,redirect
 from django.template.loader import get_template_from_string
 from django.template import Context, Template
-from events.events_admin.models import Event, Request, Result, AcceptanceEmailTemplate
+from events.events_admin.models import Event
+from events.events_manage.models import Request, Result, EmailTemplate
 from events.study_groups.models import StudyGroup
 from events.price_groups.models import PriceGroup
 from django.contrib.auth.models import User
@@ -115,7 +116,7 @@ def accept_request(request, event_id, request_id):
                 p_group = form.cleaned_data['price_group']
                 files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
                 try:
-                    template_file = Template(get_template_from_string(AcceptanceEmailTemplate.objects.get(event = event).text))
+                    template_file = Template(get_template_from_string(EmailTemplate.objects.get(event = event).text))
                     send_templated_email(
                             subject='Подтверждение заявки',
                             template_file = template_file,
@@ -129,9 +130,8 @@ def accept_request(request, event_id, request_id):
                     )
                 except ObjectDoesNotExist:
                     pass
+                current_rq.price_group = p_group
                 current_rq.save()
-                #s_group = StudyGroup.objects.get(event=,label='All')
-                #s_group.users.add(spec)
                 p_group.users.add(spec)                       
                 return redirect('events_manage_show_requests',
                                 event_id = event_id)
@@ -139,11 +139,9 @@ def accept_request(request, event_id, request_id):
             form = PriceChoiceForm(event_id=event_id) 
         return render(request,
                       'events_manage_price_choice_form.html',
-                      {'form':form,'event_id':event_id})
+                      {'form':form, 'event':event})
     else:
-        spec = user
-        current_rq = Request.objects.get(event=event,user=spec)
-        template_file = Template(get_template_from_string(AcceptanceEmailTemplate.objects.get(event = event).text))
+        template_file = Template(get_template_from_string(EmailTemplate.objects.get(event = event).text))
         current_rq.status = 'Accepted'
         files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
         send_templated_email(
@@ -183,15 +181,15 @@ def place_request(request, event_id):
 @login_required
 def create_acceptance_email_template(request,event_id):
     event = Event.objects.get(id = event_id)
-    template, created = AcceptanceEmailTemplate.objects.\
+    template, created = EmailTemplate.objects.\
                             get_or_create(event = event)
     if request.method == "POST":
-        form = AcceptanceEmailTemplateForm(request.POST, instance = template)
+        form = EmailTemplateForm(request.POST, instance = template)
         if form.is_valid():
             form.save()
             return redirect('completed')
     else:
-        form = AcceptanceEmailTemplateForm(instance = template)
+        form = EmailTemplateForm(instance = template)
     return render(request,
                   'events_manage_create_acceptance_email_form.html',
                   {'form':form, 'event' : event})

@@ -1,69 +1,69 @@
 field_perms = {     'teacher':{
                         'info':[
-                            'Teacher',
-                            'RegularUser',
-                            'Observer',
-                            'Mentor',
-                            'Admin',
+                            'teacher',
+                            'regular_User',
+                            'observer',
+                            'mentor',
+                            'admin',
                         ]
                     },
                     'regular':{
                         'grad_date':[
-                            'Teacher',
-                            'Admin',
+                            'teacher',
+                            'admin',
                         ],
                         'birthdate':[
-                            'Teacher',
-                            'Mentor',
-                            'Admin',
+                            'teacher',
+                            'mentor',
+                            'admin',
                         ],
                         'birthplace':[
-                            'Admin',                        
+                            'admin',                        
                         ],
                         'postal_code':[
-                            'Admin',
+                            'admin',
                         ],
                         'country':[
-                            'Teacher',
-                            'Mentor',
-                            'Admin',
+                            'teacher',
+                            'mentor',
+                            'admin',
                         ],
                         'city':[
-                            'Teacher',
-                            'Admin',
+                            'teacher',
+                            'admin',
                         ],
                         'street':[
-                            'Admin',
+                            'admin',
                         ],
                         'building':[
-                            'Admin',
+                            'admin',
                         ],
                         'housing':[
-                            'Admin',
+                            'admin',
                         ],
                         'appartment':[
-                            'Admin',
+                            'admin',
                         ],
                         'parent_1':[
-                            'Mentor',
-                            'Admin',
+                            'mentor',
+                            'admin',
                         ],
                         'parent_1_phone':[
-                            'Mentor',
-                            'Admin',
+                            'mentor',
+                            'admin',
                         ],
                         'parent_2':[
-                            'Mentor',
-                            'Admin',                            
+                            'mentor',
+                            'admin',                            
                         ],
                         'parent_2_phone':[
-                            'Mentor',
-                            'Admin',
+                            'mentor',
+                            'admin',
                         ],
                         'school':[
-                            'Teacher',
-                            'Mentor',
-                            'Admin',
+                            'teacher',
+                            'mentor',
+                            'admin',
                         ],
                     },
                     'observer':{

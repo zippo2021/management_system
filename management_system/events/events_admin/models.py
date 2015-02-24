@@ -9,7 +9,7 @@ class Event(models.Model):
     def __unicode__ (self):
         return self.name
     name = models.CharField(verbose_name = 'Название', max_length = 100)
-    comment = models.CharField(verbose_name = 'Комментарий',
+    comment = models.TextField(verbose_name = 'Комментарий',
 			       max_length = 1000, blank = True)
     place = models.CharField(verbose_name = 'Место проведения',
 			     max_length = 100)
@@ -36,7 +36,7 @@ class JourneyData(models.Model):
     tickets = models.ForeignKey('tickets.Ticket', related_name = 'JourneyData',
                                 blank = True, null = True)
     departure_time = models.DateTimeField(verbose_name = 'Время отправления')
-    info = models.CharField(verbose_name = 'Информация',
+    info = models.TextField(verbose_name = 'Информация',
                             blank = True,
                             max_length = 1000,
     )
@@ -44,42 +44,8 @@ class JourneyData(models.Model):
 admin.site.register(JourneyData)
 
 
-'''
-if event is private
-'''
-class Requests(models.Model):
-    event = models.OneToOneField(Event, related_name = 'Requests')
-    users = models.ManyToManyField('regular.RegularUser',
-								   related_name = 'Requests')
 
-class Request(models.Model):
-    status = models.CharField(verbose_name = 'Статус',
-                            blank = True,
-                            max_length = 1000,
-    )
-    event = models.ForeignKey(Event, related_name = 'Request')
-    user = models.ForeignKey('regular.RegularUser',
-								   related_name = 'Request')
-admin.site.register(Request)
 
 class Contract(models.Model):
     event = models.ForeignKey(Event, related_name = 'Contract')
     user = models.ForeignKey('regular.RegularUser', related_name = 'Contract')
-    '''
-    it has to be completed
-    '''
-
-class Result(models.Model):
-    event = models.ForeignKey(Event, related_name = 'Result')
-    user = models.ForeignKey('regular.RegularUser', related_name = 'Result')
-    result = models.CharField(verbose_name = 'Результат',
-                              max_length = 1000,
-    )
-
-class AcceptanceEmailTemplate(models.Model):
-    event = models.ForeignKey(Event, related_name = 'AcceptanceEmailTemplate')
-    text = models.TextField(verbose_name = 'Результат',
-                              max_length = 4000,
-    )
-    
-admin.site.register(AcceptanceEmailTemplate)
