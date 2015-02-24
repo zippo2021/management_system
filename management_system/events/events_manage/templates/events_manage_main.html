@@ -1,34 +1,93 @@
 {% extends 'base.html' %}
 {% block content %}
-{{ name }}
 <table>
-<tr>
-    <td>
-        <a href="{% url 'events_manage_choose_users' event_id 'teacher' %}">
-			Пригласить учителей
-		</a>
-        <p>
-        <a href="{% url 'events_manage_choose_users' event_id 'mentor'%}">
-			Пригласить воспитателей
-		</a>
-        <p>
-        <a href="{% url 'events_manage_choose_users' event_id 'observer' %}">
-			Пригласить наблюдателей
-		</a>
-    </td>
-    <td>
-        <a href="{% url 'price_groups_show' event_id %}">Управление ценовыми группами</a>
-        <a href="
-			{% url 'events_manage_create_acceptance_email_template' event_id %}
-		">Создать шаблон письма</a>
-    </td>
-</tr>
-<tr>
-    <td>
-        <a href="{% url 'events_manage_show_requests' event_id  %}">
-			Управление завками 
-		</a>
-    </td>
-</tr>    
+	<thead>
+		<tr>
+			<td width=40%>
+			</td>
+			<td width=20%></td>
+			<td width=40%></td>
+		<tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				<p>
+				Базовая информация
+					{% if 'admin' in user_permissions %}
+						<a href="
+							{% url 'events_admin_edit' event.id 'base' %}
+						">
+							Редактировать
+						</a>
+					{% endif %}
+				</p>
+				<p>Название: {{ event.name }}</p>
+				<p>
+					<ul>
+						{% if event.is_private %}
+							<li>
+								Закрытое
+							</li>
+						{% endif %}
+						{% if event.is_payed %}
+							<li>
+								Оплачиваемое
+							</li>
+						{% endif %}
+					</ul>
+				<p>Открытие: {{ event.opened }}</p>
+				<p>Закрытие: {{ event.closed }}</p>
+				<p>Место проведения: {{ event.place }}</p>
+				{% if event.is_journey %}
+					<p>
+						Информация о поездкее
+						{% if 'admin' in user_permissions %}
+							<a href="
+								{% url 'events_admin_edit' event.id 'journey' %}
+							">
+								Редактировать
+							</a>
+						{% endif %}
+					</p>
+					<p>Время отъезда: {{ event.JourneyData.departure_time }}</p>
+					<p>Информация о поездке: {{ event.JourneyData.info }}</p>
+				{% endif %}
+			</td>
+			<td>
+				{% if 'event_worker' in user_permissions %}
+        			<p>
+					<a href="
+					{% url 'events_manage_choose_users' event.id 'teacher' %}
+					">
+						Пригласить учителей
+					</a>
+					</p>
+					<p>
+       				<a href="
+					{% url 'events_manage_choose_users' event.id 'mentor'%}
+					">
+						Пригласить воспитателей
+					</a>
+					</p>
+        			<p>
+        			<a href="
+					{% url 'events_manage_choose_users' event.id 'observer' %}
+					">
+						Пригласить наблюдателей
+					</a>
+					</p>		
+        			<p>
+					<a href="
+					{% url 'events_manage_create_acceptance_email_template' event.id %}
+					">
+						Создать шаблон письма подтверждения
+					</a>
+					</p>
+					<p>
+				{% endif %}
+			</td>
+		</tr>
+	</tbody>
 </table>
 {% endblock %}
