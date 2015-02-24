@@ -4,6 +4,7 @@
 	<thead>
 		<tr>
 			<td width=40%>
+				<p>{{ event.name }}</p>
 			</td>
 			<td width=20%></td>
 			<td width=40%></td>
@@ -22,12 +23,11 @@
 						</a>
 					{% endif %}
 				</p>
-				<p>Название: {{ event.name }}</p>
 				<p>
 					<ul>
 						{% if event.is_private %}
 							<li>
-								Закрытое
+								Приватное
 							</li>
 						{% endif %}
 						{% if event.is_payed %}
@@ -39,9 +39,10 @@
 				<p>Открытие: {{ event.opened }}</p>
 				<p>Закрытие: {{ event.closed }}</p>
 				<p>Место проведения: {{ event.place }}</p>
+				<p>Комментарий: {{ event.comment }}</p>
 				{% if event.is_journey %}
 					<p>
-						Информация о поездкее
+						Информация о поездке
 						{% if 'admin' in user_permissions %}
 							<a href="
 								{% url 'events_admin_edit' event.id 'journey' %}
@@ -51,7 +52,7 @@
 						{% endif %}
 					</p>
 					<p>Время отъезда: {{ event.JourneyData.departure_time }}</p>
-					<p>Информация о поездке: {{ event.JourneyData.info }}</p>
+					<p>Информация: {{ event.JourneyData.info }}</p>
 				{% endif %}
 			</td>
 			<td>
@@ -81,10 +82,25 @@
 					<a href="
 					{% url 'events_manage_create_acceptance_email_template' event.id %}
 					">
-						Создать шаблон письма подтверждения
+						Шаблон письма подтверждения
 					</a>
 					</p>
 					<p>
+				{% endif %}
+				{% if 'admin' in user_permissions %}
+					<p>
+					<a href="{% url 'events_admin_deactivate' event.id %}">
+						{% if event.is_active %}
+							Заморозить
+						{% else %}
+							Разморозить
+						{% endif %}
+					</a>
+					{% if not event.is_active %}
+						<br>
+						<font color = "red">Заморожено</font>
+					{% endif %}
+					</p>
 				{% endif %}
 			</td>
 		</tr>
