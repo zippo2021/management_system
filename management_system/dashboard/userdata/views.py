@@ -88,7 +88,8 @@ def edit(request):
 			user_data = form.save(commit = False)
 			user_data.modified = True
 			user_data.save()
-			return redirect('completed')
+                        status = "success"
+			return HttpResponse(status)
     else:		
         form = UserDataForm(instance = request.user.UserData)
 
