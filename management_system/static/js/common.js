@@ -213,6 +213,25 @@ WarningMessage = function (warningText, warningDescription)
     init(warningText, warningDescription);
 };
 
+OkMessageAutoClose = function (okText, delay, autoreload)
+{
+function init(okText, delay, autoreload) {
+var modal = new Modal();
+modal.setTitle("ОК");
+modal.getContentElement().append($("<p>" + okText + "<p>"));
+delay = delay || 3;
+if (autoreload === undefined)
+autoreload = false;
+setTimeout(function(){
+modal.destroy();
+if (autoreload)
+location.reload();
+}, delay * 1000);
+modal.show();
+}
+init(okText, delay, autoreload);
+};
+
 OkMessage = function (okText, okDescription)
 {
     function init(okText, okDescription) {

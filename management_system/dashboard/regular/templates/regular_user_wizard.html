@@ -1,6 +1,4 @@
-{% extends 'base.html' %}
 
-{% block content %}
 <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }} </p>
 <form action = "" method = "post">
 {% csrf_token %}
@@ -18,6 +16,4 @@
 {% if wizard.steps.prev %}
 <button name = "wizard_goto_step" type = "submit" value="{{ wizard.steps.prev }}">back</button>
 {% endif %}
-<input type = "submit" value ="next"/>
 </form>
-{% endblock %}

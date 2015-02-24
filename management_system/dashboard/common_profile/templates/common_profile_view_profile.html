@@ -1,58 +1,8 @@
 {% extends "base.html" %}
 {% load custom_template_filters %}
+{% load staticfiles %}
 {% block extrahead %} 
-<script>
-
-
-function ModalToggle(t_url,t_id,t_title){
-var content = '';
-$.ajax({ type: "GET", 
-url: t_url, 
-async: false,
-success : function(text)
-{
-    content = text;
-    var modal = new Modal();
-    modal.setTitle(t_title);
-    modal.getContentElement().append(content);
-    modal.setButtons([
-    {
-            label:'Сохранить',
-            callback:function(){
-                var msg = modal.getContentElement().find(t_id).serialize();
-                $.ajax({
-                    type: 'POST',
-                    url: t_url,
-                    data: msg,
-                    success: function(data) {
-                        modal.hide();
-                        modal.destroy();
-                        if (data == "success"){
-                            OkMessage("Данные сохранены.");
-                        }
-                        else
-                            ErrorMessage("Error");
-                    },
-                    error: function(xhr, str){
-                        modal.hide();
-                        modal.destroy();
-                        ErrorWindow("Error");
-                    }
-                });
-        }
-    },
-    {
-        label:"Закрыть",
-        callback:function(){
-            modal.hide();
-            modal.destroy();
-        }
-    }]);
-    modal.show();
-}
-});
-}
-</script>
+ <script type="text/javascript" src="{% static 'js/modals.js' %}"></script>
 {% endblock %}
 {% block content %}
 <table>
@@ -60,9 +10,10 @@ success : function(text)
 		<tr>
 			<td width=10%></td>
 			<td width=25%>
+                
 				Базовая информация
     			{% if edit_perm == True %}
-					<a id="userdata_edit_link" href = "#" onClick="ModalToggle("{% url 'userdata_edit' %}","#userdata_form","Базовая информация"); return false;" >Редактировать</a>
+					<a id="userdata_edit_link" href = "#" onClick="ModalToggle('{% url 'userdata_edit' %}','{% url 'userdata_edit' %}','#userdata_form','Базовая информация'); return false;" >Редактировать</a>
 				{% endif %}
 			</td>
 			<td width=25%>
@@ -116,9 +67,7 @@ success : function(text)
 					<p>
 					{{ perms_to_language|get_item:role }}
         			{% if edit_perm == True %}
-            			<a href = "{% url 'common_profile_edit' role %}">
-							Редактировать
-						</a>
+                        <a id="common_profile_edit_link" href = "#" onClick="ModalToggle('{% url 'common_profile_edit' role %}','#form','Специальная информация'); return false;" >Редактировать</a>
        				{% endif %}
 					</p>
 				</td>

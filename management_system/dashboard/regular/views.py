@@ -33,7 +33,7 @@ class RegularUserWizard(SessionWizardView):
         regular = form_list[2].save(commit = False)
         regular.modified = True
         regular.save()
-        return redirect('completed')
+        return HttpResponse('success')
 
 @login_required
 @should_be_regular_possibly_unfilled
