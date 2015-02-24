@@ -45,7 +45,6 @@ class UserData(models.Model):
                     verbose_name = 'Отчество',
                     max_length = 255,
                     blank = True,
-                    null = True,
     )
 	
     last_name = models.CharField(verbose_name = 'Фамилия',  max_length = 255)
@@ -53,7 +52,6 @@ class UserData(models.Model):
     phone  = models.CharField(
                     verbose_name = 'Телефон',
                     max_length = 15,
-                    null = True,
     )
 	
     modified = models.BooleanField(default = False)
@@ -93,33 +91,33 @@ class OtherDoc(models.Model):
     user = models.OneToOneField(UserData, related_name = 'OtherDoc')
     type = models.CharField(verbose_name='Тип', max_length=255)
     ser = models.CharField(verbose_name='Серия',max_length=255)
-    number = models.CharField(verbose_name='Номер',max_length=255)
-    issued_by = models.CharField(verbose_name="Кем выдан",max_length=255,)
+    number = models.CharField(verbose_name='Номер', max_length=255)
+    issued_by = models.CharField(verbose_name="Кем выдан", max_length=255,)
     when_issued = models.DateField(verbose_name="Когда выдан")
 admin.site.register(OtherDoc)
 
 class Passport(models.Model):
     user = models.OneToOneField(UserData, related_name='Passport')
-    ser = models.PositiveIntegerField(verbose_name='Серия',max_length=4)
-    number = models.PositiveIntegerField(verbose_name='Номер',max_length=6)
-    issued_by = models.CharField(verbose_name="Кем выдан",max_length=255,)
+    ser = models.PositiveIntegerField(verbose_name='Серия', max_length=4)
+    number = models.PositiveIntegerField(verbose_name='Номер', max_length=6)
+    issued_by = models.CharField(verbose_name="Кем выдан", max_length=255,)
     when_issued = models.DateField(verbose_name="Когда выдан")
-    code = models.CharField(verbose_name="Код подразделения",max_length=30)
+    code = models.CharField(verbose_name="Код подразделения", max_length=30)
 admin.site.register(Passport)
 
 class BirthCert(models.Model):
     user = models.OneToOneField(UserData, related_name = 'BirthCert')
-    ser = models.CharField(verbose_name='Серия',max_length=8)
-    number = models.PositiveIntegerField(verbose_name='Номер',max_length=6)
-    issued_by = models.CharField(verbose_name="Кем выдано",max_length=255)
+    ser = models.CharField(verbose_name='Серия', max_length=8)
+    number = models.PositiveIntegerField(verbose_name='Номер', max_length=6)
+    issued_by = models.CharField(verbose_name="Кем выдано", max_length=255)
     when_issued = models.DateField(verbose_name="Когда выдано")
 admin.site.register(BirthCert)
 
 class Zagran(models.Model):
     user = models.OneToOneField(UserData, related_name = 'Zagran')
-    ser = models.PositiveIntegerField(verbose_name='Серия',max_length=2)
-    number = models.PositiveIntegerField(verbose_name='Номер',max_length=7)
-    issued_by = models.CharField(verbose_name="Кем выдан",max_length=255)
+    ser = models.PositiveIntegerField(verbose_name='Серия', max_length=2)
+    number = models.PositiveIntegerField(verbose_name='Номер', max_length=7)
+    issued_by = models.CharField(verbose_name="Кем выдан", max_length=255)
     when_issued = models.DateField(verbose_name="Когда выдан")
     exp_date = models.DateField(verbose_name="Срок действия")
 admin.site.register(Zagran)

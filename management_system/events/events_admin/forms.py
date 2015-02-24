@@ -2,7 +2,8 @@
 
 from dashboard.event_worker.models import EventWorker
 from django.forms import ModelForm, Form, BooleanField, ModelMultipleChoiceField
-from events.events_admin.models import Event, JourneyData, Result
+from events.events_admin.models import Event, JourneyData
+from events.events_manage.models import Result
 
 class EventEditForm(ModelForm):
     event_workers = ModelMultipleChoiceField(label = 'Работники события',

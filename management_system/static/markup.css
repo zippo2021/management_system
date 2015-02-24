@@ -52,10 +52,10 @@ html, body {
 }
 
 #content{
+    margin: 0 auto;
 	padding-top: 30px;
 	padding-left: 30px;
-	float : right;
-	width: 80%;
+	width: 100%;
 	min-height: 500px;
 	height: 100%;
 	background: #b2b2b2;

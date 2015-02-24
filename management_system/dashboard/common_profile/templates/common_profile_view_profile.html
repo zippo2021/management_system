@@ -2,30 +2,55 @@
 {% load custom_template_filters %}
 {% block extrahead %} 
 <script>
-function ModalToggle(){
-    var content = $("#userdata_form").clone();
-    content.removeAttr("hidden");
+
+
+function ModalToggle(t_url,t_id,t_title){
+var content = '';
+$.ajax({ type: "GET", 
+url: t_url, 
+async: false,
+success : function(text)
+{
+    content = text;
     var modal = new Modal();
-    modal.setTitle("Базовая информация");
+    modal.setTitle(t_title);
     modal.getContentElement().append(content);
     modal.setButtons([
-                        {
-                            label:'Сохранить',
-                            callback:function(){
-                                content.submit();
-                                modal.hide();
-                                modal.destroy();
-                            }
-                        },
-                        {
-                            label:"Закрыть",
-                            callback:function(){
-                                modal.hide();
-                                modal.destroy();
-                            }
+    {
+            label:'Сохранить',
+            callback:function(){
+                var msg = modal.getContentElement().find(t_id).serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: t_url,
+                    data: msg,
+                    success: function(data) {
+                        modal.hide();
+                        modal.destroy();
+                        if (data == "success"){
+                            OkMessage("Данные сохранены.");
                         }
-    ])
+                        else
+                            ErrorMessage("Error");
+                    },
+                    error: function(xhr, str){
+                        modal.hide();
+                        modal.destroy();
+                        ErrorWindow("Error");
+                    }
+                });
+        }
+    },
+    {
+        label:"Закрыть",
+        callback:function(){
+            modal.hide();
+            modal.destroy();
+        }
+    }]);
     modal.show();
+}
+});
 }
 </script>
 {% endblock %}
@@ -37,7 +62,7 @@ function ModalToggle(){
 			<td width=25%>
 				Базовая информация
     			{% if edit_perm == True %}
-					<a href = "#" onclick=ModalToggle()>Редактировать</a>
+					<a id="userdata_edit_link" href = "#" onClick="ModalToggle("{% url 'userdata_edit' %}","#userdata_form","Базовая информация"); return false;" >Редактировать</a>
 				{% endif %}
 			</td>
 			<td width=25%>
@@ -102,7 +127,7 @@ function ModalToggle(){
 			</tr>
 			<tr>
 			{% for key, value in fields.items %}
-				<td> {{ key }} : {{ value }} </td>
+				<td> {{ key }} : {% if value %} {{ value }} {% endif %}</td>
 				{% if forloop.counter|divisibleby:"3" %}
 					</tr><tr>
 				{% endif %}
