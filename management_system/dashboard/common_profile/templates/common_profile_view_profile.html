@@ -1,5 +1,34 @@
 {% extends "base.html" %}
 {% load custom_template_filters %}
+{% block extrahead %} 
+<script>
+function ModalToggle(){
+    var content = $("#userdata_form").clone();
+    content.removeAttr("hidden");
+    var modal = new Modal();
+    modal.setTitle("Базовая информация");
+    modal.getContentElement().append(content);
+    modal.setButtons([
+                        {
+                            label:'Сохранить',
+                            callback:function(){
+                                content.submit();
+                                modal.hide();
+                                modal.destroy();
+                            }
+                        },
+                        {
+                            label:"Закрыть",
+                            callback:function(){
+                                modal.hide();
+                                modal.destroy();
+                            }
+                        }
+    ])
+    modal.show();
+}
+</script>
+{% endblock %}
 {% block content %}
 <table>
 	<thead>
@@ -8,7 +37,7 @@
 			<td width=25%>
 				Базовая информация
     			{% if edit_perm == True %}
-					<a href = "{% url 'userdata_edit' %}">Редактировать</a>
+					<a href = "#" onclick=ModalToggle()>Редактировать</a>
 				{% endif %}
 			</td>
 			<td width=25%>
@@ -83,6 +112,8 @@
 		{% endfor %}
 	</tbody>
 </table>	
+
+
 
 {% endblock %}
 
