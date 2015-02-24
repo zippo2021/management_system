@@ -21,12 +21,12 @@ def permission_translation_processor(request):
 def documents_translation_processor(request):
     return {'docs_to_language' : docs_to_language}
 
-@login_required
+
 def user_permissions_processor(request):
     perms = perms_to_list(request.user.UserData.get_permissions())
     return {'user_permissions' : perms}
 
-@login_required
+
 def events_processor(request):
     events = Event.objects.all()
     user = request.user.UserData
@@ -38,3 +38,4 @@ def events_processor(request):
     active_events = events.filter(is_active = True)
     archive_events = events.filter(is_active = False)
     return {'active_events' : active_events, 'archive_events' : archive_events}
+
