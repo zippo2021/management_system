@@ -1,0 +1,29 @@
+{% url 'news_main' as news_main %}
+{% url 'common_profile_view_profile' user.id as common_profile_view_profile %}
+{% url 'schools_show_unproved' as schools_show_unproved %}
+{% url 'user_manager_show_all' as user_manager_show_all %}
+
+{% block main_menu %}
+ 			<ul id="main_menu" class="nav nav-tabs nav-justified">
+				<li {% if request.path == news_main %}class="active" {% endif %}>
+					<a href="{{ news_main }}">Новости </a>
+				</li>
+                {% if  user.is_authenticated %}
+                	<li {% if request.path == common_profile_view_profile %}class="active" {% endif %}>
+						<a href="{{ common_profile_view_profile }}">
+							Профиль
+						</a>
+					</li>
+       	        	{% if user.UserData.Admin.is_active %}
+						<li {% if request.path == schools_show_unproved %}class="active" {% endif %}>
+							<a href="{{ schools_show_unproved }}">Школы</a>
+						</li>
+            	        <li {% if request.path == user_manager_show_all %}class="active" {% endif %}>
+							<a href="{{ user_manager_show_all }}">
+								Управление персоналом 
+							</a>
+						</li>
+					{% endif %}
+            	{% endif %}
+			</ul>
+{% endblock %}
