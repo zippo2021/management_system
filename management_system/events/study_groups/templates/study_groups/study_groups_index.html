@@ -19,36 +19,44 @@
     <script type="text/javascript"  src="{% static 'study_groups/js/study_groups.js' %}"></script>
 </head>
 <body>
+    <div id="group_select_container">
+        <select size="1" id="group_list" style="width: 200px">
+        {% for group in groups %}
+            <option value="{{ group.id }}">{{ group.label }}</option>
+        {% endfor %}
+        </select>
+    </div>
     <table border="2px">
-        <thead></thead>
+        <thead>
+            <tr>
+                <td>
+                    В Группе
+                </td>
+                <td></td>
+                <td>
+                    Не в группе
+                </td>
+            </tr>
+        </thead>
         <tbody>
             <tr>
                 <td>
-                    <select size="10" id="groups_list" style="width: 200px">
-                        {% for group in groups %}
-                            <option>{{ group.label }}</option>
-                        {% endfor %}
+                    <select size="10" id="pupils_list_in" style="width: 200px">
                     </select>
                 </td>
+                <td>
+                    <button id="add_to_group_button"><--</button>
+                    <button id="remove_from_group_button">--></button>
+                </td>
                 <td valign="top" width="200px">
-                    <div id="pupils_list">
-                        {% for pupil in pupils %}
-                            <input type="checkbox" data-id="{{ pupil.id }}" value="">{{ pupil.data }}<br>
-                        {% endfor %}
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button id="call_add_group_button">Добавить</button>
-                    <button id="call_delete_group_button">Удалить</button>
-                </td>
-                <td>
-                    <button id="call_save_group_button" disabled="true">Сохранить</button>
+                    <select size="10" id="pupils_list_out" style="width: 200px">
+                    </select>
                 </td>
             </tr>
         </tbody>
     </table>
+    <button id="call_add_group_button">Добавить</button>
+    <button id="call_delete_group_button">Удалить</button>
 
     <div id="add_window" hidden="hidden">
         <input id="new_group_title" placeholder="Название группы" value=""/>
