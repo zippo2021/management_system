@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block main_menu %}
+	{% include 'main_menu.html' %}
+{% endblock %}
 {% load custom_template_filters %}
 {% load staticfiles %}
 {% block extrahead %} 
@@ -34,17 +37,13 @@
    			<td>
         		<p>
 					ФИО:<br>
-					<b>
 					{{ base_data.last_name }}
 					{{ base_data.first_name }}
 					{{ base_data.middle_name }}
-					</b>
 				</p>
         		<p>
 					Телефон:<br>
-					<b>
 					{{ base_data.phone }}
-					</b>
 				</p>
     		</td>
 			<td>
@@ -59,11 +58,11 @@
 </table>
 
 {% for role,fields in additional_data.items %}
-<table class="table table-bordered">
-	<tbody>
+<table class="table table-striped">
+	<thead>
     		{% if fields %}
 			<tr>
-				<td width=25%>
+				<td width=33%>
 					<p>
 					{{ perms_to_language|get_item:role }}
         			{% if edit_perm == True %}
@@ -80,9 +79,11 @@
        				{% endif %}
 					</p>
 				</td>
-				<td width=25%></td>
-				<td width=25%></td>
+				<td width=33%></td>
+				<td width=33%></td>
 			</tr>
+	</thead>
+	</tbody>
 			<tr>
 			{% for key, value in fields.items %}
 				<td> {{ key }} : {% if value %} {{ value }} {% endif %}</td>
