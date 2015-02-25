@@ -113,11 +113,6 @@
 					<p>
 						Информация о поездке
 						{% if 'admin' in user_permissions %}
-							<a href="
-								{% url 'events_admin_edit' event.id 'journey' %}
-							">
-								Редактировать
-							</a>
                             <a id="journey_edit_link" href = "#" onClick="ModalToggle('{% url 'events_admin_edit' event.id 'journey' %}','{% url 'events_admin_edit' event.id 'journey' %}','#form','Редактирование информаци о поездке'); return false;" >Редактировать</a>
 						{% endif %}
 					</p>

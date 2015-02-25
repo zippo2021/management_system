@@ -1,11 +1,8 @@
-{% extends 'base.html' %}
-{% block main_menu %}
-	{% include 'main_menu.html' %}
-{% endblock %}
+
 {% load crispy_forms_tags %}
-{% block content %}
+
 <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }} </p>
-<form action = "" method = "post">
+<form id='form' action = "" method = "post">
 {% csrf_token %}
 <table>
 {{ wizard.management_form }}
@@ -21,7 +18,7 @@
 {% if wizard.steps.prev %}
 <button name = "wizard_goto_step" type = "submit" value="{{ wizard.steps.prev }}">back</button>
 {% endif %}
-<input type = "submit" value ="next"/>
+
 </form>
-{% endblock %}
+
 
