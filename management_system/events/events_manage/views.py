@@ -22,7 +22,6 @@ import glob
 import os
 from django.conf import settings
 
-
 @login_required
 def edit_or_create_result(request, event_id, user_id):
     user = RegularUser.objects.get(id = user_id)
@@ -52,11 +51,16 @@ def main(request,event_id):
         pass
     return render(request,'events_manage_main.html', context)
 
+###############################################################
+####################### STAFF ################################
+#############################################################
+
 @login_required
 def choose_users(request,event_id, role):
     event = Event.objects.get(id = event_id)
     free_users = globals()[perms_to_classes[role]]\
-            .objects.filter(~Q(event=event_id),is_active = True)
+            .objects.filter(~Q(event=event_id),is_active = True,
+                            data__modified = True)
     not_free_users = globals()[perms_to_classes[role]]\
             .objects.filter(event=event_id)
     context = {'event' : event, 'free_users' : free_users,
@@ -87,6 +91,10 @@ def exclude(request, event_id, uid, role):
                     role = role,
                     event_id = event_id)
 
+################################################################
+###################### REQUESTS ###############################
+##############################################################
+
 @login_required
 def show_requests(request,event_id):
     event = Event.objects.get(id = event_id)
@@ -108,7 +116,7 @@ def show_requests(request,event_id):
 @should_be_event_worker
 def accept_request(request, event_id, request_id):
     current_rq = Request.objects.get(id=request_id)
-    if current_rq.status == 'одобрен':
+    if current_rq.status == 'одобрена':
         return redirect('completed')
     user = current_rq.user
     event = current_rq.event  
@@ -117,7 +125,7 @@ def accept_request(request, event_id, request_id):
         form = PriceChoiceForm(request.POST,event_id=event_id)
         if form.is_valid():
             spec = current_rq.user                
-            current_rq.status = 'одобрен'
+            current_rq.status = 'одобрена'
             p_group = form.cleaned_data['price_group']
             files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
             try:
@@ -150,9 +158,17 @@ def accept_request(request, event_id, request_id):
 def decline_request(request, event_id, request_id):    
     current_rq = Request.objects.get(id=request_id)
     event = current_rq.event
-    current_rq.status = 'отклонен'
+    current_rq.status = 'отклонена'
     current_rq.save() 
-    return redirect('events_manage_show_requests',event_id=event.id)
+    return redirect('events_manage_show_requests', event_id = event.id)
+
+@login_required
+def pop_back_request(request, event_id, request_id):
+    current_rq = Request.objects.get(id=request_id)
+    event = current_rq.event
+    current_rq.status = 'в обработке'
+    current_rq.save() 
+    return redirect('events_manage_show_requests', event_id = event.id)
     
 @login_required
 def place_request(request, event_id):
@@ -164,6 +180,10 @@ def place_request(request, event_id):
     else:
         pass #FIXME
     return redirect('completed')
+
+###############################################################
+###################### EMAILS ################################
+#############################################################
 
 @login_required
 def create_acceptance_email_template(request,event_id):

@@ -6,11 +6,27 @@
 		Создать нового пользователя
 	</a>
 </p>
-<table>
+<table class="table">
 	<tr>
 	{% for key, value in staff_members.items %}
 		<td>
-			<table>
+			<table class="table">
+				<thead>
+					<tr>
+						<td>
+							<a href="
+								{% url 'common_profile_view_profile' key.id %}
+							">
+							{{ key }}
+							</a>
+						</td>
+						<td>
+							{{ key.UserData.last_name}}
+							{{ key.UserData.first_name }}
+							{{ key.UserData.second_name }}
+						</td>
+					</tr>
+				</thead>
 				<tr>
 					<td>
 						<p>
@@ -41,17 +57,6 @@
 						</p>
 					</td>
 					<td>
-						Логин: 
-							<a href="
-								{% url 'common_profile_view_profile' key.id %}
-							">
-							{{ key }}
-							</a>
-						<br>
-						ФИО:
-							{{ key.UserData.last_name}}
-							{{ key.UserData.first_name }}
-							{{ key.UserData.second_name }}
 						<br>
 						<ul>
 							{% for each in value %}
