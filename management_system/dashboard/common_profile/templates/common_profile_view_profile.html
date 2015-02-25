@@ -5,7 +5,7 @@
  <script type="text/javascript" src="{% static 'js/modals.js' %}"></script>
 {% endblock %}
 {% block content %}
-<table>
+<table class="table">
 	<thead>
 		<tr>
 			<td width=10%></td>
@@ -58,9 +58,9 @@
 </tbody>
 </table>
 
-<table>
+{% for role,fields in additional_data.items %}
+<table class="table table-bordered">
 	<tbody>
-		{% for role,fields in additional_data.items %}
     		{% if fields %}
 			<tr>
 				<td width=25%>
@@ -83,9 +83,9 @@
 			{% endfor %}
    			</tr>
 			{% endif %}
-		{% endfor %}
 	</tbody>
 </table>	
+{% endfor %}
 
 
 

@@ -22,7 +22,6 @@ class RegularUserForm(ModelForm):
 	class Meta:
 		model = RegularUser
 		exclude = ['data', 'modified', 'is_active']
-
 '''
 !!!
 Forms for Wizard

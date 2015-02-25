@@ -18,7 +18,7 @@
 {% endif %}
 
 {% if 'admin' in user_permissions or 'event_worker' in user_permissions or 'teacher' in user_permissions or 'observer' in user_permissions %}
-   <li><a href="">Список участников</a>
+   <li><a href="{% url 'index' event.id %}">Учебные группы</a>
 {% endif %}
 
 </ul>
