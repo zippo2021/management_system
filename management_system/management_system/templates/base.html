@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 {% load i18n %}
 {% load custom_template_filters %}
+{% load crispy_forms_tags %}
 {% load staticfiles %}
 <html>
 <head>
 	<link rel="stylesheet" href="{% static 'markup.css' %}">
-    <link rel="stylesheet" href="{% static 'main.css' %}">
-
+	<link rel="stylesheet" href="{% static 'main.css' %}">
     <link rel="stylesheet" type="text/css"  href="{% static 'external/bootstrap/css/bootstrap.min.css' %}"/>
     <script type="text/javascript"  src="{% static 'external/js/jquery-1.11.1.min.js' %}"></script>
     <script type="text/javascript"  src="{% static 'external/bootstrap/js/bootstrap.min.js' %}"></script>
-
+    <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
 	{% block extrahead %}{% endblock %}
 </head>
 
@@ -18,12 +18,15 @@
     
 	<div id="container">
 		<div id="top">
-			Ваш логин: <font color="blue">{{ user }}</font>,
-			Вы обладаете следующими правами:
+			{% if  user.is_authenticated %}
+			<font color="white">Ваш логин:</font>
+			<font color="blue">{{ user }}</font>,
+			<font color="white">Вы обладаете следующими правами:</font>
 			{% for each in user_permissions %}
 				<font color="red">{{ perms_to_language|get_item:each }}</font>
-				{% if not forloop.last %},{% endif %}
+				{% if not forloop.last %}<font color="white">,</font>{% endif %}
 			{% endfor %}
+			{% endif %}
 		</div>
 		
 		<div id="org_info">
@@ -31,39 +34,9 @@
 				{{ organisation_settings.title }}
 			</div>
 		</div>
-		{% url 'news_main' as news_main %}
-        {% url 'common_profile_view_profile' user.id as common_profile_view_profile %}
-        {% url 'schools_show_unproved' as schools_show_unproved %}
-        {% url 'user_manager_show_all' as user_manager_show_all %}
 		<div id="navigation">
-            <ul id="main_menu" class="nav nav-pills">
-                <li {% if request.path == news_main %}class="active" {% endif %}><a href="{{ news_main }}">Новости </a> </li>
-                <li {% if request.path == common_profile_view_profile %}class="active" {% endif %}>
-					<a href="{{ common_profile_view_profile }}">
-						Профиль
-					</a>
-				</li>
-                {% if user.UserData.Admin.is_active %}
-					<li {% if request.path == schools_show_unproved %}class="active" {% endif %}>
-						<a href="{{ schools_show_unproved }}">Школы</a>
-					</li>
-				
-                	<li {% if request.path == user_manager_show_all %}class="active" {% endif %}>
-						<a href="{{ user_manager_show_all }}">
-							Управление персоналом 
-						</a>
-					</li>
-				{% endif %}
-            </ul>
-		</div>
-
-		<div id="sidebar">
-			{% block sidebar %}
-			<ul>
-				Sidebar<br>
-            	<a href="{% url 'events_admin_show_all' %}">События</a>
-			</ul>
-			{% endblock %}
+			{% block main_menu %}{% endblock %}
+			{% block event_menu %}{% endblock %}
 		</div>
 
 		<div id="content">

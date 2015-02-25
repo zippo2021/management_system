@@ -1,14 +1,22 @@
 {% extends "base.html" %}
+{% block main_menu %}
+	{% include 'main_menu.html' %}
+{% endblock %}
 {% load custom_template_filters %}
+{% load staticfiles %}
+{% block extrahead %} 
+ <script type="text/javascript" src="{% static 'js/modals.js' %}"></script>
+{% endblock %}
 {% block content %}
-<table>
+<table class="table">
 	<thead>
 		<tr>
 			<td width=10%></td>
 			<td width=25%>
+                
 				Базовая информация
     			{% if edit_perm == True %}
-					<a href = "{% url 'userdata_edit' %}">Редактировать</a>
+					<a id="userdata_edit_link" href = "#" onClick="ModalToggle('{% url 'userdata_edit' %}','{% url 'userdata_edit' %}','#userdata_form','Базовая информация'); return false;" >Редактировать</a>
 				{% endif %}
 			</td>
 			<td width=25%>
@@ -29,17 +37,13 @@
    			<td>
         		<p>
 					ФИО:<br>
-					<b>
 					{{ base_data.last_name }}
 					{{ base_data.first_name }}
 					{{ base_data.middle_name }}
-					</b>
 				</p>
         		<p>
 					Телефон:<br>
-					<b>
 					{{ base_data.phone }}
-					</b>
 				</p>
     		</td>
 			<td>
@@ -53,36 +57,47 @@
 </tbody>
 </table>
 
-<table>
-	<tbody>
-		{% for role,fields in additional_data.items %}
+{% for role,fields in additional_data.items %}
+<table class="table table-striped">
+	<thead>
     		{% if fields %}
 			<tr>
-				<td width=25%>
+				<td width=33%>
 					<p>
 					{{ perms_to_language|get_item:role }}
         			{% if edit_perm == True %}
-            			<a href = "{% url 'common_profile_edit' role %}">
-							Редактировать
-						</a>
+                        {% if role == 'regular' %}
+                            <a id="common_profile_edit_link" href = "#" onClick="WizardModalToggle('{% url 'regular_user_wizard' %}','{% url 'regular_user_wizard' %}','#form','Специальная информация'); return false;" >Редактировать</a>
+                        {% endif %}
+
+                        {% if role == 'teacher' %}
+                            <a id="common_profile_edit_link" href = "#" onClick="ModalToggle('{% url 'teacher_edit' %}','{% url 'teacher_edit' %}','#form','Специальная информация'); return false;" >Редактировать</a>
+                        {% endif %}
+
+                        
+                        
        				{% endif %}
 					</p>
 				</td>
-				<td width=25%></td>
-				<td width=25%></td>
+				<td width=33%></td>
+				<td width=33%></td>
 			</tr>
+	</thead>
+	</tbody>
 			<tr>
 			{% for key, value in fields.items %}
-				<td> {{ key }} : {{ value }} </td>
+				<td> {{ key }} : {% if value %} {{ value }} {% endif %}</td>
 				{% if forloop.counter|divisibleby:"3" %}
 					</tr><tr>
 				{% endif %}
 			{% endfor %}
    			</tr>
 			{% endif %}
-		{% endfor %}
 	</tbody>
 </table>	
+{% endfor %}
+
+
 
 {% endblock %}
 

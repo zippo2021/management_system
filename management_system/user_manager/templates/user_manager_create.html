@@ -1,22 +1,9 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
 <form method="post" class="form-container" action="">
 {% csrf_token %}
-<dl class="staff_manager">
-{{ form.non_field_errors }}
-{% for field in form %}
-    <dt>{{ field.label }}</dt>
-    <dd class="clearfix">
-    {{ field }}
-    {% if field.help_text %}
-         <div class="clearfix">{{ field.help_text}}</div>
-    {% endif %}
-    {% if field.errors %}
-    <div class="myerrors clearfix">{{field.errors }}</div>
-    {% endif %}
-    </dd>
-{% endfor %}
-</dl>
+{{ form|crispy }}
 <input type="submit" value="Создать" class="clearfix">
 </form>
 {% endblock %}

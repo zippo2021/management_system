@@ -2,7 +2,8 @@
 
 from django.shortcuts import render
 from events.study_groups.models import StudyGroup
-from events.events_admin.models import Event, Request
+from events.events_admin.models import Event
+from events.events_manage.models import Request
 from dashboard.teacher.models import Teacher
 from dashboard.regular.models import RegularUser
 import json

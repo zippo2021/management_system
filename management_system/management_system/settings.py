@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 INSTALLED_APPS = (
    	'management_system',
@@ -39,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles', 
     'django.contrib.humanize',  # Required for elapsed time formatting
+    'crispy_forms',
     'registration',
     'customuseradmin',
     'markdown_deux',  # Required for Knowledgebase item formatting

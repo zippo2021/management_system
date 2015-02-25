@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
+{% block main_menu %}
+	{% include 'main_menu.html' %}
+{% endblock %}
 {% block content %}
-<table>
+{% if schools %}
+<table class="table table-hover">
 	<thead>
 		<tr>
 			<td width=25%>Название</td>
@@ -23,13 +27,10 @@
 				<a href="{% url 'schools_approve' each.id %}">Подтвердить</a>
 			</td>
 		</tr>
-	{% empty %}
-		<tr>
-			<td>
-				Нет записей!
-			</td>
-		</tr>
 	{% endfor %}
 	</tbody>
 </table>
+{% else %}
+	Нет записей
+{% endif %}
 {% endblock %}

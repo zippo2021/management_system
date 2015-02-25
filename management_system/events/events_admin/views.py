@@ -68,7 +68,8 @@ def edit(request, event_id, base_or_journey):
     else:
         form = form_class(instance = instance)
     
-    return render(request, 'events_admin_edit.html', {'form' : form})
+    return render(request, 'events_admin_edit.html',
+                    {'form' : form, 'event' : event})
 
 @login_required
 @should_be_admin
@@ -76,7 +77,7 @@ def deactivate(request, event_id):
     event = Event.objects.get(id = event_id)
     event.is_active = not(event.is_active)
     event.save()
-    return redirect('events_admin_show_all')
+    return redirect('events_manage_main', event_id)
 
 
 @login_required

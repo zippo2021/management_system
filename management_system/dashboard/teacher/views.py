@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from dashboard.teacher.forms import TeacherForm
 from dashboard.teacher.models import Teacher
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -15,7 +16,8 @@ def edit(request):
 			   instance = request.user.UserData.Teacher)
 		if form.is_valid():
 			teacher = form.save()
-			return redirect ('completed')
+			status = "success"
+			return HttpResponse(status)
 	else:
 		form = TeacherForm(instance = request.user.UserData.Teacher)
 	return render(request, 'teacher_edit.html', {'form' : form})

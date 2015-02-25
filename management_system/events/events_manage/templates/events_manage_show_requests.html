@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block event_menu %}
+	{% include 'event_menu.html' %}
+{% endblock %}
+{% block content %}
+<p>
+Ценовые группы <a href="{% url 'price_groups_add' event.id %}">Добавить</a>
+</p>
+<p>
+{% for each in price_groups %}
+	{{ each }}<br>
+{% endfor %}
+</p>
+<table class="table table-hover">
+<thead>
+	<tr>
+		<td>ФИО</td>
+		<td>Статус</td>
+		<td></td>
+	</tr>
+</thead>
+<tbody>
+	{% for each in users  %}
+		<tr>
+    		<td>
+        		<a href="{% url 'common_profile_view_profile' each.user.data.id %}">{{ each.user.data.last_name }} {{ each.user.data.first_name }} {{ each.user.data.middle_name }}</a>        
+    		</td>
+    		<td>
+    			{{ each.status }}
+				{% if each.status == 'одобрена' %}
+					({{ each.price_group }})
+				{% endif %}
+    		</td>
+    		<td>
+     			{% if accept  %} 
+   					{% if each.status == 'в обработке'  %} 
+      				    <a href="{% url 'events_manage_accept_request' event.id each.id  %}" > Одобрить</a>
+						<br>
+        				<a href="{% url 'events_manage_decline_request' event.id each.id %}" > Отказать</a>
+					{% else %}
+						<a href="{% url 'events_manage_pop_back_request' event.id each.id %}">Вернуть в заявки</a>
+					{% endif %}
+				{% endif %}
+			</td>
+    	</tr>
+	{% endfor %}
+</tbody>
+</table>
+{% endblock %}

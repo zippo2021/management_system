@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
-
+{% block main_menu %}
+	{% include 'main_menu.html' %}
+{% endblock %}
+{% load crispy_forms_tags %}
 {% block content %}
 <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }} </p>
 <form action = "" method = "post">
@@ -9,10 +12,10 @@
 {% if wizard.form.forms %}
     {{ wizard.form.management_form }}
     {% for form in wizard.form.forms %}
-        {{ form }}
+        {{ form|crispy }}
     {% endfor %}
 {% else %}
-    {{ wizard.form }}
+    {{ wizard.form|crispy }}
 {% endif %}
 </table>
 {% if wizard.steps.prev %}
