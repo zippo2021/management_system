@@ -1,13 +1,24 @@
-{% extends "base.html"  %}
+{% extends "registration/base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
-<div align="center">
-<h1>Регистрация завершена</h1>
+<div class="panel panel-default" id="reg-panel">
+<div class="panel-heading">Регистрация</div>
+<div class="panel-body">   
 <p>
-Спасибо за уделённое время. На ваш e-mail отправлен 
-код подтверждения. Необходимо подтвердить регистрацию, 
-просто кликнув по указанной ссылке.<br/><br/>
+Регистрация завершена!
 </p>
 <p>
-<a href="{% url 'home' %}">Страница авторизации</a>
+На указанный Вами e-mail было выслано письмо с подтверждением.
+Срок действия активационной ссылки в письме - 1 день.
+</p>
+<p>
+После активации, Вы сразу же сможете авторизоваться в системе по
+ссылке ниже.
+</p>
+<a id="option-link" href="{% url 'auth_login' %}">
+Авторизация
+</a>
+</form>
+</div>
 </div>
 {% endblock %}

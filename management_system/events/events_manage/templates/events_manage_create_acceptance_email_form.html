@@ -1,14 +1,10 @@
-{% extends 'base.html' %}
-{% block event_menu %}
-	{% include 'event_menu.html' %}
-{% endblock %}
-{% block content %}
-<form method="post" class="form-container" action="">{% csrf_token %} 
+
+<form method="post"  id='form' class="form-container" action="">{% csrf_token %} 
 {{ form.non_field_errors }}
 <div class="field_wrapper">
 	<p>{{ form.text.errors }}</p>
 	<p>{{ form.text }}</p>
 </div>
-<input type="submit" value="Принять" class="clearfix">
+
 </form>
-{% endblock %}
+

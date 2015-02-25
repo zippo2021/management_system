@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from user_manager.source_functions import create_user, get_staff_members
 from base_source_functions import send_templated_email
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.contrib.auth.decorators import user_passes_test
 from user_manager.permissions import perms_to_classes
 
@@ -34,8 +35,8 @@ def create(request):
 								 },
 				recipients = user.email,
 			)
-			
-			return redirect('completed')
+			status = "success"
+			return HttpResponse(status)
 		
 	else:
 		form = CreateUserForm()
@@ -61,7 +62,8 @@ def edit_permissions(request, user_id):
 			cleaned_data = form.cleaned_data
 			#set new permissions
 			user.UserData.set_permissions(cleaned_data)
-			return redirect('completed')
+			status = "success"
+			return HttpResponse(status)
 	else:
 		#load permissions to form
 		perms = user.UserData.get_permissions()

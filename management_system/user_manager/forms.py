@@ -45,9 +45,7 @@ class EditPermissionsForm(UserForm):
                                     ),
                                     Field('admin_hidden', type="hidden"),
                                     Field('use_admin_hidden', type="hidden"),
-                                    ButtonHolder(
-                    Submit('submit', 'Submit', css_class='button white')
-                                                    )
+                                  
         )
         editor = kwargs.pop('editor')
         edited = kwargs.pop('edited')

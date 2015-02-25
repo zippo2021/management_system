@@ -2,6 +2,10 @@
 {% block event_menu %}
 	{% include 'event_menu.html' %}
 {% endblock %}
+{% load staticfiles %}
+{% block extrahead %} 
+ <script type="text/javascript" src="{% static 'js/modals.js' %}"></script>
+{% endblock %}
 {% block content %}
 <table class="table">
 	<thead>
@@ -19,12 +23,8 @@
 				<p>
 				Базовая информация
 					{% if 'admin' in user_permissions %}
-						<a href="
-							{% url 'events_admin_edit' event.id 'base' %}
-						">
-							Редактировать
-						</a>
-					{% endif %}
+                        <a id="edit_event_link" href = "#" onClick="ModalToggle('{% url 'events_admin_edit' event.id 'base' %}','{% url 'events_admin_edit' event.id 'base' %}','#form','Редактирование '); return false;" >Редактирование</a>
+					{% endif %}ljre
 				</p>
 				<p>
 					<ul>
@@ -84,11 +84,8 @@
 					</a>
 					</p>		
         			<p>
-					<a href="
-					{% url 'events_manage_create_acceptance_email_template' event.id %}
-					">
-						Шаблон письма подтверждения
-					</a>
+					
+                    <a id="email_template_link" href = "#" onClick="ModalToggle('{% url 'events_manage_create_acceptance_email_template' event.id %}','{% url 'events_manage_create_acceptance_email_template' event.id %}','#form','Шаблон письма подтверждения'); return false;" >Редактирование шаблона письма подтверждения</a>
 					</p>
 					<p>
 				{% endif %}
@@ -116,11 +113,7 @@
 					<p>
 						Информация о поездке
 						{% if 'admin' in user_permissions %}
-							<a href="
-								{% url 'events_admin_edit' event.id 'journey' %}
-							">
-								Редактировать
-							</a>
+                            <a id="journey_edit_link" href = "#" onClick="ModalToggle('{% url 'events_admin_edit' event.id 'journey' %}','{% url 'events_admin_edit' event.id 'journey' %}','#form','Редактирование информаци о поездке'); return false;" >Редактировать</a>
 						{% endif %}
 					</p>
 					<p>Время отъезда: {{ event.JourneyData.departure_time }}</p>

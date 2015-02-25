@@ -22,9 +22,8 @@
 			<td width=25%>
 				Документы
     			{% if edit_perm == True %}
-					<a href = "{% url 'userdata_document_wizard' %}">
-						Добавить/обновить
-					</a>
+
+                    <a id="edit_event_link" href = "#" onClick="ModalToggle('{% url 'userdata_document_wizard' %}','{% url 'userdata_document_wizard' %}','#form','Редактирование документа '); return false;" >Добавить/обновить</a>
 				{% endif %}
 			</td>
 		</tr>
@@ -67,7 +66,7 @@
 					{{ perms_to_language|get_item:role }}
         			{% if edit_perm == True %}
                         {% if role == 'regular' %}
-                            <a id="common_profile_edit_link" href = "#" onClick="WizardModalToggle('{% url 'regular_user_wizard' %}','{% url 'regular_user_wizard' %}','#form','Специальная информация'); return false;" >Редактировать</a>
+                            <a id="common_profile_edit_link" href = "#" onClick="ModalToggle('{% url 'regular_user_wizard' %}','{% url 'regular_user_wizard' %}','#form','Специальная информация'); return false;" >Редактировать</a>
                         {% endif %}
 
                         {% if role == 'teacher' %}

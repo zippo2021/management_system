@@ -1,3 +1,5 @@
+
+
 from django.conf.urls import patterns, url
 
 from events.journal import schedule
