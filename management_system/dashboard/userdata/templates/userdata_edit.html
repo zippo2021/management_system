@@ -1,9 +1,5 @@
-{% extends "base.html" %}
-
-
-{% block content %}
-
-<a href="{% url 'userdata_edit' %}">
-        Редактировать</a> 
-
-{% endblock %}
+{% load crispy_forms_tags %}
+<form id="userdata_form" method='post' class="form"  action="javascript:void(null);" enctype='multipart/form-data'>
+{{ form|crispy }}
+{% csrf_token %}
+</form>

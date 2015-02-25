@@ -19,7 +19,6 @@ class StudyGroup(models.Model):
 
     def __unicode__(self):
         return self.label
-#admin.site.register(StudyGroup)
 
 
 @receiver(post_save, sender = Event)

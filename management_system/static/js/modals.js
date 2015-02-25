@@ -51,7 +51,7 @@ success : function(text)
 });
 }
 
-function WizardModalToggle(get_url,post_url,t_id,t_title)
+function WizardModalToggle(get_url,post_url,t_id,t_title,step)
 {
 var content = '';
 $.ajax({ type: "GET", 
@@ -79,9 +79,11 @@ success : function(text)
                             OkMessageAutoClose("Данные сохранены.",2,true);
                         }
                         else{
+                            var next_step = modal.getContentElement().find("next_step").val();
                             modal.hide();
                             modal.destroy();
-                            WizardModalToggle(get_url,post_url,t_id,t_title);                      
+                            alert(next_step);
+                            WizardModalToggle(get_url,post_url,t_id,t_title,next_step);                      
                         }
                         
                     },  

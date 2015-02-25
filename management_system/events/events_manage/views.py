@@ -22,7 +22,6 @@ import glob
 import os
 from django.conf import settings
 
-
 @login_required
 def edit_or_create_result(request, event_id, user_id):
     user = RegularUser.objects.get(id = user_id)
@@ -52,11 +51,16 @@ def main(request,event_id):
         pass
     return render(request,'events_manage_main.html', context)
 
+###############################################################
+####################### STAFF ################################
+#############################################################
+
 @login_required
 def choose_users(request,event_id, role):
     event = Event.objects.get(id = event_id)
     free_users = globals()[perms_to_classes[role]]\
-            .objects.filter(~Q(event=event_id),is_active = True)
+            .objects.filter(~Q(event=event_id),is_active = True,
+                            data__modified = True)
     not_free_users = globals()[perms_to_classes[role]]\
             .objects.filter(event=event_id)
     context = {'event' : event, 'free_users' : free_users,
@@ -87,15 +91,23 @@ def exclude(request, event_id, uid, role):
                     role = role,
                     event_id = event_id)
 
+################################################################
+###################### REQUESTS ###############################
+##############################################################
+
 @login_required
 def show_requests(request,event_id):
     event = Event.objects.get(id = event_id)
     requests = Request.objects.filter(event = event_id)
-    if (event.PriceGroup.all()) or(event.is_payed) :
+    price_groups = event.PriceGroup.all()
+    if event.is_private:
         accept = True
     else:
         accept = False
-    context = {'event' : event, 'users':requests, 'accept':accept}
+    context = {'event' : event,
+               'users':requests,
+               'accept' : accept,
+               'price_groups' : price_groups}
     return render(request,
                  'events_manage_show_requests.html',
                  context)
@@ -104,79 +116,74 @@ def show_requests(request,event_id):
 @should_be_event_worker
 def accept_request(request, event_id, request_id):
     current_rq = Request.objects.get(id=request_id)
+    if current_rq.status == 'одобрена':
+        return redirect('completed')
     user = current_rq.user
     event = current_rq.event  
     event_id = event.id
-    if event.is_payed:          
-        if request.method == "POST":
-            form = PriceChoiceForm(request.POST,event_id=event_id)
-            if form.is_valid():
-                spec = current_rq.user                
-                current_rq.status = 'Accepted'
-                p_group = form.cleaned_data['price_group']
-                files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
-                try:
-                    template_file = Template(get_template_from_string(EmailTemplate.objects.get(event = event).text))
-                    send_templated_email(
-                            subject='Подтверждение заявки',
-                            template_file = template_file,
-                            email_context={
-                            'event': event.name,
-                            'price': p_group.price,                        
-                            },
-		    				recipients=user.data.user.email,
-                            fail_silently=False,
-		    				files=files,
-                    )
-                except ObjectDoesNotExist:
-                    pass
-                current_rq.price_group = p_group
-                current_rq.save()
-                p_group.users.add(spec)                       
-                return redirect('events_manage_show_requests',
-                                event_id = event_id)
-        else:
-            form = PriceChoiceForm(event_id=event_id) 
-        return render(request,
-                      'events_manage_price_choice_form.html',
-                      {'form':form, 'event':event})
-    else:
-        template_file = Template(get_template_from_string(EmailTemplate.objects.get(event = event).text))
-        current_rq.status = 'Accepted'
-        files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
-        send_templated_email(
-                            subject='Подтверждение заявки',
-                            template_file=template_file,
-                            email_context={
-                            'event': event.name,                        
-                            },
-		    				recipients=user.data.user.email,
-                            fail_silently=False,
-		    				files=files,
+    if request.method == "POST":
+        form = PriceChoiceForm(request.POST,event_id=event_id)
+        if form.is_valid():
+            spec = current_rq.user                
+            current_rq.status = 'одобрена'
+            p_group = form.cleaned_data['price_group']
+            files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
+            try:
+                template_file = Template(get_template_from_string(EmailTemplate.objects.get(event = event).text))
+                send_templated_email(
+                        subject='Подтверждение заявки',
+                        template_file = template_file,
+                        email_context={
+                        'event': event.name,
+                        'price': p_group.price,                        
+                        },
+	        			recipients=user.data.user.email,
+                        fail_silently=False,
+		            	files=files,
                 )
-        current_rq.save()
-        return redirect('events_manage_show_requests',
-                        event_id = event_id)
-        
+            except ObjectDoesNotExist:
+                pass
+            current_rq.price_group = p_group
+            current_rq.save()
+            return redirect('events_manage_show_requests',
+                            event_id = event_id)
+    else:
+        form = PriceChoiceForm(event_id=event_id) 
+   
+    return render(request,
+                  'events_manage_price_choice_form.html',
+                  {'form':form, 'event':event})
 
 @login_required
 def decline_request(request, event_id, request_id):    
     current_rq = Request.objects.get(id=request_id)
     event = current_rq.event
-    current_rq.status = 'Declined'
+    current_rq.status = 'отклонена'
     current_rq.save() 
-    return redirect('events_manage_show_requests',event_id=event.id)
+    return redirect('events_manage_show_requests', event_id = event.id)
+
+@login_required
+def pop_back_request(request, event_id, request_id):
+    current_rq = Request.objects.get(id=request_id)
+    event = current_rq.event
+    current_rq.status = 'в обработке'
+    current_rq.save() 
+    return redirect('events_manage_show_requests', event_id = event.id)
     
 @login_required
 def place_request(request, event_id):
     event = Event.objects.get(id = event_id)
     e_request, created = Request.objects.get_or_create(event = event, user = request.user.UserData.RegularUser)
     if created:
-        e_request.status = 'Processing'
+        e_request.status = 'в обработке'
         e_request.save()
     else:
         pass #FIXME
     return redirect('completed')
+
+###############################################################
+###################### EMAILS ################################
+#############################################################
 
 @login_required
 def create_acceptance_email_template(request,event_id):

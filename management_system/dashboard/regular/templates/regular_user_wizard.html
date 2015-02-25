@@ -1,4 +1,5 @@
-
+{% load crispy_forms_tags %}
+<input type="hidden" id="next_step" name="variable" value="{{ wizard.steps.next }}">
 <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }} </p>
 <form action = "" id='form' method = "post">
 {% csrf_token %}
@@ -7,10 +8,10 @@
 {% if wizard.form.forms %}
 	{{ wizard.form.management_form }}
 	{% for form in wizard.form.forms %}
-		{{ form }}
+		{{ form|crispy }}
 	{% endfor %}
 {% else %}
-	{{ wizard.form }}
+	{{ wizard.form|crispy }}
 {% endif %}
 </table>
 {% if wizard.steps.prev %}

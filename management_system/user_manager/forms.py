@@ -3,6 +3,8 @@
 from django.forms import Form, EmailField, BooleanField, HiddenInput
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from crispy_forms.helper import FormHelper, Layout
+from crispy_forms.layout import Field, Fieldset, ButtonHolder, Submit
 
 class UserForm(Form):
 	regular = BooleanField(required = False, label = "Ученик")
@@ -31,6 +33,22 @@ class EditPermissionsForm(UserForm):
     use_admin_hidden = BooleanField(required = False, label = '')
 
     def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.layout = Layout(Fieldset(
+                                    '',
+                                    'regular',
+                                    'observer',
+                                    'mentor',
+                                    'teacher',
+                                    'event_worker',
+                                    'admin'
+                                    ),
+                                    Field('admin_hidden', type="hidden"),
+                                    Field('use_admin_hidden', type="hidden"),
+                                    ButtonHolder(
+                    Submit('submit', 'Submit', css_class='button white')
+                                                    )
+        )
         editor = kwargs.pop('editor')
         edited = kwargs.pop('edited')
         super(EditPermissionsForm, self).__init__(*args, **kwargs)
