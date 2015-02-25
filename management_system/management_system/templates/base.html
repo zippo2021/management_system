@@ -19,13 +19,16 @@
 	<div id="container">
 		<div id="top">
 			{% if  user.is_authenticated %}
-			<font color="white">Ваш логин:</font>
+			<font color="white">
+			Ваш логин:
+			</font>
 			<font color="blue">{{ user }}</font>,
-			<font color="white">Вы обладаете следующими правами:</font>
+			<!--Вы обладаете следующими правами:
 			{% for each in user_permissions %}
 				<font color="red">{{ perms_to_language|get_item:each }}</font>
-				{% if not forloop.last %}<font color="white">,</font>{% endif %}
+				{% if not forloop.last %},{% endif %}
 			{% endfor %}
+			--!>
 			{% endif %}
 		</div>
 		
