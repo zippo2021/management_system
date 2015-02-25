@@ -1,6 +1,6 @@
 
 
-function ModalToggle(get_url,post_url,t_id,t_title)
+function ModalToggle(get_url,post_url,t_id,t_title,r_load)
 {
 var content = '';
 $.ajax({ type: "GET", 
@@ -27,13 +27,14 @@ success : function(text)
                         if (data == "success"){
                             OkMessageAutoClose("Данные сохранены.",2,true);
                         }
-                        else
+                        else{
                             ErrorMessage("Error");
+                        }
                     },
                     error: function(xhr, str){
                         modal.hide();
                         modal.destroy();
-                        ErrorWindow("Error");
+                        ErrorMessage("Error");
                     }
                 });
         }
@@ -50,7 +51,7 @@ success : function(text)
 });
 }
 
-function WizardToggle(get_url,post_url,t_id,t_title)
+function WizardModalToggle(get_url,post_url,t_id,t_title)
 {
 var content = '';
 $.ajax({ type: "GET", 
@@ -72,18 +73,22 @@ success : function(text)
                     url: post_url,
                     data: msg,
                     success: function(data) {
-                        modal.hide();
-                        modal.destroy();
                         if (data == "success"){
+                            modal.hide();
+                            modal.destroy();
                             OkMessageAutoClose("Данные сохранены.",2,true);
                         }
-                        else
-                            ErrorMessage("Error");
-                    },
+                        else{
+                            modal.hide();
+                            modal.destroy();
+                            WizardModalToggle(get_url,post_url,t_id,t_title);                      
+                        }
+                        
+                    },  
                     error: function(xhr, str){
                         modal.hide();
                         modal.destroy();
-                        ErrorMessage("Error");
+                        ErrorMessage("Жопа");
                     }
                 });
         }

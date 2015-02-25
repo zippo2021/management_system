@@ -1,6 +1,5 @@
-{% extends "base.html" %}
-{% block content %}
-<form method="post" class="form-container" action="">
+
+<form method="post" id='form' class="form-container" action="">
 {% csrf_token %}
 <dl class="schools">
 {{ form.non_field_errors }}
@@ -9,7 +8,7 @@
     <dd class="clearfix">
     {{ field }}
     {% if field.help_text %}
-         <div class="clearfix">{{ field.help_text}}</div>
+         <div class="clearfix">{{ field.help_text|safe}}</div>
     {% endif %}
     {% if field.errors %}
     <div class="myerrors clearfix">{{field.errors }}</div>
@@ -17,6 +16,5 @@
     </dd>
 {% endfor %}
 </dl>
-<input type="submit" value="Сохранить" class="clearfix">
 </form>
-{% endblock %}
+

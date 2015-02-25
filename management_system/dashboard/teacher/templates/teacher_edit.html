@@ -1,5 +1,5 @@
 
-<form method="post" class="form-container" action="">
+<form method="post" id='form', class="form-container" action="">
 {% csrf_token %}
 <dl class="teacher">
 {% for field in form %}
@@ -15,6 +15,6 @@
     </dd>
 {% endfor %}
 </dl>
-
+<input type="submit" value=""></input>
 </form>
 

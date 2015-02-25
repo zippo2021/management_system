@@ -16,7 +16,8 @@ def edit(request):
 			   instance = request.user.UserData.Teacher)
 		if form.is_valid():
 			teacher = form.save()
-			return HttpResponse('success')
+			status = "success"
+			return HttpResponse(status)
 	else:
 		form = TeacherForm(instance = request.user.UserData.Teacher)
 	return render(request, 'teacher_edit.html', {'form' : form})
