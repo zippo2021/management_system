@@ -79,9 +79,10 @@ success : function(text)
                             OkMessageAutoClose("Данные сохранены.",2,true);
                         }
                         else{
-                            var next_step = modal.getContentElement().find("next_step").val();
+                            var next_step = modal.getElementById("next_step").value;
                             modal.hide();
                             modal.destroy();
+
                             alert(next_step);
                             WizardModalToggle(get_url,post_url,t_id,t_title,next_step);                      
                         }

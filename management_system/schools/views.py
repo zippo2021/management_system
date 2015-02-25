@@ -30,8 +30,11 @@ def edit(request, school_id):
     if request.method == 'POST':
         form = SchoolForm(request.POST, instance = school)
         if form.is_valid():
-            school = form.save()
-            return redirect('schools_approve', school_id)
+            school = form.save(commit=False)
+            school.approved = True
+            school.save()
+            status="success"
+            return HttpResponse(status)
     else:       
         form = SchoolForm(instance = school)
     return render(request, 'schools_edit_form.html', {'form' : form})

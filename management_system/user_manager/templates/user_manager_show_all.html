@@ -2,12 +2,14 @@
 {% block main_menu %}
 	{% include 'main_menu.html' %}
 {% endblock %}
+{% load staticfiles %}
+{% block extrahead %} 
+ <script type="text/javascript" src="{% static 'js/modals.js' %}"></script>
+{% endblock %}
 {% load custom_template_filters %}
 {% block content %}
 <p>
-	<a href="{% url 'user_manager_create' %}">
-		Создать нового пользователя
-	</a>
+    <a id="userdata_edit_link" href = "#" onClick="ModalToggle('{% url 'user_manager_create' %}','{% url 'user_manager_create' %}','#form','Базовая информация'); return false;" >Создать нового пользователя</a>
 </p>
 <table class="table">
 	<tr>
@@ -36,11 +38,8 @@
 							<img src="{{ key.UserData.avatar }}">
 						</p>
 						<p>
-							<a href="
-							    {% url 'user_manager_edit_permissions' key.id %}
-							">
-								Изменить права
-							</a>
+							
+                            <a id="userdata_edit_link" href = "#" onClick="ModalToggle('{% url 'user_manager_edit_permissions' key.id %}','{% url 'user_manager_edit_permissions' key.id %}','#form','Базовая информация'); return false;" >Изменить права</a>
 							<br>
 							{% if user.UserData.Admin.is_superadmin and not key.UserData.Admin.is_superadmin %}
 								<a href="

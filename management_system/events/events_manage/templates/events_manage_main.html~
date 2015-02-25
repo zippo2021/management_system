@@ -1,25 +1,131 @@
 {% extends 'base.html' %}
+{% block event_menu %}
+	{% include 'event_menu.html' %}
+{% endblock %}
+{% load staticfiles %}
+{% block extrahead %} 
+ <script type="text/javascript" src="{% static 'js/modals.js' %}"></script>
+{% endblock %}
 {% block content %}
-{{ name }}
-<table>
-<tr>
-    <td>
-        <a href="{% url 'events_show_users' eid 'Teacher' %}">Пригласить учителей</a>
-        <p>
-        <a href="{% url 'events_show_users' eid 'Mentor'%}">Пригласить воспитателей</a>
-        <p>
-        <a href="{% url 'events_show_users' eid 'RegularUser' %}">Пригласить учеников</a>
-        <a href="{% url 'events_show_users' eid 'Observer' %}">Пригласить наблюдателей</a>
-    </td>
-    <td>
-        <a href="{% url 'price_groups_show' eid %}">Управление ценовыми группами</a>
-        <a href="{% url 'create_acceptance_email_template' eid %}">Создать шаблон письма</a>
-    </td>
-</tr>
-<tr>
-    <td>
-        <a href="{% url 'events_show_requests' eid  %}">Управление завками </a>
-    </td>
-</tr>    
+<table class="table">
+	<thead>
+		<tr>
+			<td>
+				<p>{{ event.name }}</p>
+			</td>
+			<td></td>
+			<td></td>
+		<tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				<p>
+				Базовая информация
+					{% if 'admin' in user_permissions %}
+                        <a id="edit_event_link" href = "#" onClick="ModalToggle('{% url 'events_admin_edit' event.id 'base' %}','{% url 'events_admin_edit' event.id 'base' %}','#form','Редактирование '); return false;" >Редактирование</a>
+					{% endif %}
+				</p>
+				<p>
+					<ul>
+						{% if event.is_private %}
+							<li>
+								Добавление по заявкам
+							</li>
+						{% endif %}
+						{% if event.is_payed %}
+							<li>
+								Оплачиваемое
+							</li>
+						{% endif %}
+					</ul>
+				<p>Открытие: {{ event.opened }}</p>
+				<p>Закрытие: {{ event.closed }}</p>
+				<p>Место проведения: {{ event.place }}</p>
+				<p>Комментарий: {{ event.comment|linebreaks }}</p>
+			</td>
+			<td>
+				{% if 'regular' in user_permissions %}
+					{% if rq %}
+						<p>
+							Информация о заявке:
+								{{ rq.status }}
+						</p>
+					{% else %}
+						<p>
+							<a href="
+								{% url 'events_manage_place_request' event.id %}
+							">
+								Подать заявку
+							</a>
+						</p>
+					{% endif %}
+				{% endif %}
+				{% if 'event_worker' in user_permissions %}
+        			<p>
+					<a href="
+					{% url 'events_manage_choose_users' event.id 'teacher' %}
+					">
+						Пригласить учителей
+					</a>
+					</p>
+					<p>
+       				<a href="
+					{% url 'events_manage_choose_users' event.id 'mentor'%}
+					">
+						Пригласить воспитателей
+					</a>
+					</p>
+        			<p>
+        			<a href="
+					{% url 'events_manage_choose_users' event.id 'observer' %}
+					">
+						Пригласить наблюдателей
+					</a>
+					</p>		
+        			<p>
+					
+                    <a id="email_template_link" href = "#" onClick="ModalToggle('{% url 'events_manage_create_acceptance_email_template' event.id %}','{% url 'events_manage_create_acceptance_email_template' event.id %}','#form','Шаблон письма подтверждения'); return false;" >Редактирование шаблона письма подтверждения</a>
+					</p>
+					<p>
+				{% endif %}
+				{% if 'admin' in user_permissions %}
+					<p>
+					<a href="{% url 'events_admin_deactivate' event.id %}">
+						{% if event.is_active %}
+							Заморозить
+						{% else %}
+							Разморозить
+						{% endif %}
+					</a>
+					{% if not event.is_active %}
+						<br>
+						<font color = "red">Заморожено</font>
+					{% endif %}
+					</p>
+				{% endif %}
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				{% if event.is_journey %}
+					<p>
+						Информация о поездке
+						{% if 'admin' in user_permissions %}
+							<a href="
+								{% url 'events_admin_edit' event.id 'journey' %}
+							">
+								Редактировать
+							</a>
+                            <a id="journey_edit_link" href = "#" onClick="ModalToggle('{% url 'events_admin_edit' event.id 'journey' %}','{% url 'events_admin_edit' event.id 'journey' %}','#form','Редактирование информаци о поездке'); return false;" >Редактировать</a>
+						{% endif %}
+					</p>
+					<p>Время отъезда: {{ event.JourneyData.departure_time }}</p>
+					<p>Информация: {{ event.JourneyData.info|linebreaks }}</p>
+				{% endif %}
+			</td>
+		</tr>
+	</tbody>
 </table>
 {% endblock %}

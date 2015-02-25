@@ -1,13 +1,9 @@
-{% extends "base.html" %}
-{% block event_menu %}
-	{% include 'event_menu.html' %}
-{% endblock %}
+
 {% load crispy_forms_tags %}
 
-{% block content %}
-<form method="post" class="form-container" action="">
+
+<form method="post" id='form' class="form-container" action="">
 {% csrf_token %}
 {{ form|crispy }}
-<input type="submit" value="Сохранить" class="btn btn-primary">
 </form>
-{% endblock %}
+

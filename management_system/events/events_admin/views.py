@@ -5,6 +5,7 @@ from django.contrib.formtools.wizard.views import SessionWizardView
 from events.events_admin.forms import EventForm, EventEditForm, JourneyDataForm, EventMailForm
 from events.price_groups.forms import PriceGroupForm
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 
 '''
 Wizard:
@@ -64,7 +65,8 @@ def edit(request, event_id, base_or_journey):
         form = form_class(request.POST, instance = instance)
         if form.is_valid():
             obj = form.save()
-            return redirect('completed')
+            status = "success"
+            return HttpResponse(status)
     else:
         form = form_class(instance = instance)
     
