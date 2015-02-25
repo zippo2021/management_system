@@ -15,11 +15,10 @@ function SendNewGroupData(value)
             }
             else
             {
-                var newOption = $("<option>" + data["data"] + "</option>").appendTo($("#groups_list"));
-                newOption.click(function()
-                {
-                    GetGroupInfo(this.value)
-                });
+                var groupList = $("#group_list");
+                $("<option value='" + data["data"]["id"] + "'>" + data["data"]["name"] + "</option>").appendTo(groupList);
+                groupList.val(data["data"]["id"]);
+                GetPupils();
             }
         },
         error:          function(jqXHR, errorString)
@@ -33,13 +32,14 @@ function SendNewGroupData(value)
     });
 }
 
-function SendDeleteGroupData(value)
+function SendDeleteGroupData()
 {
+    var sendData = $("#group_list option:selected").val();
     $.ajax(
     {
         url:            "/event/" + $("#event_id").val() +"/study_groups/delete_group",
         dataType:       "json",
-        data:           JSON.stringify(value),
+        data:           JSON.stringify(sendData),
         type:           "post",
         contentType:    "application/json",
         success:        function(data)
@@ -50,7 +50,8 @@ function SendDeleteGroupData(value)
             }
             else
             {
-                $("option:contains(" + value + ")").remove();
+                $("#group_list option[value=" + sendData + "]").remove();
+                GetPupils();
             }
         },
         error:          function(jqXHR, errorString)
@@ -64,37 +65,18 @@ function SendDeleteGroupData(value)
     });
 }
 
-function GetGroupInfo(value)
-{
-    var save_button = $("#call_save_group_button");
-    if (!save_button.prop("disabled"))
-    {
-        ErrorMessage("Save changes before select new group");
-    }
-    else {
-        save_button.prop("disabled", true);
-        SendGroupInfoRequest(value);
-    }
-}
-
-function SendSaveGroupMembersRequest()
+function SendSaveNewMembersRequest()
 {
     var send_data = {};
-    send_data["group"] = $("#groups_list option:selected").text();
-    send_data["not_in_group"] = [];
-    send_data["in_group"] = [];
-    var pupils = $("#pupils_list").find("input");
-    $.each(pupils, function (key, val)
+    send_data["group"] = $("#group_list option:selected").text();
+    send_data["remove_from_group"] = [];
+    send_data["add_to_group"] = [];
+    $('#pupils_list_out :selected').each(function(i, selected)
     {
-        if ($(val).prop("checked"))
-        {
-            send_data["in_group"].push($(val).attr("data-id"));
-        }
-        else
-        {
-            send_data["not_in_group"].push($(val).attr("data-id"))
-        }
+        send_data["add_to_group"][i] = $(selected).val();
     });
+    if (send_data["add_to_group"].length == 0)
+        return;
     $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/study_groups/save_group_members",
@@ -110,7 +92,7 @@ function SendSaveGroupMembersRequest()
             }
             else
             {
-                $("#call_save_group_button").prop("disabled", true);
+                GetPupils();
             }
         },
         error: function (jqXHR, errorString)
@@ -123,13 +105,23 @@ function SendSaveGroupMembersRequest()
     });
 }
 
-function SendGroupInfoRequest(value)
+function SendRemoveMembersRequest()
 {
+    var send_data = {};
+    send_data["group"] = $("#group_list option:selected").text();
+    send_data["remove_from_group"] = [];
+    send_data["add_to_group"] = [];
+    $('#pupils_list_in :selected').each(function(i, selected)
+    {
+        send_data["remove_from_group"][i] = $(selected).val();
+    });
+    if (send_data["remove_from_group"].length == 0)
+        return;
     $.ajax(
     {
-        url: "/event/" + $("#event_id").val() + "/study_groups/get_group_info",
+        url: "/event/" + $("#event_id").val() + "/study_groups/save_group_members",
         dataType: "json",
-        data: JSON.stringify(value),
+        data: JSON.stringify(send_data),
         type: "post",
         contentType: "application/json",
         success: function (data)
@@ -140,14 +132,51 @@ function SendGroupInfoRequest(value)
             }
             else
             {
-                var pupils = $("#pupils_list").find("input");
-                pupils.prop("checked", false);
-                $.each(pupils, function (key, val)
+                GetPupils();
+            }
+        },
+        error: function (jqXHR, errorString)
+        {
+            ErrorMessage("Ошибка во время получения данных", errorString);
+        },
+        complete: function ()
+        {
+        }
+    });
+}
+
+function GetPupils()
+{
+    var sendData = $("#group_list option:selected").val();
+
+    $.ajax(
+    {
+        url: "/event/" + $("#event_id").val() + "/study_groups/get_group_info",
+        dataType: "json",
+        data: JSON.stringify(sendData),
+        type: "post",
+        contentType: "application/json",
+        success: function (data)
+        {
+            if ('error' in data)
+            {
+                ErrorMessage("Ошибка во время получения данных", data["error"]);
+            }
+            else
+            {
+                var pupilsIn = data["data"]["in"];
+                var pupilsOut = data["data"]["out"];
+                var pupilsListIn = $("#pupils_list_in");
+                var pupilsListOut = $("#pupils_list_out");
+                pupilsListIn.find("option").remove();
+                $.each(pupilsIn, function (key, val)
                 {
-                    if ($(val).attr("data-id") in data["data"])
-                    {
-                        $(val).prop("checked", true);
-                    }
+                    $("<option value='" + val["id"] + "'>" + val["name"] + "</option>").appendTo(pupilsListIn);
+                });
+                pupilsListOut.find("option").remove();
+                $.each(pupilsOut, function (key, val)
+                {
+                    $("<option value='" + val["id"] + "'>" + val["name"] + "</option>").appendTo(pupilsListOut);
                 });
             }
         },
@@ -164,6 +193,7 @@ function SendGroupInfoRequest(value)
 $(document).ready(function()
 {
     PrepareAjax();
+    GetPupils();
     $("#call_add_group_button").click(function()
     {
         var modal = new Modal();
@@ -196,31 +226,23 @@ $(document).ready(function()
         modal.show();
     });
 
-    $("#groups_list").find("option").click(function()
+    $("#group_list").change(function()
     {
-        GetGroupInfo(this.value)
+        GetPupils();
     });
 
     $("#call_delete_group_button").click(function()
     {
-        var val = $("#groups_list option:selected").text();
-        if (val == '')
-        {
-            ErrorMessage("Please, select group");
-        }
-        else
-        {
-            SendDeleteGroupData(val);
-        }
+        SendDeleteGroupData();
     });
 
-    $("#pupils_list").find("input").change(function()
+    $("#add_to_group_button").click(function()
     {
-        $("#call_save_group_button").prop("disabled", false);
+        SendSaveNewMembersRequest();
     });
 
-    $("#call_save_group_button").click(function()
+    $("#remove_from_group_button").click(function()
     {
-        SendSaveGroupMembersRequest();
+        SendRemoveMembersRequest();
     });
 });

@@ -316,7 +316,7 @@ function GetGroupsBySubject()
             groupList.val("");
             $.each(groups, function (key, val)
             {
-                $("<option>" + val["name"] + "</option>").appendTo(groupList);
+                $("<option value='" + val["id"] + "'>" + val["name"] + "</option>").appendTo(groupList);
             });
             GetLessons();
         },
