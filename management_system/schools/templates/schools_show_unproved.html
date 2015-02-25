@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 {% block main_menu %}
 	{% include 'main_menu.html' %}
+{% endblock %}
+{% block extrahead %}
+ <script type="text/javascript" src="{% static 'js/modals.js' %}"></script>
 {% endblock %}
 {% block content %}
 {% if schools %}
@@ -19,10 +23,8 @@
 			<td>{{ each.name }}</td>
 			<td>{{ each.city }}</td>
 			<td>{{ each.country }}</td>
-			<td>
-				<a href="{% url 'schools_edit' each.id %}">
-					Редактировать и подтвердить
-				</a>
+			<td>				
+                <a id="school_edit_link" href = "#" onClick="ModalToggle('{% url 'schools_edit' each.id %}','{% url 'schools_edit' each.id %}','#form','Редактирование'); return false;" >Редактировать и подтвердить</a>
 				<br>
 				<a href="{% url 'schools_approve' each.id %}">Подтвердить</a>
 			</td>

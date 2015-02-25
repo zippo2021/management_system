@@ -67,7 +67,7 @@ function UpdateTable()
     sendData["subject"] = $("#subject_list option:selected").val();
      $.ajax(
     {
-        url: "/event/" + $("#event_id").val() + "/schedule/get_pupils_lessons_marks",
+        url: "/event/" + $("#event_id").val() + "/journal/teacher/get_pupils_lessons_marks",
         dataType: "json",
         data: JSON.stringify(sendData),
         type: "post",
@@ -160,7 +160,7 @@ function UpdateTable()
                     var input = this;
                      $.ajax(
                     {
-                        url: "/event/" + $("#event_id").val() + "/schedule/set_mark",
+                        url: "/event/" + $("#event_id").val() + "/journal/teacher/set_mark",
                         dataType: "json",
                         data: JSON.stringify(sendData),
                         type: "post",
@@ -202,7 +202,7 @@ function GetGroupsBySubject()
     sendData["subject"] = $("#subject_list option:selected").val();
     $.ajax(
     {
-        url: "/event/" + $("#event_id").val() + "/schedule/get_groups_teacher",
+        url: "/event/" + $("#event_id").val() + "/journal/teacher/get_groups",
         dataType: "json",
         data: JSON.stringify(sendData),
         type: "post",

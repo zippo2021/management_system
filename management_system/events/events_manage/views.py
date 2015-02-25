@@ -21,6 +21,7 @@ from base_source_functions import send_templated_email
 import glob
 import os
 from django.conf import settings
+from django.http import HttpResponse
 
 @login_required
 def edit_or_create_result(request, event_id, user_id):
@@ -116,8 +117,6 @@ def show_requests(request,event_id):
 @should_be_event_worker
 def accept_request(request, event_id, request_id):
     current_rq = Request.objects.get(id=request_id)
-    if current_rq.status == 'одобрена':
-        return redirect('completed')
     user = current_rq.user
     event = current_rq.event  
     event_id = event.id
@@ -142,11 +141,11 @@ def accept_request(request, event_id, request_id):
 		            	files=files,
                 )
             except ObjectDoesNotExist:
-                pass
+                pass #FIXME
             current_rq.price_group = p_group
             current_rq.save()
-            return redirect('events_manage_show_requests',
-                            event_id = event_id)
+            status = "success"
+            return HttpResponse(status)
     else:
         form = PriceChoiceForm(event_id=event_id) 
    
@@ -179,7 +178,7 @@ def place_request(request, event_id):
         e_request.save()
     else:
         pass #FIXME
-    return redirect('completed')
+    return redirect('event_manage_main',event_id)
 
 ###############################################################
 ###################### EMAILS ################################
@@ -194,7 +193,8 @@ def create_acceptance_email_template(request,event_id):
         form = AcceptanceEmailTemplateForm(request.POST, instance = template)
         if form.is_valid():
             form.save()
-            return redirect('completed')
+            status = "success"
+            return HttpResponse(status)
     else:
         form = AcceptanceEmailTemplateForm(instance = template)
     return render(request,

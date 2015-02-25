@@ -348,11 +348,11 @@ def as_teacher_left(request, event_id):
         event = Event.objects.get(id=event_id)
         start_date = event.opened.strftime('%d/%m/%Y')
         end_date = event.closed.strftime('%d/%m/%Y')
-        return render(request, 'journal/schedule_teacher_left.html', {'event_id': event_id,
-                                                                       'start_date': start_date,
-                                                                       'end_date': end_date,
-                                                                       'subjects': subjects,
-                                                                       'groups': groups})
+        return render(request, 'journal/journal_teacher_left.html', {'event_id': event_id,
+                                                                     'start_date': start_date,
+                                                                     'end_date': end_date,
+                                                                     'subjects': subjects,
+                                                                     'groups': groups})
     else:
         return HttpResponseNotFound(request)
 
@@ -368,11 +368,11 @@ def as_teacher_right(request, event_id):
         event = Event.objects.get(id=event_id)
         start_date = event.opened.strftime('%d/%m/%Y')
         end_date = event.closed.strftime('%d/%m/%Y')
-        return render(request, 'journal/schedule_teacher_right.html', {'event_id': event_id,
-                                                                       'start_date': start_date,
-                                                                       'end_date': end_date,
-                                                                       'subjects': subjects,
-                                                                       'groups': groups})
+        return render(request, 'journal/journal_teacher_right.html', {'event_id': event_id,
+                                                                      'start_date': start_date,
+                                                                      'end_date': end_date,
+                                                                      'subjects': subjects,
+                                                                      'groups': groups})
     else:
         return HttpResponseNotFound(request)
 
@@ -386,12 +386,12 @@ def as_admin(request, event_id):
         start_date = event.opened.strftime('%d/%m/%Y')
         end_date = event.closed.strftime('%d/%m/%Y')
         repeats = (event.closed - event.opened).days + 1
-        return render(request, 'journal/schedule_admin.html', {'groups': groups,
-                                                               'event_id': event_id,
-                                                               'start_date': start_date,
-                                                               'end_date': end_date,
-                                                               'subjects': subjects,
-                                                               'teachers': teachers,
-                                                               'repeats': range(1, repeats + 1)})
+        return render(request, 'journal/journal_admin.html', {'groups': groups,
+                                                              'event_id': event_id,
+                                                              'start_date': start_date,
+                                                              'end_date': end_date,
+                                                              'subjects': subjects,
+                                                              'teachers': teachers,
+                                                              'repeats': range(1, repeats + 1)})
     else:
         return HttpResponseNotFound(request)

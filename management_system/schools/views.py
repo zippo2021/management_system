@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from schools.forms import SchoolForm
 from schools.models import School
+from django.http import HttpResponse
 from decorators import should_be_defined, should_be_regular
 # Create your views here.
 
@@ -15,7 +16,8 @@ def add(request):
         form = SchoolForm(request.POST)
         if form.is_valid():
             school = form.save()
-            return redirect('regular_user_wizard')
+            status = "success"
+            return HttpResponse(status)
     else:       
         form = SchoolForm()
     return render(request, 'schools_add_form.html', {'form' : form})
@@ -28,8 +30,11 @@ def edit(request, school_id):
     if request.method == 'POST':
         form = SchoolForm(request.POST, instance = school)
         if form.is_valid():
-            school = form.save()
-            return redirect('schools_approve', school_id)
+            school = form.save(commit=False)
+            school.approved = True
+            school.save()
+            status="success"
+            return HttpResponse(status)
     else:       
         form = SchoolForm(instance = school)
     return render(request, 'schools_edit_form.html', {'form' : form})

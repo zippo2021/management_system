@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from events.price_groups.forms import PriceGroupForm
 from events.price_groups.models import PriceGroup
 from events.events_admin.models import Event
+from django.http import HttpResponse
 # Create your views here.
 
 def add(request, event_id):
@@ -11,7 +12,8 @@ def add(request, event_id):
         if form.is_valid():
             pg = PriceGroup(event = event, price = form.cleaned_data['price'])
             pg.save()
-            return redirect('completed')
+            status = "success"
+            return HttpResponse(status)
     else:
         form = PriceGroupForm()
         return render(request,"price_group_form.html",
