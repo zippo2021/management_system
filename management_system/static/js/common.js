@@ -158,7 +158,7 @@ ErrorMessage = function (errorText, errorDescription)
     function init(errorText, errorDescription) {
         var modal = new Modal();
         modal.setTitle("Ошибка");
-        modal.getContentElement().append($("<p>" + errorText + "<p>"));
+        modal.getContentElement().append($("<p class='text-error'>" + errorText + "<p>"));
         if (errorDescription != undefined)
         {
             modal.getContentElement().append($("<a href='#' class='description_button'>Подробно</a><p hidden='hidden' class='description'>" + errorDescription + "<p>"));
@@ -188,7 +188,7 @@ WarningMessage = function (warningText, warningDescription)
     function init(warningText, warningDescription) {
         var modal = new Modal();
         modal.setTitle("Внимание");
-        modal.getContentElement().append($("<p>" + warningText + "<p>"));
+        modal.getContentElement().append($("<p class='text-warning'>" + warningText + "<p>"));
         if (warningDescription != undefined)
         {
             modal.getContentElement().append($("<a href='#' class='description_button'>Подробно</a><p hidden='hidden' class='description'>" + warningDescription + "<p>"));
@@ -218,7 +218,7 @@ OkMessageAutoClose = function (okText, delay, autoreload)
 function init(okText, delay, autoreload) {
 var modal = new Modal();
 modal.setTitle("ОК");
-modal.getContentElement().append($("<p>" + okText + "<p>"));
+modal.getContentElement().append($("<p class='text-success'>" + okText + "<p>"));
 delay = delay || 3;
 if (autoreload === undefined)
 autoreload = false;
