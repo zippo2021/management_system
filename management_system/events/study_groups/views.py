@@ -21,8 +21,7 @@ def index(request, event_id):
         try:
             groups = StudyGroup.objects.filter(event__id=event_id)
             pupils = RegularUser.objects.filter(Request__event__id=event_id, Request__status="Accepted").distinct()
-            print(pupils)
-            return render(request, 'groups/groups.html', {'groups': groups, 'pupils': pupils, 'event_id': event_id})
+            return render(request, 'groups/study_groups_index.html', {'groups': groups, 'pupils': pupils, 'event_id': event_id})
         except ObjectDoesNotExist as e:
             return HttpResponseNotFound(request)
         except Exception as e:
