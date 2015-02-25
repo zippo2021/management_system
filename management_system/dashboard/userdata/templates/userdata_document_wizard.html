@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
-
+{% block main_menu %}
+	{% include 'main_menu.html' %}
+{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
 <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }} </p>

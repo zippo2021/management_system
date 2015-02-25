@@ -1,10 +1,20 @@
+{% url 'events_manage_main' event.id as events_manage_main %}
+{% url 'events_manage_show_requests' event.id as events_manage_show_requests %}
+
 {% block event_menu %}
-<ul id="event_menu" class="nav nav-pills nav-justified">
-<li><a href="{% url 'events_manage_main' event.id %}">Главная</a></li>
+<ul id="event_menu" class="nav nav-tabs nav-justified">
+	<li>
+		<a href="{% url 'news_main' %}">Домой</a>
+	</li>
+	<li {% if request.path == events_manage_main %}class="active" {% endif %}>
+		<a href="{% url 'events_manage_main' event.id %}">Главная</a>
+	</li>
 <li><a href="">Новости</a></li>
 
 {% if 'event_worker' in user_permissions %}
-<li><a href="{% url 'events_manage_show_requests' event.id %}">Заявки</a></li>
+<li {% if request.path == events_manage_show_requests %} class="active" {% endif %}>
+	<a href="{% url 'events_manage_show_requests' event.id %}">Заявки</a>
+</li>
 {% endif %}
 
 <li><a href="">Расписание</a></li>

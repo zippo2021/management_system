@@ -15,9 +15,10 @@ html, body {
 }
 
 #top{
-	height: 50px;
+	font-weight: bold;
+	height: 40px;
 	width: 100%;
-	background: #aaaaaa;
+	background: #000000;
 }
 
 #org_info{
@@ -38,7 +39,7 @@ html, body {
 
 #navigation{
 	width: 100%;
-	height: 100px;
+	background: #F9F9F9;
 }
 
 #sidebar{
