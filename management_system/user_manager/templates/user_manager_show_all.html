@@ -23,7 +23,7 @@
 							{{ key }}
 							</a>
 						</td>
-						<td>
+						<td width=300px>
 							{{ key.UserData.last_name}}
 							{{ key.UserData.first_name }}
 							{{ key.UserData.second_name }}
@@ -60,7 +60,7 @@
 						</p>
 					</td>
 					<td>
-						<br>
+						<p>
 						<ul>
 							{% for each in value %}
 								<li>
@@ -68,13 +68,11 @@
 								</li>
 							{% endfor %}
 						</ul>
+						</p>
 					</td>
 				</tr>
 			</table>
 		<td>
-		{% if forloop.counter0|divisibleby:"2" %}
-			<td width=10%></td>
-		{% endif %}
 		{% if forloop.counter|divisibleby:"2" %}
 			</tr><tr>
 		{% endif %}

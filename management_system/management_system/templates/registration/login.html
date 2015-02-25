@@ -1,8 +1,10 @@
 {% extends "registration/base.html" %}
 {% block content %}
-<div align="center">
+<div class="panel panel-default" id="auth-panel">
+<div class="panel-heading">Авторизация</div>
+<div class="panel-body">
 {% load staticfiles %}
-<h1>Авторизация</h1>
+{% load crispy_forms_tags %}
 {% if user.is_authenticated %}
 Что такое, {{ user.username }}? Вы же уже авторизорваны. 
 Впрочем, всегда можно <a href="{% url 'auth_logout' %}">выйти</a>.<br/><br/>
@@ -13,23 +15,24 @@
 {% endif %}
 <form method="post" action=""> 
 {% csrf_token %}
-<dl class="register">   
-{% for field in form %}
-    <dt>{{ field.label_tag }}</dt>
-    <dd class="clearfix">{{ field }}
-    {% if field.help_text %}<div class="clearfix">{{ field.help_text }}</div>{% endif %}
-    {% if field.errors %}<div class="myerrors clearfix">{{ field.errors }}</div>{% endif %}
-    </dd>
-{% endfor %}
-</dl>
-<input type="submit" value="Вход" class="clearfix">
+{{ form|crispy }}
+<input type="submit" value="Вход" class="btn btn-primary">
+<div id="option-link">
+<a href="{% url 'registration_register' %}">
+Регистрация
+</a>
+<br>
+<a href="{% url 'auth_password_reset' %}">
+Восстановление пароля
+</a>
+</div>
 </form>
     
 <script type="text/javascript">
 document.getElementById('id_username').focus()
 </script>
-<p><a href="{% url 'registration_register' %}">Регистрация</a></p>
   
 {% endif %}
+</div>
 </div>
 {% endblock %}

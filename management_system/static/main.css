@@ -1,3 +1,23 @@
 thead {
   font-weight:bold;
-    }
+}
+
+#reg-panel {
+	margin : auto;
+	position: absolute;
+	top: 0; left: 0; bottom: 0; right: 0; 
+	width : 25%;
+	height: 410px;
+}
+
+#auth-panel {
+	margin : auto;
+	position: absolute;
+	top: 0; left: 0; bottom: 0; right: 0; 
+	width : 25%;
+	height: 270px;
+}
+
+#option-link {
+	float: right;
+}

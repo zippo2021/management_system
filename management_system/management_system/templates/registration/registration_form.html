@@ -1,26 +1,16 @@
 {% extends "registration/base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
-<div align="center">
-<h1>Регистрация</h1>
+<div class="panel panel-default" id="reg-panel">
+<div class="panel-heading">Регистрация</div>
+<div class="panel-body">   
 <form method="post" class="form-container"  action="">{% csrf_token %}
-<dl class="register">
-{% for field in form %}
-    <dt>{{ field.label_tag }}</dt>
-    <dd class="clearfix">
-    {{ field }}
-    {% if field.help_text %}
-    	<div class="clearfix">{{ field.help_text}}</div>
-    {% endif %}
-    {% if field.errors %}
-    	<div class="myerrors clearfix">{{field.errors }}</div>
-    {% endif %}
-    </dd>
-{% endfor %}
-</dl>
-<input type="submit" value="Зарегистрироваться" class="clearfix">
+{{ form|crispy }}
+<input type="submit" value="Зарегистрироваться" class="btn btn-primary">
+<a id="option-link" href="{% url 'auth_login' %}">
+Авторизация
+</a>
 </form>
-<p>
-<a href="javascript:history.go(-1)">Назад</a>
-</p>
+</div>
 </div>
 {% endblock %}
