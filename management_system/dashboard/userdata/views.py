@@ -42,7 +42,8 @@ class DocumentWizard(SessionWizardView):
             other = form_list[1].save(commit = False)
             other.user = self.request.user.UserData
             other.save()
-        return redirect('completed')
+        status = "success"
+        return HttpResponse(status)
 
 def add_passport_condition(wizard):
     cleaned_data = wizard.get_cleaned_data_for_step('0') or {}
