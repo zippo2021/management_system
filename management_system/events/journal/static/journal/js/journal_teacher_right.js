@@ -17,7 +17,7 @@ function GetLessons()
     sendData["subject"] = $("#subject_list option:selected").val();
     $.ajax(
     {
-        url: "/event/" + $("#event_id").val() + "/schedule/get_lessons_teacher",
+        url: "/event/" + $("#event_id").val() + "/journal/teacher/get_lessons",
         dataType: "json",
         data: JSON.stringify(sendData),
         type: "post",
@@ -226,7 +226,7 @@ function SendUpdateLessonRequest(sendData)
 {
     $.ajax(
     {
-        url: "/event/" + $("#event_id").val() + "/schedule/update_lesson_teacher",
+        url: "/event/" + $("#event_id").val() + "/journal/teacher/update_lesson",
         dataType: "json",
         data: JSON.stringify(sendData),
         type: "post",
@@ -299,7 +299,7 @@ function GetGroupsBySubject()
     sendData["subject"] = $("#subject_list option:selected").val();
     $.ajax(
     {
-        url: "/event/" + $("#event_id").val() + "/schedule/get_groups_teacher",
+        url: "/event/" + $("#event_id").val() + "/journal/teacher/get_groups",
         dataType: "json",
         data: JSON.stringify(sendData),
         type: "post",

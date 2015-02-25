@@ -2,7 +2,7 @@ function SendNewGroupData(value)
 {
     $.ajax(
     {
-        url:            "/event/" + $("#event_id").val() +"/groups/new_group",
+        url:            "/event/" + $("#event_id").val() +"/study_groups/new_group",
         dataType:       "json",
         data:           JSON.stringify(value),
         type:           "post",
@@ -37,7 +37,7 @@ function SendDeleteGroupData(value)
 {
     $.ajax(
     {
-        url:            "/event/" + $("#event_id").val() +"/groups/delete_group",
+        url:            "/event/" + $("#event_id").val() +"/study_groups/delete_group",
         dataType:       "json",
         data:           JSON.stringify(value),
         type:           "post",
@@ -97,7 +97,7 @@ function SendSaveGroupMembersRequest()
     });
     $.ajax(
     {
-        url: "/event/" + $("#event_id").val() + "/groups/save_group_members",
+        url: "/event/" + $("#event_id").val() + "/study_groups/save_group_members",
         dataType: "json",
         data: JSON.stringify(send_data),
         type: "post",
@@ -127,7 +127,7 @@ function SendGroupInfoRequest(value)
 {
     $.ajax(
     {
-        url: "/event/" + $("#event_id").val() + "/groups/get_group_info",
+        url: "/event/" + $("#event_id").val() + "/study_groups/get_group_info",
         dataType: "json",
         data: JSON.stringify(value),
         type: "post",
