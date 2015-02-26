@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render, redirect
-from django.contrib.admin.views.decorators import staff_member_required
 from user_manager.forms import CreateUserForm, EditPermissionsForm
+from decorators import should_be_admin
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from user_manager.source_functions import create_user, get_staff_members
 from base_source_functions import send_templated_email
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.contrib.auth.decorators import user_passes_test
 from user_manager.permissions import perms_to_classes
 
-@staff_member_required
+@login_required
+@should_be_admin
 def create(request):
 	if request.method == 'POST':
 		form = CreateUserForm(request.POST)
@@ -43,7 +44,8 @@ def create(request):
 		
 	return render(request, 'user_manager_create.html', {'form' : form})
 
-@staff_member_required
+@login_required
+@should_be_admin
 def show_all(request):
 	staff_members = get_staff_members()
 	return render(request,
@@ -51,7 +53,8 @@ def show_all(request):
 				  {'staff_members' : staff_members}
 		   )
 		   
-@staff_member_required
+@login_required
+@should_be_admin
 def edit_permissions(request, user_id):
 	user = User.objects.get(id = user_id)
 	if request.method == 'POST':
@@ -74,12 +77,13 @@ def edit_permissions(request, user_id):
 				  'user_manager_edit_permissions.html',
 				  {'form' : form })
 
-@user_passes_test(lambda u: u.is_superuser)
+@login_required
+@should_be_admin
 def deactivate(request, user_id):
-	user = User.objects.get(id = user_id)
-	#we can not deactivate superadmin
-	if not(user.UserData.Admin.is_superadmin):
-		user.is_active = not(user.is_active)
-		user.save()
-	else: pass #FIXME
-	return redirect('user_manager_show_all')
+    edited = User.objects.get(id = user_id)
+    #we can not deactivate superadmin
+    if not(edited.UserData.Admin.is_superadmin):
+        user.is_active = not(user.is_active)
+        user.save()
+    else: pass #FIXME
+    return redirect('user_manager_show_all')

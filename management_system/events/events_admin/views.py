@@ -81,7 +81,7 @@ def deactivate(request, event_id):
     event.save()
     return redirect('events_manage_main', event_id)
 
-
+#test view!
 @login_required
 @should_be_admin
 def show_all(request):

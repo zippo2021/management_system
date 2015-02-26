@@ -2,6 +2,9 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block event_menu %}
+	{% include 'event_menu.html' %}
+{% endblock %}
 {% block content %}
 {% csrf_token %}
 <html lang="en">
