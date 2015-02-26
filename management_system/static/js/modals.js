@@ -90,8 +90,9 @@ function linkWrapper(url_to,url_from)
                 window.location = url_from;
         }
         else{
-            alert(url_to);
-            window.location.href = url_to;
+            document.open();
+            document.write(data);
+            document.close();
         }    
     }
     });

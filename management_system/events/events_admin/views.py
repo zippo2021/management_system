@@ -77,9 +77,11 @@ def edit(request, event_id, base_or_journey):
 @should_be_admin
 def deactivate(request, event_id):
     event = Event.objects.get(id = event_id)
-    event.is_active = not(event.is_active)
+    tmp = event.is_active
+    print 'current status',event.is_active
+    event.is_active = not(tmp)
+    print 'changed status',event.is_active
     event.save()
-    print 'huila'
     return redirect('events_manage_main', event_id)
 
 #test view!
