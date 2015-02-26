@@ -37,7 +37,7 @@ document decorators
 
     #false functions
 
-not_has_document = lambda request, *args, **kwags: HttpResponse(json.dumps({'error':{'url':reverse('edit document'),'title':'Заполнение базовой информации'}}))
+not_has_document = lambda request, *args, **kwags: HttpResponse(json.dumps({'error':{'url':reverse('userdata_document_wizard'),'title':'Заполнение базовой информации'}}))
 
     #condition functions
 
@@ -104,8 +104,7 @@ regular decorators
 
 	#false functons
 
-not_is_regular_possibly_unfilled = lambda request, *args, **kwargs: render(request, 'decorator.html',
-{'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Regular"})
+not_is_regular_possibly_unfilled = lambda request, *args, **kwargs: HttpResponse(json.dumps({'error':'Вы не ученик'}))
 
 
 def not_regular(request, *args, **kwargs):
@@ -114,7 +113,7 @@ def not_regular(request, *args, **kwargs):
 	elif not(is_regular_possibly_unfilled(request)):
             return not_is_regular_possibly_unfilled(request)
 	else:
-            return HttpResponse(json.dumps({'error':{'url':reverse('edit_regular'),'title':'Заполнение дополнительной информации'}}))
+            return HttpResponse(json.dumps({'error':{'url':reverse('regular_user_wizard'),'title':'Заполнение дополнительной информации'}}))
 
 
 	#condition functions
@@ -147,8 +146,7 @@ def not_teacher(request):
     if not(has_filled_data(request)):
         return not_has_filled_data(request)
     else:
-        render(request, 'decorator.html',
-{'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Teacher"})
+        HttpResponse(json.dumps({'error':'Вы не являетесь учитель'}))
 
 	#condition functions
 

@@ -78,7 +78,8 @@ function linkWrapper(url_to,url_from)
     async: false,
     cache: false,
     success : function(data){
-        if (typeof data == 'object'){
+ 
+        if (isJson(data)){
             response = JSON.parse(data);
             if (response['error'] != undefined)
                 if(typeof response['error'] == 'object')
@@ -88,9 +89,19 @@ function linkWrapper(url_to,url_from)
             else 
                 window.location = url_from;
         }
-        else
-            window.location = url_to;
-            
+        else{
+            alert(url_to);
+            window.location.href = url_to;
+        }    
     }
     });
+}
+
+function isJson(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
 }

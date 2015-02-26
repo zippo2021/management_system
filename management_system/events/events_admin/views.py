@@ -79,6 +79,7 @@ def deactivate(request, event_id):
     event = Event.objects.get(id = event_id)
     event.is_active = not(event.is_active)
     event.save()
+    print 'huila'
     return redirect('events_manage_main', event_id)
 
 #test view!

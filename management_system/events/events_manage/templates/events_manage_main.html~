@@ -50,11 +50,20 @@
 					{% if rq %}
 						<p>
 							Информация о заявке:
-								{{ rq.status }}
+							{{ rq.status }}
+							{% if rq.status == 'в обработке' %}
+							<b>
+							<a href="
+						 {% url 'events_manage_undo_request' event.id rq.id %}">
+								Отменить
+							</a>
+							</b>
+							{% endif %}
 						</p>
 					{% else %}
 						<p>
-							<a href="#" onClick="linkWrapper('{% url 'events_manage_place_request' event.id %}','{{ request.path }}')">
+                            {% url 'events_manage_place_request' event.id as events_manage_place_request %}
+							<a href="#" onClick="linkWrapper('{{ events_manage_place_request }}','{{ request.path }}')">
 								Подать заявку
 							</a>
 						</p>
@@ -84,7 +93,7 @@
 				{% endif %}
 				{% if 'admin' in user_permissions %}
 					<p>
-					<a href="{% url 'events_admin_deactivate' event.id %}">
+					<a href="#" onClick="linkWrapper('{% url 'events_admin_deactivate' event.id %}','{{ request.path }}')">
 						{% if event.is_active %}
 							Заморозить
 						{% else %}
