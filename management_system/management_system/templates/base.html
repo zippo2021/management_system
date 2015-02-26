@@ -20,7 +20,7 @@
 	<div id="container">
 		<div id="top">
 			{% if  user.is_authenticated %}
-			<a class="option-link" href="{% url 'auth_logout' %}">Выйти</a>
+			<a class="option-link" id="logout-a" href="{% url 'auth_logout' %}">Выйти</a>
 			<!--
 			<font color="white">
 			Ваш логин:

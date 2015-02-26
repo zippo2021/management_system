@@ -23,6 +23,8 @@ urlpatterns = [
                     name = 'events_manage_decline_request'),
     url(r'^pop_back_request/(?P<request_id>\d+)/$', views.pop_back_request,
                     name = 'events_manage_pop_back_request'),
+    url(r'^undo_request/(?P<request_id>\d+)/$', views.undo_request,
+                    name = 'events_manage_undo_request'),
     url(r'^email_template/acceptance', views.create_acceptance_email_template,
                     name = 'events_manage_create_acceptance_email_template'),
 ]

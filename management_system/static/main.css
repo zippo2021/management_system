@@ -2,7 +2,12 @@ thead {
     font-weight:bold;
 }
 
-#panel-wrapper{
+#logout-a {
+	color: white;
+	margin-right: 40px;
+}
+
+#panel-wrapper {
 	position: absolute;
 	top: 20%; left: 0; right: 0; 
 }

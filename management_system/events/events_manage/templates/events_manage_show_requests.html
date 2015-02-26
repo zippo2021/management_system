@@ -18,14 +18,16 @@
 {% endfor %}
 </tr>
 </table>
+
+{% if users %}
 <table class="table table-hover">
 <thead>
 	<tr>
-		<td>ФИО</td>
-		<td>Город</td>
-		<td>Школа</td>
-		<td>Статус</td>
-		<td></td>
+		<td width=30%>ФИО</td>
+		<td width=20%>Город</td>
+		<td width=20%>Школа</td>
+		<td width=15%>Статус</td>
+		<td width=15%></td>
 	</tr>
 </thead>
 <tbody>
@@ -60,4 +62,7 @@
 	{% endfor %}
 </tbody>
 </table>
+{% else %}
+<p class="lead">Заявки отсутствуют</p>
+{% endif %}
 {% endblock %}

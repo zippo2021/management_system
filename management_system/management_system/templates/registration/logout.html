@@ -1,6 +1,12 @@
+{% extends "registration/base.html" %}
 {% block content %}
-<div align="center">
-<h1>Выход</h1>
-Спасибо, что были с нами. Ждем вас снова.<br/><br/>
+<div id="panel-wrapper">
+<div class="panel panel-primary" id="auth-panel">
+<div class="panel-heading">Выход</div>
+<div class="panel-body">
+{% load staticfiles %}
+Спасибо, что были с нами!
+</div>
+</div>
 </div>
 {% endblock %}
