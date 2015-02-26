@@ -62,7 +62,8 @@
 						</p>
 					{% else %}
 						<p>
-							<a href="#" onClick="linkWrapper('{% url 'events_manage_place_request' event.id %}','{{ request.path }}')">
+                            {% url 'events_manage_place_request' event.id as events_manage_place_request %}
+							<a href="#" onClick="linkWrapper('{{ events_manage_place_request }}','{{ request.path }}')">
 								Подать заявку
 							</a>
 						</p>

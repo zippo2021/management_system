@@ -8,6 +8,7 @@
 {% endblock %}
 {% load custom_template_filters %}
 {% block content %}
+
 <p>
     <a id="userdata_edit_link" href = "#" onClick="ModalToggle('{% url 'user_manager_create' %}','{% url 'user_manager_create' %}','#form','Cоздание нового пользователя'); return false;" >Создать нового пользователя</a>
 </p>
@@ -19,7 +20,8 @@
 				<thead>
 					<tr>
 						<td>
-							<a href="#" onClick="linkWrapper('{% url 'common_profile_view_profile' key.id %}','{{ request.path }}')">
+                            {% url 'common_profile_view_profile' key.id as common_profile_view_profile %}
+							<a href="#" onClick="linkWrapper('{{ common_profile_view_profile }}','{{ request.path }}')">
                             
 							{{ key }}
 							</a>
@@ -40,8 +42,9 @@
 							
                             <a id="userdata_edit_link" href = "#" onClick="ModalToggle('{% url 'user_manager_edit_permissions' key.id %}','{% url 'user_manager_edit_permissions' key.id %}','#form','Базовая информация'); return false;" >Изменить права</a>
 							<br>
+                            {% url 'user_manager_deactivate' key.id as user_manager_deactivate %}
 							{% if user.UserData.Admin.is_superadmin and not key.UserData.Admin.is_superadmin %}
-								<a href="#" onClick="linkWrapper('{% url 'user_manager_deactivate' key.id %}','{{ request.path }}')">
+								<a href="#" onClick="linkWrapper('{{ user_manager_deactivate }}','{{ request.path }}')">
 									{% if key.is_active %}
 										Отключить
 									{% else %}

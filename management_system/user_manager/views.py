@@ -80,9 +80,9 @@ def edit_permissions(request, user_id):
 @login_required
 @should_be_admin
 def deactivate(request, user_id):
-    edited = User.objects.get(id = user_id)
+    user = User.objects.get(id = user_id)
     #we can not deactivate superadmin
-    if not(edited.UserData.Admin.is_superadmin):
+    if not(user.UserData.Admin.is_superadmin):
         user.is_active = not(user.is_active)
         user.save()
     else: pass #FIXME
