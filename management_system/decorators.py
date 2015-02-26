@@ -37,7 +37,7 @@ document decorators
 
     #false functions
 
-not_has_document = lambda request, *args, **kwags: redirect('edit document')
+not_has_document = lambda request, *args, **kwags: HttpResponse(json.dumps({'error':{'url':reverse('edit document'),'title':'Заполнение базовой информации'}}))
 
     #condition functions
 
@@ -114,7 +114,7 @@ def not_regular(request, *args, **kwargs):
 	elif not(is_regular_possibly_unfilled(request)):
             return not_is_regular_possibly_unfilled(request)
 	else:
-            return redirect('edit_regular')
+            return HttpResponse(json.dumps({'error':{'url':reverse('edit_regular'),'title':'Заполнение дополнительной информации'}}))
 
 
 	#condition functions

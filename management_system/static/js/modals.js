@@ -3,6 +3,7 @@
 function ModalToggle(get_url,post_url,t_id,t_title)
 {
 var content = '';
+var modal = new Modal();
 $.ajax({ type: "GET", 
 url: get_url, 
 async: false,
@@ -10,7 +11,6 @@ cache: false ,
 success : function(text)
 {
     content = text;
-    var modal = new Modal();
     modal.setTitle(t_title);
     modal.getContentElement().append(content);
     modal.setButtons([
@@ -63,16 +63,16 @@ function linkWrapper(url_to,url_from)
     async: false,
     cache: false,
     success : function(data){
-        response = JSON.parse(data);
-        if (url_from.length === 0)
-                url_from = "{{ url 'news_main' }}"
-        if (response['error'].length === 0){
+        if (typeof data == 'object'){
+            response = JSON.parse(data);
+            if (response['error'] != undefined)
+                ModalToggle(response['error']['url'],response['error']['url'],'#form',response['error']['title']);
+            else 
+                window.location = url_from;
+        }
+        else
             window.location = url_to;
-        }
-        else{
-            window.location = url_from;
-            ModalToggle(String(response['error']['url']),String(response['error']['url']),'#form',String(response['error']['title']));
-        }
+            
     }
     });
 }

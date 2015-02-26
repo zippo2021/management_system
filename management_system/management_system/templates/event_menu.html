@@ -4,16 +4,16 @@
 {% block event_menu %}
 <ul id="event_menu" class="nav nav-tabs nav-justified">
 	<li>
-		<a href="{% url 'news_main' %}">Домой</a>
+		<a href="#" onClick="linkWrapper('{% url 'news_main' %}','{{ request.path }}')">Домой</a>
 	</li>
 	<li {% if request.path == events_manage_main %}class="active" {% endif %}>
-		<a href="{% url 'events_manage_main' event.id %}">Главная</a>
+		<a href="#" onClick="linkWrapper('{{ events_manage_main }}','{{ request.path }}')">Главная</a>
 	</li>
 <li><a href="">Новости</a></li>
 
 {% if 'event_worker' in user_permissions %}
 <li {% if request.path == events_manage_show_requests %} class="active" {% endif %}>
-	<a href="{% url 'events_manage_show_requests' event.id %}">Заявки</a>
+	<a href="#" onClick="linkWrapper('{{ events_manage_show_requests }}','{{ request.path }}')">Заявки</a>
 </li>
 {% endif %}
 
@@ -28,7 +28,7 @@
 {% endif %}
 
 {% if 'admin' in user_permissions or 'event_worker' in user_permissions or 'teacher' in user_permissions or 'observer' in user_permissions %}
-   <li><a href="{% url 'study_groups_index' event.id %}">Учебные группы</a>
+   <li><a href="#" onClick="linkWrapper('{% url 'study_groups_index' event.id %}','{{ request.path }}')">Учебные группы</a>
 {% endif %}
 
 </ul>

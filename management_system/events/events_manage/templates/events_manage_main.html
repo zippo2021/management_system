@@ -54,9 +54,7 @@
 						</p>
 					{% else %}
 						<p>
-							<a href="
-								{% url 'events_manage_place_request' event.id %}
-							">
+							<a href="#" onClick="linkWrapper('{% url 'events_manage_place_request' event.id %}','{{ request.path }}')">
 								Подать заявку
 							</a>
 						</p>
@@ -64,23 +62,17 @@
 				{% endif %}
 				{% if 'event_worker' in user_permissions %}
         			<p>
-					<a href="
-					{% url 'events_manage_choose_users' event.id 'teacher' %}
-					">
+					<a href="#" onClick="linkWrapper('{% url 'events_manage_choose_users' event.id 'teacher' %}','{{ request.path }}')">
 						Пригласить учителей
 					</a>
 					</p>
 					<p>
-       				<a href="
-					{% url 'events_manage_choose_users' event.id 'mentor'%}
-					">
+       				<a href="#" onClick="linkWrapper('{% url 'events_manage_choose_users' event.id 'mentor'%}','{{ request.path }}')">
 						Пригласить воспитателей
 					</a>
 					</p>
         			<p>
-        			<a href="
-					{% url 'events_manage_choose_users' event.id 'observer' %}
-					">
+        			<a href="#" onClick="linkWrapper('{% url 'events_manage_choose_users' event.id 'observer' %}','{{ request.path }}')">
 						Пригласить наблюдателей
 					</a>
 					</p>		
@@ -92,7 +84,7 @@
 				{% endif %}
 				{% if 'admin' in user_permissions %}
 					<p>
-					<a href="{% url 'events_admin_deactivate' event.id %}">
+					<a href="#" onClick="linkWrapper('{% url 'events_admin_deactivate' event.id %}','{{ request.path }}')">
 						{% if event.is_active %}
 							Заморозить
 						{% else %}
