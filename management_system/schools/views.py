@@ -2,15 +2,14 @@
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.admin.views.decorators import staff_member_required
 from schools.forms import SchoolForm
 from schools.models import School
 from django.http import HttpResponse
-from decorators import should_be_defined, should_be_regular
+from decorators import should_be_admin
 # Create your views here.
 
 @login_required
-@should_be_defined
+@should_be_admin
 def add(request):
     if request.method == 'POST':
         form = SchoolForm(request.POST)
@@ -24,7 +23,7 @@ def add(request):
     
 
 @login_required
-@staff_member_required
+@should_be_admin
 def edit(request, school_id):
     school = School.objects.get(id = school_id)
     if request.method == 'POST':
@@ -40,7 +39,7 @@ def edit(request, school_id):
     return render(request, 'schools_edit_form.html', {'form' : form})
 
 @login_required
-@staff_member_required
+@should_be_admin
 def approve(request, school_id):
     school = School.objects.get(id = school_id)
     school.approved = True
@@ -48,7 +47,7 @@ def approve(request, school_id):
     return redirect('schools_show_unproved')
 
 @login_required
-@staff_member_required
+@should_be_admin
 def show_unproved(request):
     schools = School.objects.filter(approved = False)
     return render(request, 'schools_show_unproved.html', {'schools' : schools})

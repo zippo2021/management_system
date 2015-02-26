@@ -9,7 +9,6 @@ from decorators import should_have_filled_data
 # Create your views here.
 
 @login_required
-@should_have_filled_data
 def view_profile(request,uid):
     restr = True
     if request.user.UserData.id == int(uid):
