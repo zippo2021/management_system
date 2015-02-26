@@ -97,7 +97,6 @@ def exclude(request, event_id, uid, role):
 ##############################################################
 
 @login_required
-@should_have_filled_data
 def show_requests(request,event_id):
     event = Event.objects.get(id = event_id)
     requests = Request.objects.filter(event = event_id)
@@ -129,6 +128,7 @@ def accept_request(request, event_id, request_id):
             p_group = form.cleaned_data['price_group']
             files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
             try:
+                print EmailTemplate.objects.get(event = event).text
                 template_file = Template(get_template_from_string(EmailTemplate.objects.get(event = event).text))
                 send_templated_email(
                         subject='Подтверждение заявки',
@@ -179,7 +179,15 @@ def place_request(request, event_id):
         e_request.save()
     else:
         pass #FIXME
-    return redirect('event_manage_main',event_id)
+    return redirect('events_manage_main', event.id)
+
+@login_required
+def undo_request(request, event_id, request_id):
+    event = Event.objects.get(id = event_id)
+    e_request = Request.objects.get(id = request_id)
+    if e_request.status.encode('utf-8')== 'в обработке':
+        e_request.delete()
+    return redirect('events_manage_main', event_id)
 
 ###############################################################
 ###################### EMAILS ################################
