@@ -95,7 +95,7 @@
 	</tbody>
 		<tr>
 			{% for key, value in fields.items %}
-				<td>{% if value %} {{ value }} {% endif %}
+				<td>{{ key }}: {% if value %} {{ value }} {% endif %}
 				</td>
 				{% if forloop.counter|divisibleby:"3" %}
 					</tr><tr>

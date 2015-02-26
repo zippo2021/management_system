@@ -50,7 +50,15 @@
 					{% if rq %}
 						<p>
 							Информация о заявке:
-								{{ rq.status }}
+							{{ rq.status }}
+							{% if rq.status == 'в обработке' %}
+							<b>
+							<a href="
+						 {% url 'events_manage_undo_request' event.id rq.id %}">
+								Отменить
+							</a>
+							</b>
+							{% endif %}
 						</p>
 					{% else %}
 						<p>

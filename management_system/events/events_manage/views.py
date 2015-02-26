@@ -178,7 +178,15 @@ def place_request(request, event_id):
         e_request.save()
     else:
         pass #FIXME
-    return redirect('event_manage_main',event_id)
+    return redirect('events_manage_main', event.id)
+
+@login_required
+def undo_request(request, event_id, request_id):
+    event = Event.objects.get(id = event_id)
+    e_request = Request.objects.get(id = request_id)
+    if e_request.status.encode('utf-8')== 'в обработке':
+        e_request.delete()
+    return redirect('events_manage_main', event_id)
 
 ###############################################################
 ###################### EMAILS ################################
