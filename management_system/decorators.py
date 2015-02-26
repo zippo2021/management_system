@@ -172,8 +172,7 @@ def not_event_worker(request,*args, **kwargs):
     if not(has_filled_data(request)):
         return not_has_filled_data(request)
     else:
-        return render(request, 'decorator.html',
-{'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT EventWorker"})
+        return HttpResponse(json.dumps({'error':'Вы не являетесь работником данного события'}))
 
 	#condition fucntions
 
@@ -197,7 +196,7 @@ def not_mentor(request):
     if not(has_filled_data(request)):
         return not_has_filled_data(request)
     else:
-        return render(request, 'decorator.html', {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Mentor"})
+        return HttpResponse(json.dumps({'error':'Вы не являетесь воспитателем'}))
 
 	#condition functions
 
@@ -221,8 +220,7 @@ def not_observer(request):
     if not(has_filled_data(request)):
         return not_has_filled_data(request)
     else:
-        return render(request, 'decorator.html', 
-{'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Observer"})
+        return HttpResponse(json.dumps({'error':'Вы не являетесь наблюдателем'}))
 
 	#condition functions
 
@@ -244,8 +242,7 @@ def not_admin(request):
     if not(has_filled_data(request)):
         return not_has_filled_data(request)
     else:
-        return render(request, 'decorator.html', 
-{'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Admin"})
+        return HttpResponse(json.dumps({'error':'Вы не являетесь администратором'}))
 
 
 
@@ -275,7 +272,7 @@ is_staff = lambda request, *args, **kwargs: True\
                 else False 
     #false functions
 
-not_staff = lambda request, *args, **kwargs: render(request, 'decorator.html', {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT staff"})
+not_staff = lambda request, *args, **kwargs: HttpResponse(json.dumps({'error':'Вы не являетесь персоналом'}))
 
     #decorators
 
@@ -334,7 +331,7 @@ def is_allowed_for_event(request, *args, **kwargs):
 
     # false functions
 
-not_allowed_for_event = lambda request, *args, **kwargs: render(request, 'decorator.html', {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT allowed for event"})
+not_allowed_for_event = lambda request, *args, **kwargs: HttpResponse(json.dumps({'error':'Вы не участвуете в данном событии'}))
 
     # decorators
 

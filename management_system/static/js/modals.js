@@ -55,6 +55,21 @@ success : function(text)
 });
 }
 
+function ToggleSimpleTextModal(text,title){
+    var modal = new Modal();
+    modal.setTitle(title);
+    modal.getContentElement().append(text);
+    modal.setButtons([
+    {
+        label:"Закрыть",
+        callback:function(){
+            modal.hide();
+            modal.destroy();
+        }
+    }]);
+    modal.show()
+}
+
 function linkWrapper(url_to,url_from)
 {
     var content = '';
@@ -66,7 +81,10 @@ function linkWrapper(url_to,url_from)
         if (typeof data == 'object'){
             response = JSON.parse(data);
             if (response['error'] != undefined)
-                ModalToggle(response['error']['url'],response['error']['url'],'#form',response['error']['title']);
+                if(typeof response['error'] == 'object')
+                    ModalToggle(response['error']['url'],response['error']['url'],'#form',response['error']['title']);
+                else
+                    ToggleSimpleTextModal(response['error']['text'],'Ошибка доступа');
             else 
                 window.location = url_from;
         }
