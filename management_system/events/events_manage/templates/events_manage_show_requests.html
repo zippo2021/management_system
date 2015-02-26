@@ -34,7 +34,7 @@
 	{% for each in users  %}
 		<tr>
     		<td>
-        		<a href="{% url 'common_profile_view_profile' each.user.data.id %}">{{ each.user.data.last_name }} {{ each.user.data.first_name }} {{ each.user.data.middle_name }}</a>        
+        		<a href="#" onClick="linkWrapper('{% url 'common_profile_view_profile' each.user.data.id %}','{{ request.path }}')">{{ each.user.data.last_name }} {{ each.user.data.first_name }} {{ each.user.data.middle_name }}</a>        
     		</td>
 			<td>
 				{{ each.user.data.RegularUser.city }}
@@ -52,9 +52,9 @@
    					{% if each.status == 'в обработке'  %} 
                         <a id="accept_link" href = "#" onClick="ModalToggle('{% url 'events_manage_accept_request' event.id each.id  %}','{% url 'events_manage_accept_request' event.id each.id  %}','#form','Одобрение участника'); return false;" >Одобрить</a>						
                         <br>
-        				<a href="{% url 'events_manage_decline_request' event.id each.id %}" > Отказать</a>
+        				<a href="#" onClick="linkWrapper('{% url 'events_manage_decline_request' event.id each.id %}','{{ request.path }}')"> Отказать</a>
 					{% else %}
-						<a href="{% url 'events_manage_pop_back_request' event.id each.id %}">Вернуть в заявки</a>
+						<a href="#" onClick="linkWrapper('{% url 'events_manage_pop_back_request' event.id each.id %}','{{ request.path }}')">Вернуть в заявки</a>
 					{% endif %}
 				{% endif %}
 			</td>

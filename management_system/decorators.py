@@ -8,6 +8,7 @@ from dashboard.regular.models import RegularUser
 from user_manager.permissions import perms_to_classes
 from events.events_admin.models import Event
 from django.core.urlresolvers import reverse
+import json
 
 
 def check_decorator(view=None,
@@ -36,7 +37,7 @@ document decorators
 
     #false functions
 
-not_has_document = lambda request, *args, **kwags: redirect('edit document')
+not_has_document = lambda request, *args, **kwags: HttpResponse(json.dumps({'error':{'url':reverse('edit document'),'title':'Заполнение базовой информации'}}))
 
     #condition functions
 
@@ -85,7 +86,7 @@ userdata decorators
 
 	#false functions
 
-not_has_filled_data = lambda request, *args, **kwargs: HttpResponse({'error':{'url':reverse('userdata_edit'),'title':'Заполнение базовой информации'}})
+not_has_filled_data = lambda request, *args, **kwargs: HttpResponse(json.dumps({'error':{'url':reverse('userdata_edit'),'title':'Заполнение базовой информации'}}))
 
 	#condition functions
 
@@ -113,7 +114,7 @@ def not_regular(request, *args, **kwargs):
 	elif not(is_regular_possibly_unfilled(request)):
             return not_is_regular_possibly_unfilled(request)
 	else:
-            return redirect('edit_regular')
+            return HttpResponse(json.dumps({'error':{'url':reverse('edit_regular'),'title':'Заполнение дополнительной информации'}}))
 
 
 	#condition functions
@@ -171,8 +172,7 @@ def not_event_worker(request,*args, **kwargs):
     if not(has_filled_data(request)):
         return not_has_filled_data(request)
     else:
-        return render(request, 'decorator.html',
-{'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT EventWorker"})
+        return HttpResponse(json.dumps({'error':'Вы не являетесь работником данного события'}))
 
 	#condition fucntions
 
@@ -196,7 +196,7 @@ def not_mentor(request):
     if not(has_filled_data(request)):
         return not_has_filled_data(request)
     else:
-        return render(request, 'decorator.html', {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Mentor"})
+        return HttpResponse(json.dumps({'error':'Вы не являетесь воспитателем'}))
 
 	#condition functions
 
@@ -220,8 +220,7 @@ def not_observer(request):
     if not(has_filled_data(request)):
         return not_has_filled_data(request)
     else:
-        return render(request, 'decorator.html', 
-{'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Observer"})
+        return HttpResponse(json.dumps({'error':'Вы не являетесь наблюдателем'}))
 
 	#condition functions
 
@@ -243,8 +242,7 @@ def not_admin(request):
     if not(has_filled_data(request)):
         return not_has_filled_data(request)
     else:
-        return render(request, 'decorator.html', 
-{'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT Admin"})
+        return HttpResponse(json.dumps({'error':'Вы не являетесь администратором'}))
 
 
 
@@ -274,7 +272,7 @@ is_staff = lambda request, *args, **kwargs: True\
                 else False 
     #false functions
 
-not_staff = lambda request, *args, **kwargs: render(request, 'decorator.html', {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT staff"})
+not_staff = lambda request, *args, **kwargs: HttpResponse(json.dumps({'error':'Вы не являетесь персоналом'}))
 
     #decorators
 
@@ -333,7 +331,7 @@ def is_allowed_for_event(request, *args, **kwargs):
 
     # false functions
 
-not_allowed_for_event = lambda request, *args, **kwargs: render(request, 'decorator.html', {'error' : "Here we have decorator working to prevent you from getting to this page, while you are NOT allowed for event"})
+not_allowed_for_event = lambda request, *args, **kwargs: HttpResponse(json.dumps({'error':'Вы не участвуете в данном событии'}))
 
     # decorators
 

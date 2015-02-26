@@ -19,9 +19,8 @@
 				<thead>
 					<tr>
 						<td>
-							<a href="
-								{% url 'common_profile_view_profile' key.id %}
-							">
+							<a href="#" onClick="linkWrapper('{% url 'common_profile_view_profile' key.id %}','{{ request.path }}')">
+                            
 							{{ key }}
 							</a>
 						</td>
@@ -42,9 +41,7 @@
                             <a id="userdata_edit_link" href = "#" onClick="ModalToggle('{% url 'user_manager_edit_permissions' key.id %}','{% url 'user_manager_edit_permissions' key.id %}','#form','Базовая информация'); return false;" >Изменить права</a>
 							<br>
 							{% if user.UserData.Admin.is_superadmin and not key.UserData.Admin.is_superadmin %}
-								<a href="
-									{% url 'user_manager_deactivate' key.id %}
-								">
+								<a href="#" onClick="linkWrapper('{% url 'user_manager_deactivate' key.id %}','{{ request.path }}')">
 									{% if key.is_active %}
 										Отключить
 									{% else %}

@@ -26,7 +26,7 @@
 			<td>				
                 <a id="school_edit_link" href = "#" onClick="ModalToggle('{% url 'schools_edit' each.id %}','{% url 'schools_edit' each.id %}','#form','Редактирование'); return false;" >Редактировать и подтвердить</a>
 				<br>
-				<a href="{% url 'schools_approve' each.id %}">Подтвердить</a>
+				<a href="#" onClick="linkWrapper('{% url 'schools_approve' each.id %}','{{ request.path }}')">Подтвердить</a>
 			</td>
 		</tr>
 	{% endfor %}
