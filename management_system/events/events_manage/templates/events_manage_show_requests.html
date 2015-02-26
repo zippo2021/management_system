@@ -11,16 +11,19 @@
 Ценовые группы 
 <a id="price_group_add_link" href = "#" onClick="ModalToggle('{% url 'price_groups_add' event.id %}','{% url 'price_groups_add' event.id %}','#form','Добавление ценовой группы'); return false;" >Добавить</a>
 </p>
-
-<p>
+<table class="table">
+<tr>
 {% for each in price_groups %}
-	{{ each }}<br>
+	<td><pre>{{ each }}</pre></td>
 {% endfor %}
-</p>
+</tr>
+</table>
 <table class="table table-hover">
 <thead>
 	<tr>
 		<td>ФИО</td>
+		<td>Город</td>
+		<td>Школа</td>
 		<td>Статус</td>
 		<td></td>
 	</tr>
@@ -31,7 +34,12 @@
     		<td>
         		<a href="{% url 'common_profile_view_profile' each.user.data.id %}">{{ each.user.data.last_name }} {{ each.user.data.first_name }} {{ each.user.data.middle_name }}</a>        
     		</td>
+			<td>
+				{{ each.user.data.RegularUser.city }}
     		<td>
+				{{ each.user.data.RegularUser.school }}
+			</td>
+			<td>
     			{{ each.status }}
 				{% if each.status == 'одобрена' %}
 					({{ each.price_group }})

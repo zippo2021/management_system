@@ -20,11 +20,13 @@
 	<div id="container">
 		<div id="top">
 			{% if  user.is_authenticated %}
+			<a class="option-link" href="{% url 'auth_logout' %}">Выйти</a>
+			<!--
 			<font color="white">
 			Ваш логин:
 			</font>
 			<font color="blue">{{ user }}</font>,
-			<!--Вы обладаете следующими правами:
+			Вы обладаете следующими правами:
 			{% for each in user_permissions %}
 				<font color="red">{{ perms_to_language|get_item:each }}</font>
 				{% if not forloop.last %},{% endif %}
