@@ -1,3 +1,4 @@
+#-*- coding: utf-8 *-*
 from functools import partial, wraps
 from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -6,6 +7,7 @@ from dashboard import regular
 from dashboard.regular.models import RegularUser
 from user_manager.permissions import perms_to_classes
 from events.events_admin.models import Event
+from django.core.urlresolvers import reverse
 
 
 def check_decorator(view=None,
@@ -83,7 +85,7 @@ userdata decorators
 
 	#false functions
 
-not_has_filled_data = lambda request, *args, **kwargs: redirect('userdata_edit')
+not_has_filled_data = lambda request, *args, **kwargs: HttpResponse({'error':{'url':reverse('userdata_edit'),'title':'Заполнение базовой информации'}})
 
 	#condition functions
 

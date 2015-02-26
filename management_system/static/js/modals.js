@@ -52,4 +52,19 @@ success : function(text)
 });
 }
 
-
+function linkWrapper(url_to,url_from)
+{
+    var content = '';
+    $.ajax({ type: "GET", 
+    url: url_to, 
+    async: false,
+    success : function(data){
+        if (data['error']){
+            window.location = url_from;
+            ModalToggle(data['error']['url'],data['error']['url'],'form',data['error']['title']);
+        }
+        else
+            window.location = url_to;
+    }
+    });
+}

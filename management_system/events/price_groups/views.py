@@ -16,7 +16,7 @@ def add(request, event_id):
             return HttpResponse(status)
     else:
         form = PriceGroupForm()
-        return render(request,"price_group_form.html",
+    return render(request,"price_group_form.html",
                         {'form':form, 'event':event})
 
 def show(request, event_id):
