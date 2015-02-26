@@ -8,6 +8,7 @@ from dashboard.regular.models import RegularUser
 from user_manager.permissions import perms_to_classes
 from events.events_admin.models import Event
 from django.core.urlresolvers import reverse
+import json
 
 
 def check_decorator(view=None,
@@ -85,7 +86,7 @@ userdata decorators
 
 	#false functions
 
-not_has_filled_data = lambda request, *args, **kwargs: HttpResponse({'error':{'url':reverse('userdata_edit'),'title':'Заполнение базовой информации'}})
+not_has_filled_data = lambda request, *args, **kwargs: HttpResponse(json.dumps({'error':{'url':reverse('userdata_edit'),'title':'Заполнение базовой информации'}}))
 
 	#condition functions
 

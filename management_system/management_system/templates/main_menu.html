@@ -10,9 +10,7 @@
 				</li>
                 {% if  user.is_authenticated %}
                 	<li {% if request.path == common_profile_view_profile %}class="active" {% endif %}>
-						<a href="{{ common_profile_view_profile }}">
-							Профиль
-						</a>
+                        <a href="#" onClick="linkWrapper('{{ common_profile_view_profile }}','{{ request.path }}')">Профиль</a>
 					</li>
        	        	{% if user.UserData.Admin.is_active %}
 						<li {% if request.path == schools_show_unproved %}class="active" {% endif %}>

@@ -15,7 +15,7 @@ from events.events_manage.forms import PriceChoiceForm, ResultForm, AcceptanceEm
 from user_manager.permissions import perms_to_classes
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
-from decorators import should_be_event_worker,should_be_allowed_for_event, should_be_allowed_to_view_event
+from decorators import should_be_event_worker,should_be_allowed_for_event, should_be_allowed_to_view_event,should_have_filled_data
 from django.contrib.auth.decorators import login_required
 from base_source_functions import send_templated_email
 import glob
