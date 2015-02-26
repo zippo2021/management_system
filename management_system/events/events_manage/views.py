@@ -100,7 +100,7 @@ def exclude(request, event_id, uid, role):
 def show_requests(request,event_id):
     event = Event.objects.get(id = event_id)
     requests = Request.objects.filter(event = event_id)
-    price_groups = event.PriceGroup.all()
+    price_groups = event.PriceGroup.all().order_by('price')
     if event.is_private:
         accept = True
     else:

@@ -122,7 +122,7 @@ DATABASES = {
 
 # Django-registration
 
-ACCOUNT_ACTIVATION_DAYS = 2
+ACCOUNT_ACTIVATION_DAYS = 1
 AUTH_USER_EMAIL_UNIQUE = True
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 587
@@ -130,7 +130,7 @@ EMAIL_HOST_USER = 'managtest@yandex.ru'
 EMAIL_HOST_PASSWORD = 'qwerty2021'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'managtest@yandex.ru'
-
+LOGIN_REDIRECT_URL = '/news/main/'
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 

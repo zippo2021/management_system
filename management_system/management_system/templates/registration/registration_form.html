@@ -8,7 +8,7 @@
 <form method="post" class="form-container"  action="">{% csrf_token %}
 {{ form|crispy }}
 <input type="submit" value="Зарегистрироваться" class="btn btn-primary">
-<a id="option-link" href="{% url 'auth_login' %}">
+<a class="option-link" href="{% url 'auth_login' %}">
 Авторизация
 </a>
 </form>

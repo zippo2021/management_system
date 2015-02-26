@@ -13,7 +13,7 @@ class PriceGroup(models.Model):
             return str(self.price) + ' р.'
             _
     event = models.ForeignKey('events_admin.Event', related_name = 'PriceGroup')
-    price = models.IntegerField(verbose_name = 'Стоимость')
+    price = models.IntegerField(verbose_name = 'Стоимость', unique = True)
 
 @receiver(post_save, sender = Event)
 def create_price_group_free(instance, created, **kwargs):

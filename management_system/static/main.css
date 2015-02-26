@@ -1,7 +1,6 @@
 thead {
-  font-weight:bold;
+    font-weight:bold;
 }
-
 
 #panel-wrapper{
 	position: absolute;
@@ -24,6 +23,6 @@ thead {
 	display: table;
 }
 
-#option-link {
+.option-link {
 	float: right;
 }

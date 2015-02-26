@@ -11,7 +11,7 @@
 	<thead>
 		<tr>
 			<td>
-				<p>{{ event.name }}</p>
+				<p class="lead">{{ event.name }}</p>
 			</td>
 			<td></td>
 			<td></td>
@@ -21,10 +21,11 @@
 		<tr>
 			<td>
 				<p>
-				Базовая информация
+				<b>Базовая информация
 					{% if 'admin' in user_permissions %}
                         <a id="edit_event_link" href = "#" onClick="ModalToggle('{% url 'events_admin_edit' event.id 'base' %}','{% url 'events_admin_edit' event.id 'base' %}','#form','Редактирование '); return false;" >Редактирование</a>
 					{% endif %}
+				</b>
 				</p>
 				<p>
 					<ul>
@@ -111,10 +112,11 @@
 			<td>
 				{% if event.is_journey %}
 					<p>
-						Информация о поездке
+					<b>Информация о поездке
 						{% if 'admin' in user_permissions %}
                             <a id="journey_edit_link" href = "#" onClick="ModalToggle('{% url 'events_admin_edit' event.id 'journey' %}','{% url 'events_admin_edit' event.id 'journey' %}','#form','Редактирование информаци о поездке'); return false;" >Редактировать</a>
 						{% endif %}
+					</b>
 					</p>
 					<p>Время отъезда: {{ event.JourneyData.departure_time }}</p>
 					<p>Информация: {{ event.JourneyData.info|linebreaks }}</p>

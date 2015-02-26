@@ -14,7 +14,7 @@
 {% csrf_token %}
 {{ form|crispy }}
 <input type="submit" value="Вход" class="btn btn-primary">
-<div id="option-link">
+<div class="option-link">
 <a href="{% url 'registration_register' %}">
 Регистрация
 </a>
