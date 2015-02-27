@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     url(r'^journal$', schedule.index, name='journal_index'),
 
     url(r'^journal/admin$', schedule.as_admin, name='journal_admin'),
+    url(r'^journal/admin/subjects$', schedule.subjects, name='journal_subjects'),
 
     url(r'^journal/teacher/right$', schedule.as_teacher_right, name='journal_teacher_right'),
     url(r'^journal/teacher/left$', schedule.as_teacher_left, name='journal_teacher_left'),
@@ -20,6 +21,9 @@ urlpatterns = patterns('',
     url(r'^journal/admin/add_lessons$', schedule.add_lessons_admin, name='journal_admin_add_lessons'),
     url(r'^journal/admin/del_lesson$', schedule.delete_lesson_admin, name='journal_admin_del_lesson'),
     url(r'^journal/admin/update_lesson$', schedule.update_lesson_admin, name='journal_admin_update_lesson'),
+    url(r'^journal/admin/delete_subject$', schedule.delete_subject_admin, name='journal_admin_delete_subject'),
+    url(r'^journal/admin/add_subject$', schedule.add_subject_admin, name='journal_admin_add_subject'),
+    url(r'^journal/admin/get_subjects$', schedule.get_subjects_admin, name='journal_admin_get_subjects'),
 
     url(r'^journal/teacher/get_groups$', schedule.get_groups_teacher, name='journal_teacher_get_groups'),
     url(r'^journal/teacher/get_lessons$', schedule.get_lessons_teacher, name='journal_teacher_get_lessons'),
