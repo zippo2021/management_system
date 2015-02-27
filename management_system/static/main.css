@@ -2,6 +2,20 @@ thead {
     font-weight:bold;
 }
 
+.td-centered {
+	vertical-align: middle;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+	text-align: center; 
+	vertical-align: middle;
+}
+
+.div-centered {
+	display: block;
+	margin: auto;
+}
+
 .top-menu-link {
 	float: right;
 	color: white;
