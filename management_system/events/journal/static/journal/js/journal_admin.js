@@ -45,7 +45,10 @@ function GetLessons()
                 });
                 $(".del_lesson").click(function()
                 {
-                    SendDelLessonRequest($(this).parent().parent().data("lessonid"));
+                    var data = $(this).parent().parent().data("lessonid");
+                    ConfirmWindow('Вы действительно хотите удалить занятие?', function(){
+                        SendDelLessonRequest(data);
+                    });
                 });
                 $(".edit_lesson").click(function()
                 {

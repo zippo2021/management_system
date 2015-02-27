@@ -162,6 +162,37 @@ Modal = function ()
     this.getContentElement = getContentElement;
 };
 
+ConfirmWindow = function(text, callback)
+{
+    function init(text, callback) {
+        var modal = new Modal();
+        modal.setTitle("Внимание!");
+        modal.getContentElement().append($("<p class='text-info'>" + text + "<p>"));
+        modal.setButtons([
+        {
+            label: 'Да',
+            callback: function ()
+            {
+                callback();
+                modal.hide();
+                modal.destroy();
+            }
+        },
+        {
+            label: 'Нет',
+            callback: function ()
+            {
+                //just close it
+                modal.hide();
+                modal.destroy();
+            }
+        }
+        ]);
+        modal.show();
+    }
+    init(text, callback);
+};
+
 ErrorMessage = function (errorText, errorDescription)
 {
     function init(errorText, errorDescription) {

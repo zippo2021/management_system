@@ -9,6 +9,7 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from decorators import should_be_teacher, should_be_admin, should_be_regular
 import json
+from django.db import IntegrityError
 from datetime import datetime, timedelta
 
 
@@ -379,6 +380,8 @@ def delete_lesson_admin(request, event_id):
             data = json.loads(request.body.decode('utf-8'))
             lesson = Lesson.objects.get(id=data, event__id=event_id)
             lesson.delete()
+        except IntegrityError as e:
+            answer["error"] = "Нельзя удалить занятие, по которому проставлены оценки"
         except Exception as e:
             print(str(e))
             answer["error"] = "Error: " + str(e)
@@ -451,6 +454,66 @@ def add_lessons_admin(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
+
+@login_required
+@should_be_admin
+def delete_subject_admin(request, event_id):
+    if request.method == "POST" and request.is_ajax:
+        answer = dict()
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            Subject.objects.get(event__id=event_id, id=data).delete()
+        except Exception as e:
+            print(str(e))
+            answer["error"] = "Error: " + str(e)
+        return HttpResponse(json.dumps(answer), content_type="application/json")
+    else:
+        return HttpResponseNotFound(request)
+
+
+@login_required
+@should_be_admin
+def add_subject_admin(request, event_id):
+    if request.method == "POST" and request.is_ajax:
+        answer = dict()
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            if data == '':
+                raise Exception('Field should be not NULL')
+            subjects = Subject.objects.filter(event__id=event_id, name=data)
+            if len(subjects) == 0:
+                subject = Subject(name=data, event_id=event_id)
+                subject.save()
+            else:
+                answer["error"] = "Subject already exists"
+        except Exception as e:
+            print(str(e))
+            answer["error"] = "Error: " + str(e)
+        return HttpResponse(json.dumps(answer), content_type="application/json")
+    else:
+        return HttpResponseNotFound(request)
+
+
+@login_required
+@should_be_admin
+def get_subjects_admin(request, event_id):
+    if request.method == "POST" and request.is_ajax:
+        answer = dict()
+        try:
+            subjects = Subject.objects.filter(event__id=event_id)
+            answer["data"] = list()
+            for subject in subjects:
+                answer["data"].append(dict())
+                answer["data"][-1]["id"] = subject.id
+                answer["data"][-1]["name"] = subject.name
+        except Exception as e:
+            print(str(e))
+            answer["error"] = "Error: " + str(e)
+        return HttpResponse(json.dumps(answer), content_type="application/json")
+    else:
+        return HttpResponseNotFound(request)
+
+
 #############
 ##  VIEWS  ##
 #############
@@ -473,11 +536,7 @@ def index(request, event_id):
 def as_pupil_marks(request, event_id):
     if request.method == "GET":
         event = Event.objects.get(id=event_id)
-        start_date = event.opened.strftime('%d/%m/%Y')
-        end_date = event.closed.strftime('%d/%m/%Y')
-        return render(request, 'journal/journal_pupil_marks.html', {'event_id': event_id,
-                                                                    'start_date': start_date,
-                                                                    'end_date': end_date})
+        return render(request, 'journal/journal_pupil_marks.html', {'event': event})
     else:
         return HttpResponseNotFound(request)
 
@@ -487,11 +546,7 @@ def as_pupil_marks(request, event_id):
 def as_pupil_schedule(request, event_id):
     if request.method == "GET":
         event = Event.objects.get(id=event_id)
-        start_date = event.opened.strftime('%d/%m/%Y')
-        end_date = event.closed.strftime('%d/%m/%Y')
-        return render(request, 'journal/journal_pupil_schedule.html', {'event_id': event_id,
-                                                                       'start_date': start_date,
-                                                                       'end_date': end_date})
+        return render(request, 'journal/journal_pupil_schedule.html', {'event': event})
     else:
         return HttpResponseNotFound(request)
 
@@ -501,11 +556,7 @@ def as_pupil_schedule(request, event_id):
 def as_teacher_schedule(request, event_id):
     if request.method == "GET":
         event = Event.objects.get(id=event_id)
-        start_date = event.opened.strftime('%d/%m/%Y')
-        end_date = event.closed.strftime('%d/%m/%Y')
-        return render(request, 'journal/journal_teacher_schedule.html', {'event_id': event_id,
-                                                                         'start_date': start_date,
-                                                                         'end_date': end_date})
+        return render(request, 'journal/journal_teacher_schedule.html', {'event': event})
     else:
         return HttpResponseNotFound(request)
 
@@ -522,11 +573,7 @@ def as_teacher_left(request, event_id):
                                            lesson__teacher__id=teacher_id,
                                            lesson__subject=subjects[0]).distinct()
         event = Event.objects.get(id=event_id)
-        start_date = event.opened.strftime('%d/%m/%Y')
-        end_date = event.closed.strftime('%d/%m/%Y')
-        return render(request, 'journal/journal_teacher_left.html', {'event_id': event_id,
-                                                                     'start_date': start_date,
-                                                                     'end_date': end_date,
+        return render(request, 'journal/journal_teacher_left.html', {'event': event,
                                                                      'subjects': subjects,
                                                                      'groups': groups})
     else:
@@ -545,13 +592,19 @@ def as_teacher_right(request, event_id):
                                            lesson__teacher__id=teacher_id,
                                            lesson__subject=subjects[0]).distinct()
         event = Event.objects.get(id=event_id)
-        start_date = event.opened.strftime('%d/%m/%Y')
-        end_date = event.closed.strftime('%d/%m/%Y')
-        return render(request, 'journal/journal_teacher_right.html', {'event_id': event_id,
-                                                                      'start_date': start_date,
-                                                                      'end_date': end_date,
+        return render(request, 'journal/journal_teacher_right.html', {'event': event,
                                                                       'subjects': subjects,
                                                                       'groups': groups})
+    else:
+        return HttpResponseNotFound(request)
+
+
+@login_required
+@should_be_admin
+def subjects(request, event_id):
+    if request.method == "GET":
+        event = Event.objects.get(id=event_id)
+        return render(request, 'journal/journal_subjects.html', {'event': event})
     else:
         return HttpResponseNotFound(request)
 
@@ -564,12 +617,8 @@ def as_admin(request, event_id):
         subjects = Subject.objects.filter(event__id=event_id)
         teachers = Teacher.objects.filter(event__id=event_id)
         event = Event.objects.get(id=event_id)
-        start_date = event.opened.strftime('%d/%m/%Y')
-        end_date = event.closed.strftime('%d/%m/%Y')
         return render(request, 'journal/journal_admin.html', {'groups': groups,
-                                                              'event_id': event_id,
-                                                              'start_date': start_date,
-                                                              'end_date': end_date,
+                                                              'event': event,
                                                               'subjects': subjects,
                                                               'teachers': teachers})
     else:
