@@ -24,7 +24,7 @@ import glob
 import os
 from django.conf import settings
 from django.http import HttpResponse
-from multiuploader.forms import MultiUploadForm
+
 
 ############################################################
 ##################### RRESULTS ############################
