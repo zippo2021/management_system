@@ -1,19 +1,40 @@
 # -*- coding: utf-8 -*-
 
-from django.forms import ModelForm, RegexField, ChoiceField, Form
+from django.forms import FileInput,ImageField,ModelForm, RegexField, ChoiceField, Form
 from dashboard.userdata.models import UserData, Passport, Zagran, BirthCert, OtherDoc
 
 class UserDataForm(ModelForm):
+        avatar = ImageField(label='Аватар',required=False, error_messages = {'invalid':"Только изображения"}, widget=FileInput)
 	phone = RegexField(regex = r'^\+?1?\d{9,15}$', required = True,
-					   error_message = ("Телефонный номер должен иметь формат +99999999999. Может содержать до 15 цифр"))
+      					   error_message = ("Телефонный номер должен иметь формат +99999999999. Может содержать до 15 цифр"))
 	class Meta:
 		model = UserData
 		exclude = ['user',
-				   'modified',
-				   ]
-
+                           'modified',
+                ]
+        def clean_avatar(self):
+                # получаем данные из нужного поля
+                  picture =  self.cleaned_data['avatar']
+                  if picture:
+                      try:
+                      # првряем размеры изображения
+                      # получаем размеры загружаемого изображения
+                          w, h = get_image_dimensions(picture)
+                      # задаем ограничения размеров
+                          max_width = 200 
+                          max_height = 300 
+                      # собственно сравнение
+                          if w > max_width or h > max_height:
+                              raise forms.ValidationError(u'Максимальный размер изображения %s x %s пикселов.' % (max_height, max_width))
+                      # не пропускаем файлы, размер (вес) которых более 100 килобайт
+                          if len(picture) > (500 * 1024):
+                              raise forms.ValidationError(u'Размер изображения не может превышать 500 кб.')
+                      except AttributeError:
+                          pass
+                      return picture
+    
 '''
-Document type select form
+Documeent type select form
 '''
 choices = (('P' , 'Паспорт'),
            ('Z', 'Загран. паспорт'),

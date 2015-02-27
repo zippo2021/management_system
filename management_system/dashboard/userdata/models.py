@@ -13,7 +13,6 @@ from dashboard.observer.models import Observer
 from user_manager.permissions import perms_to_classes
 from django.db.models.signals import post_save
 
-
 # Create your models here.
 class UserData(models.Model):
     def get_permissions(self):
@@ -31,10 +30,9 @@ class UserData(models.Model):
         return self.last_name +' '+ self.first_name
 
     user = models.OneToOneField(User, related_name = 'UserData')
-
     avatar = models.ImageField(
                     verbose_name = 'Аватар',
-                    upload_to ='images/profile_pics',
+                    upload_to ='profile_pics/',
                     blank = True,
                     null = True,
     )

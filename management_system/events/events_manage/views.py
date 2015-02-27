@@ -24,6 +24,7 @@ import glob
 import os
 from django.conf import settings
 from django.http import HttpResponse
+from multiuploader.forms import MultiUploadForm
 
 ############################################################
 ##################### RRESULTS ############################
@@ -163,8 +164,7 @@ def accept_request(request, event_id, request_id):
             p_group = form.cleaned_data['price_group']
             files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
             try:
-                template_file = Template(get_template_from_string(EmailTemplate.objects.get(event = event).text))
-                print template_file.render({})
+                template_file = get_template_from_string(EmailTemplate.objects.get(event = event).text)
                 send_templated_email(
                         subject='Подтверждение заявки',
                         template_file = template_file,

@@ -27,4 +27,5 @@ urlpatterns = patterns('',
     url(r'^completed', views.completed, name = 'completed'),
     url(r'^event/(?P<event_id>\d+)/', include('events.study_groups.urls')),
     url(r'^event/(?P<event_id>\d+)/', include('events.journal.urls')),
+    url(r'^your_uploads/', include('multiuploader.urls')),
 )

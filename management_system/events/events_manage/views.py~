@@ -24,6 +24,7 @@ import glob
 import os
 from django.conf import settings
 from django.http import HttpResponse
+from multiuploader.forms import MultiUploadForm
 
 ############################################################
 ##################### RRESULTS ############################
@@ -34,10 +35,18 @@ from django.http import HttpResponse
 @should_be_allowed_to_view_event
 def show_results(request, event_id):
     event = Event.objects.get(id = event_id)
-    results = Result.objects.filter(event = event)
+    requests = Request.objects.filter(event = event, status = 'одобрена')
+    users = [each.user for each in requests]
+    users_and_results = {}
+    for each in users:
+        try:
+            result = Result.objects.get(user = user, event = event)
+            users_and_results.update({each : result})
+        except:
+            users_and_results.update({each : None})
     return render(request,
                   'events_manage_show_results.html',
-                  {'results' : results})
+                  {'users_and_results' : users_and_results, 'event' : event})
 
 @login_required
 @should_be_event_worker
