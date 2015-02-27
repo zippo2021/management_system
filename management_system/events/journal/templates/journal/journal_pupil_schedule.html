@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block event_menu %}
+    {% include 'event_menu.html' %}
+{% endblock %}
+
 {% block content %}
 {% csrf_token %}
 <html lang="en">
@@ -32,11 +36,11 @@
 
 </head>
 <body>
-    <div id="date_container">
+    <div id="date_container" class="form-group form-inline">
         <label for="from">From</label>
-        <input type="text" id="from" name="from" autocomplete="off">
+        <input type="text" id="from" class="form-control" name="from" autocomplete="off">
         <label for="to">to</label>
-        <input type="text" id="to" name="to" autocomplete="off">
+        <input type="text" id="to" class="form-control" name="to" autocomplete="off">
     </div>
     <div id="schedule">
     </div>

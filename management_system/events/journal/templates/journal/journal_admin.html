@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block event_menu %}
+	{% include 'event_menu.html' %}
+{% endblock %}
 {% block content %}
 {% csrf_token %}
 <html lang="en">
@@ -32,21 +35,23 @@
 
 </head>
 <body>
-    <div id="date_container">
+    <div id="date_container" class="form-inline form-group">
         <label for="from">From</label>
-        <input type="text" id="from" name="from" autocomplete="off">
+        <input type="text" class="form-control" style="width: 200px" id="from" name="from" autocomplete="off">
         <label for="to">to</label>
-        <input type="text" id="to" name="to" autocomplete="off">
-    </div>
-    <div id="group_select_container">
-        <select size="1" id="groups_list" style="width: 200px">
+        <input type="text" class="form-control" id="to" name="to" style="width: 200px" autocomplete="off">
+	</div>
+    <div id="group_select_container" class="form-group">
+		<p>
+        <select size="1" id="groups_list" class="form-control" style="width: 200px">
         {% for group in groups %}
             <option value="{{ group.id }}">{{ group.label }}</option>
         {% endfor %}
         </select>
-    </div>
+    	</p>
+	</div>
 
-    <table border="2px">
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <td></td>
@@ -63,46 +68,53 @@
         </tbody>
     </table>
 
-    <button id="call_add_lesson_button">Добавить</button>
+    <button class="btn btn-primary" id="call_add_lesson_button">Добавить</button>
 
     <div id="add_window" hidden="hidden">
 
-        <div id="date_container">
+        <div id="date_container" class="form-group">
             <label for="lesson_date">Date</label>
-            <input type="text" id="lesson_date" name="lesson_date" autocomplete="off">
+            <input type="text" class="form-control" id="lesson_date" name="lesson_date" autocomplete="off">
         </div>
 
-        <div id="time_container">
-            <input id="start_time" type="text" class="time ui-timepicker-input" autocomplete="off">
-            <input id="end_time" type="text" class="time ui-timepicker-input" autocomplete="off">
+        <div id="time_container" class="form-group form-inline">
+            <input id="start_time" type="text" class="time ui-timepicker-input form-control" autocomplete="off">
+            <input id="end_time" type="text" class="time ui-timepicker-input form-control" autocomplete="off">
         </div>
 
-        <div id="subject_select_container">
-            <select size="1" id="subject_list" style="width: 200px">
+        <div id="subject_select_container" class="form-group form-inline">
+            <select size="1" id="subject_list" class="form-control" style="width: 200px">
             {% for subject in subjects %}
                 <option value="{{ subject.id }}">{{ subject.name }}</option>
             {% endfor %}
             </select>
-            <select size="1" id="teacher_list" style="width: 200px">
+            <select size="1" id="teacher_list" class="form-control" style="width: 200px">
                 {% for teacher in teachers %}
                     <option value="{{ teacher.id }}">{{ teacher.data }}</option>
                 {% endfor %}
             </select>
         </div>
-        <label for="lesson_place">Place</label>
-        <input id="lesson_place" type="text">
-        <div id="repeat_group" hidden="hidden">
-            <input id="repeat_box" type="checkbox">Repeat</input>
-            <select size="1" id="repeat_list" hidden="hidden" style="width: 200px">
-                <option value="1">Every day</option>
-                <option value="7">Every week</option>
-            </select>
-            <select size="1" id="until_list" hidden="hidden" style="width: 200px">
-                <option value="1">until event end</option>
-                <option value="2">times</option>
-            </select>
-            <select size="1" id="times_list" hidden="hidden" style="width: 50px">
-            </select>
+		<div class="form-group">
+        	<label for="lesson_place">Place</label>
+        	<input id="lesson_place" class="form-control" type="text">
+        </div>
+		<div id="repeat_group" class="form-group" hidden="hidden">
+			<div class="form-group form-inline">
+				<label for="repeat_box">Repeat</label>
+            	<input id="repeat_box" class="checkbox" type="checkbox">
+            </div>
+			<div class="form-group form-inline">
+				<select size="1" id="repeat_list" class="form-control" hidden="hidden" style="width: 200px">
+    	            <option value="1">Every day</option>
+       	    	    <option value="7">Every week</option>
+       		    </select>
+       	   	    <select size="1" id="until_list" class="form-control" hidden="hidden" style="width: 200px">
+                	<option value="1">until event end</option>
+                	<option value="2">times</option>
+         	    </select>
+           	    <select size="1" id="times_list" class="form-control" hidden="hidden" style="width: 50px">
+                </select>
+			</div>
         </div>
     </div>
 
