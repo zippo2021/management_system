@@ -11,13 +11,17 @@ import json
 from django.http import HttpResponse, HttpResponseNotFound
 import traceback
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.contrib.auth.decorators import login_required
+from decorators import should_be_staff, should_be_allowed_for_event
 
 #############
 ##  VIEWS  ##
 #############
-
+@login_required
+@should_be_staff
+@should_be_allowed_for_event
 def index(request, event_id):
+    event = Event.objects.get(id = event_id)
     if request.method == "GET":
         try:
             groups = StudyGroup.objects.filter(event__id=event_id)
@@ -37,6 +41,9 @@ def index(request, event_id):
 ###########
 
 
+@login_required
+@should_be_staff
+@should_be_allowed_for_event
 def delete_group(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -55,6 +62,9 @@ def delete_group(request, event_id):
         return HttpResponseNotFound(request)
 
 
+@login_required
+@should_be_staff
+@should_be_allowed_for_event
 def add_group(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -79,6 +89,9 @@ def add_group(request, event_id):
         return HttpResponseNotFound(request)
 
 
+@login_required
+@should_be_staff
+@should_be_allowed_for_event
 def get_group_info(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -107,6 +120,9 @@ def get_group_info(request, event_id):
         return HttpResponseNotFound(request)
 
 
+@login_required
+@should_be_staff
+@should_be_allowed_for_event
 def save_group_members(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()

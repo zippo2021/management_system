@@ -15,18 +15,49 @@ from events.events_manage.forms import PriceChoiceForm, ResultForm, AcceptanceEm
 from user_manager.permissions import perms_to_classes
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
-from decorators import should_be_event_worker,should_be_allowed_for_event, should_be_allowed_to_view_event
+from decorators import should_be_event_worker, should_be_allowed_for_event,\
+should_be_allowed_to_view_event, should_have_filled_data,\
+should_be_regular, should_be_allowed_to_view_event, should_be_defined
 from django.contrib.auth.decorators import login_required
 from base_source_functions import send_templated_email
 import glob
 import os
 from django.conf import settings
 from django.http import HttpResponse
+from multiuploader.forms import MultiUploadForm
+
+############################################################
+##################### RRESULTS ############################
+##########################################################
 
 @login_required
+@should_be_event_worker
+@should_be_allowed_to_view_event
+def show_results(request, event_id):
+    event = Event.objects.get(id = event_id)
+    if event.has_journal:
+        return redirect('events_manage_main', event.id)
+    requests = Request.objects.filter(event = event, status = 'одобрена')
+    users = [each.user for each in requests]
+    users_and_results = {}
+    for each in users:
+        try:
+            result = Result.objects.get(user = user, event = event)
+            users_and_results.update({each : result})
+        except:
+            users_and_results.update({each : None})
+    return render(request,
+                  'events_manage_show_results.html',
+                  {'users_and_results' : users_and_results, 'event' : event})
+
+@login_required
+@should_be_event_worker
+@should_be_allowed_for_event
 def edit_or_create_result(request, event_id, user_id):
     user = RegularUser.objects.get(id = user_id)
     event = Event.objects.get(id = event_id)
+    if event.has_journal:
+        return redirect('events_manage_main', event.id)
     result, created = Result.objects.get_or_create(event = event, user = user)
     if request.method == 'POST':
         form = ResultForm(request.POST, instance = result)
@@ -40,6 +71,7 @@ def edit_or_create_result(request, event_id, user_id):
                   {'form' : form})
 
 @login_required
+@should_be_defined
 @should_be_allowed_to_view_event
 def main(request,event_id):
     event = Event.objects.get(id = event_id)
@@ -57,6 +89,8 @@ def main(request,event_id):
 #############################################################
 
 @login_required
+@should_be_event_worker
+@should_be_allowed_for_event
 def choose_users(request,event_id, role):
     event = Event.objects.get(id = event_id)
     free_users = globals()[perms_to_classes[role]]\
@@ -71,6 +105,8 @@ def choose_users(request,event_id, role):
                   context)
 
 @login_required
+@should_be_event_worker
+@should_be_allowed_for_event
 def invite(request,event_id, uid, role):           
     event = Event.objects.get(id = event_id)
     user = User.objects.get(id = uid)
@@ -82,6 +118,8 @@ def invite(request,event_id, uid, role):
                     event_id = event_id)
 
 @login_required
+@should_be_event_worker
+@should_be_allowed_for_event
 def exclude(request, event_id, uid, role):
     event = Event.objects.get(id = event_id)
     user = User.objects.get(id = uid)
@@ -97,10 +135,12 @@ def exclude(request, event_id, uid, role):
 ##############################################################
 
 @login_required
+@should_be_event_worker
+@should_be_allowed_for_event
 def show_requests(request,event_id):
     event = Event.objects.get(id = event_id)
     requests = Request.objects.filter(event = event_id)
-    price_groups = event.PriceGroup.all()
+    price_groups = event.PriceGroup.all().order_by('price')
     if event.is_private:
         accept = True
     else:
@@ -115,6 +155,7 @@ def show_requests(request,event_id):
 
 @login_required
 @should_be_event_worker
+@should_be_allowed_for_event
 def accept_request(request, event_id, request_id):
     current_rq = Request.objects.get(id=request_id)
     user = current_rq.user
@@ -128,7 +169,7 @@ def accept_request(request, event_id, request_id):
             p_group = form.cleaned_data['price_group']
             files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
             try:
-                template_file = Template(get_template_from_string(EmailTemplate.objects.get(event = event).text))
+                template_file = get_template_from_string(EmailTemplate.objects.get(event = event).text)
                 send_templated_email(
                         subject='Подтверждение заявки',
                         template_file = template_file,
@@ -154,6 +195,8 @@ def accept_request(request, event_id, request_id):
                   {'form':form, 'event':event})
 
 @login_required
+@should_be_event_worker
+@should_be_allowed_for_event
 def decline_request(request, event_id, request_id):    
     current_rq = Request.objects.get(id=request_id)
     event = current_rq.event
@@ -162,6 +205,8 @@ def decline_request(request, event_id, request_id):
     return redirect('events_manage_show_requests', event_id = event.id)
 
 @login_required
+@should_be_event_worker
+@should_be_allowed_for_event
 def pop_back_request(request, event_id, request_id):
     current_rq = Request.objects.get(id=request_id)
     event = current_rq.event
@@ -170,6 +215,8 @@ def pop_back_request(request, event_id, request_id):
     return redirect('events_manage_show_requests', event_id = event.id)
     
 @login_required
+@should_be_regular
+@should_be_allowed_to_view_event
 def place_request(request, event_id):
     event = Event.objects.get(id = event_id)
     e_request, created = Request.objects.get_or_create(event = event, user = request.user.UserData.RegularUser)
@@ -178,13 +225,25 @@ def place_request(request, event_id):
         e_request.save()
     else:
         pass #FIXME
-    return redirect('event_manage_main',event_id)
+    return redirect('events_manage_main', event.id)
+
+@login_required
+@should_be_regular
+@should_be_allowed_to_view_event
+def undo_request(request, event_id, request_id):
+    event = Event.objects.get(id = event_id)
+    e_request = Request.objects.get(id = request_id)
+    if e_request.status.encode('utf-8')== 'в обработке':
+        e_request.delete()
+    return redirect('events_manage_main', event_id)
 
 ###############################################################
 ###################### EMAILS ################################
 #############################################################
 
 @login_required
+@should_be_allowed_for_event
+@should_be_event_worker
 def create_acceptance_email_template(request,event_id):
     event = Event.objects.get(id = event_id)
     template, created = EmailTemplate.objects.\

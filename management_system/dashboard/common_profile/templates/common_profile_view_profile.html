@@ -4,9 +4,6 @@
 {% endblock %}
 {% load custom_template_filters %}
 {% load staticfiles %}
-{% block extrahead %} 
- <script type="text/javascript" src="{% static 'js/modals.js' %}"></script>
-{% endblock %}
 {% block content %}
 <table class="table">
 	<thead>
@@ -16,7 +13,7 @@
                 
 				Базовая информация
     			{% if edit_perm == True %}
-					<a id="userdata_edit_link" href = "#" onClick="ModalToggle('{% url 'userdata_edit' %}','{% url 'userdata_edit' %}','#userdata_form','Базовая информация'); return false;" >Редактировать</a>
+					<a id="userdata_edit_link" href = "#" onClick="ModalToggle('{% url 'userdata_edit' %}','{% url 'userdata_edit' %}','#form','Базовая информация'); return false;" >Редактировать</a>
 				{% endif %}
 			</td>
 			<td width=25%>
@@ -31,18 +28,23 @@
 	<tbody>
 		<tr>
     		<td>
-        		<img src="{{ base_data.avatar }}"/> 
+        		<img src="{{ base_data.super_avatar }}"/> 
     		</td>
    			<td>
-        		<p>
-					ФИО:<br>
+        		<p class="lead">
 					{{ base_data.last_name }}
 					{{ base_data.first_name }}
 					{{ base_data.middle_name }}
 				</p>
         		<p>
-					Телефон:<br>
-					{{ base_data.phone }}
+					E-mail:<br>
+					{{ base_data.user.email }}
+				</p>
+				<p>
+					{% if 'admin' in user_permissions or edit_perm %}
+						Телефон:<br>
+						{{ base_data.phone }}
+					{% endif %}
 				</p>
     		</td>
 			<td>
@@ -57,43 +59,55 @@
 </table>
 
 {% for role,fields in additional_data.items %}
+{% if fields %}
 <table class="table table-striped">
 	<thead>
-    		{% if fields %}
+    {% if role == 'regular' %}
 			<tr>
 				<td width=33%>
 					<p>
 					{{ perms_to_language|get_item:role }}
         			{% if edit_perm == True %}
-                        {% if role == 'regular' %}
                             <a id="common_profile_edit_link" href = "#" onClick="ModalToggle('{% url 'regular_user_wizard' %}','{% url 'regular_user_wizard' %}','#form','Специальная информация'); return false;" >Редактировать</a>
-                        {% endif %}
-
-                        {% if role == 'teacher' %}
-                            <a id="common_profile_edit_link" href = "#" onClick="ModalToggle('{% url 'teacher_edit' %}','{% url 'teacher_edit' %}','#form','Специальная информация'); return false;" >Редактировать</a>
-                        {% endif %}
-
-                        
-                        
        				{% endif %}
 					</p>
 				</td>
 				<td width=33%></td>
 				<td width=33%></td>
 			</tr>
-	</thead>
-	</tbody>
+	{% endif %}
+    {% if role == 'teacher' %}
 			<tr>
+				<td>
+					<p>
+					{{ perms_to_language|get_item:role }}
+        			{% if edit_perm == True %}
+                            <a id="common_profile_edit_link" href = "#" onClick="ModalToggle('{% url 'teacher_edit' %}','{% url 'teacher_edit' %}','#form','Специальная информация'); return false;" >Редактировать</a>
+       				{% endif %}
+					</p>
+				</td>
+			</tr>
+    {% endif %} 
+	</thead>
+	<tbody>
+		<tr>
 			{% for key, value in fields.items %}
-				<td> {{ key }} : {% if value %} {{ value }} {% endif %}</td>
+				<td>
+				{% if role == 'regular' %}
+					{{ key }}:
+				{% endif %}
+				{% if value %}
+				{{ value }}
+				{% endif %}
+				</td>
 				{% if forloop.counter|divisibleby:"3" %}
 					</tr><tr>
 				{% endif %}
 			{% endfor %}
    			</tr>
-			{% endif %}
 	</tbody>
 </table>	
+{% endif %}
 {% endfor %}
 
 

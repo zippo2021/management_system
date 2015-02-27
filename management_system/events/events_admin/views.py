@@ -26,7 +26,7 @@ class EventWizard(SessionWizardView):
             journey.event = event
             journey.save()
         
-        return redirect('completed')
+        return redirect('event_main',event_id = event.id)
 
 def add_journey_data_condition(wizard):
     cleaned_data = wizard.get_cleaned_data_for_step('0') or {}
@@ -77,11 +77,14 @@ def edit(request, event_id, base_or_journey):
 @should_be_admin
 def deactivate(request, event_id):
     event = Event.objects.get(id = event_id)
-    event.is_active = not(event.is_active)
+    tmp = event.is_active
+    print 'current status',event.is_active
+    event.is_active = not(tmp)
+    print 'changed status',event.is_active
     event.save()
     return redirect('events_manage_main', event_id)
 
-
+#test view!
 @login_required
 @should_be_admin
 def show_all(request):

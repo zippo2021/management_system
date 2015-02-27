@@ -3,35 +3,47 @@
 	{% include 'event_menu.html' %}
 {% endblock %}
 {% load staticfiles %}
-{% block extrahead %} 
- <script type="text/javascript" src="{% static 'js/modals.js' %}"></script>
-{% endblock %}
 {% block content %}
 <p>
 Ценовые группы 
 <a id="price_group_add_link" href = "#" onClick="ModalToggle('{% url 'price_groups_add' event.id %}','{% url 'price_groups_add' event.id %}','#form','Добавление ценовой группы'); return false;" >Добавить</a>
 </p>
-
-<p>
+<table class="table">
+<tr>
 {% for each in price_groups %}
-	{{ each }}<br>
+	{% if forloop.counter|divisibleby:"7" %}
+	</tr><tr>
+	{% endif %}
+	<td><pre>{{ each }}</pre></td>
 {% endfor %}
-</p>
+</tr>
+</table>
+
+{% if users %}
 <table class="table table-hover">
 <thead>
 	<tr>
-		<td>ФИО</td>
-		<td>Статус</td>
-		<td></td>
+		<td width=30%>ФИО</td>
+		<td width=20%>Город</td>
+		<td width=20%>Школа</td>
+		<td width=15%>Статус</td>
+		<td width=15%></td>
 	</tr>
 </thead>
 <tbody>
 	{% for each in users  %}
-		<tr>
+		<tr {% if each.status == 'одобрена' %}class="info"{% endif %}
+			{% if each.status == 'в обработке' %}class=""{% endif %}
+			{% if each.status == 'отклонена' %}class="danger"{% endif %}>
     		<td>
-        		<a href="{% url 'common_profile_view_profile' each.user.data.id %}">{{ each.user.data.last_name }} {{ each.user.data.first_name }} {{ each.user.data.middle_name }}</a>        
+        		<a href="#" onClick="linkWrapper('{% url 'common_profile_view_profile' each.user.data.id %}','{{ request.path }}')">{{ each.user.data.last_name }} {{ each.user.data.first_name }} {{ each.user.data.middle_name }}</a>        
     		</td>
+			<td>
+				{{ each.user.data.RegularUser.city }}
     		<td>
+				{{ each.user.data.RegularUser.school }}
+			</td>
+			<td>
     			{{ each.status }}
 				{% if each.status == 'одобрена' %}
 					({{ each.price_group }})
@@ -42,9 +54,9 @@
    					{% if each.status == 'в обработке'  %} 
                         <a id="accept_link" href = "#" onClick="ModalToggle('{% url 'events_manage_accept_request' event.id each.id  %}','{% url 'events_manage_accept_request' event.id each.id  %}','#form','Одобрение участника'); return false;" >Одобрить</a>						
                         <br>
-        				<a href="{% url 'events_manage_decline_request' event.id each.id %}" > Отказать</a>
+        				<a href="#" onClick="linkWrapper('{% url 'events_manage_decline_request' event.id each.id %}','{{ request.path }}')"> Отказать</a>
 					{% else %}
-						<a href="{% url 'events_manage_pop_back_request' event.id each.id %}">Вернуть в заявки</a>
+						<a href="#" onClick="linkWrapper('{% url 'events_manage_pop_back_request' event.id each.id %}','{{ request.path }}')">Вернуть в заявки</a>
 					{% endif %}
 				{% endif %}
 			</td>
@@ -52,4 +64,7 @@
 	{% endfor %}
 </tbody>
 </table>
+{% else %}
+<p class="lead">Заявки отсутствуют</p>
+{% endif %}
 {% endblock %}

@@ -42,7 +42,8 @@ class DocumentWizard(SessionWizardView):
             other = form_list[1].save(commit = False)
             other.user = self.request.user.UserData
             other.save()
-        return redirect('completed')
+        status = "success"
+        return HttpResponse(status)
 
 def add_passport_condition(wizard):
     cleaned_data = wizard.get_cleaned_data_for_step('0') or {}
@@ -82,7 +83,7 @@ end of Wizard
 def edit(request):
     if request.method == 'POST':    
         #userdata always exists if we passed should_have_data
-        form = UserDataForm(request.POST, instance = request.user.UserData)
+        form = UserDataForm(request.POST,request.FILES, instance = request.user.UserData)
         #validate form and redirect
         if form.is_valid():
             user_data = form.save(commit = False)

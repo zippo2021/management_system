@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render, redirect
-from django.contrib.admin.views.decorators import staff_member_required
 from user_manager.forms import CreateUserForm, EditPermissionsForm
+from decorators import should_be_admin
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from user_manager.source_functions import create_user, get_staff_members
 from base_source_functions import send_templated_email
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.contrib.auth.decorators import user_passes_test
-from user_manager.permissions import perms_to_classes
+from user_manager.permissions import perms_to_classes, perms_to_language
+from dashboard.common_profile.source_functions import perms_to_list
 
-@staff_member_required
+@login_required
+@should_be_admin
 def create(request):
 	if request.method == 'POST':
 		form = CreateUserForm(request.POST)
@@ -19,6 +21,7 @@ def create(request):
 			#creating user
 			perms = { each : form.cleaned_data[each] 
 					  for each in perms_to_classes.keys()}
+
 			password = User.objects.make_random_password(length = 8)
 			user = create_user(username = form.cleaned_data['email'],
 							  password = password,
@@ -30,8 +33,9 @@ def create(request):
 				email_template_name = 'user_manager_create_email.html',
 				email_context = {'username' : user.username,
 								 'password' : password,
-								 'perms' : perms,
-								 'admin' : user.is_staff
+								 'perms' : perms_to_list(perms),
+								 'admin' : user.is_staff,
+                                 'perms_to_language' : perms_to_language,
 								 },
 				recipients = user.email,
 			)
@@ -43,7 +47,8 @@ def create(request):
 		
 	return render(request, 'user_manager_create.html', {'form' : form})
 
-@staff_member_required
+@login_required
+@should_be_admin
 def show_all(request):
 	staff_members = get_staff_members()
 	return render(request,
@@ -51,7 +56,8 @@ def show_all(request):
 				  {'staff_members' : staff_members}
 		   )
 		   
-@staff_member_required
+@login_required
+@should_be_admin
 def edit_permissions(request, user_id):
 	user = User.objects.get(id = user_id)
 	if request.method == 'POST':
@@ -74,12 +80,13 @@ def edit_permissions(request, user_id):
 				  'user_manager_edit_permissions.html',
 				  {'form' : form })
 
-@user_passes_test(lambda u: u.is_superuser)
+@login_required
+@should_be_admin
 def deactivate(request, user_id):
-	user = User.objects.get(id = user_id)
-	#we can not deactivate superadmin
-	if not(user.UserData.Admin.is_superadmin):
-		user.is_active = not(user.is_active)
-		user.save()
-	else: pass #FIXME
-	return redirect('user_manager_show_all')
+    user = User.objects.get(id = user_id)
+    #we can not deactivate superadmin
+    if not(user.UserData.Admin.is_superadmin):
+        user.is_active = not(user.is_active)
+        user.save()
+    else: pass #FIXME
+    return redirect('user_manager_show_all')

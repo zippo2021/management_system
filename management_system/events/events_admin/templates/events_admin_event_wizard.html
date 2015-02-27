@@ -3,7 +3,6 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }} </p>
 <form action = "" method = "post">
 {% csrf_token %}
 <table>

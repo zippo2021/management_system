@@ -1,23 +1,34 @@
 thead {
-  font-weight:bold;
+    font-weight:bold;
+}
+
+.top-menu-link {
+	float: right;
+	color: white;
+	margin-right: 40px;
+}
+
+#panel-wrapper {
+	position: absolute;
+	top: 20%; left: 0; right: 0; 
 }
 
 #reg-panel {
-	margin : auto;
+	margin : 0 auto;
 	position: absolute;
 	top: 0; left: 0; bottom: 0; right: 0; 
 	width : 25%;
-	height: 410px;
+	display: table;
 }
 
 #auth-panel {
-	margin : auto;
+	margin : 0 auto;
 	position: absolute;
 	top: 0; left: 0; bottom: 0; right: 0; 
 	width : 25%;
-	height: 270px;
+	display: table;
 }
 
-#option-link {
+.option-link {
 	float: right;
 }

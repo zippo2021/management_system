@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from dashboard.userdata.models import UserData
 from dashboard.common_profile.source_functions import create_info
 from dashboard.userdata.documents import docs_to_language
+from decorators import should_have_filled_data
 # Create your views here.
 
 @login_required

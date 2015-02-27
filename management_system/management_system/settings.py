@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles', 
     'django.contrib.humanize',  # Required for elapsed time formatting
+    'multiuploader',
     'crispy_forms',
     'registration',
     'customuseradmin',
@@ -66,8 +67,9 @@ INSTALLED_APPS = (
     'export',
     'schools',
     'search',
-	'user_manager',
+    'user_manager',
     'news',
+    'feedback',
 )
 
 MIDDLEWARE_CLASSES = (  
@@ -122,7 +124,7 @@ DATABASES = {
 
 # Django-registration
 
-ACCOUNT_ACTIVATION_DAYS = 2
+ACCOUNT_ACTIVATION_DAYS = 1
 AUTH_USER_EMAIL_UNIQUE = True
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 587
@@ -130,7 +132,7 @@ EMAIL_HOST_USER = 'managtest@yandex.ru'
 EMAIL_HOST_PASSWORD = 'qwerty2021'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'managtest@yandex.ru'
-
+LOGIN_REDIRECT_URL = '/news/main/'
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
@@ -155,15 +157,26 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 			 'context_processors.permission_translation_processor',
              'context_processors.events_processor',
              'context_processors.documents_translation_processor',
-             'context_processors.user_permissions_processor',)
+             'context_processors.user_permissions_processor',
+             'multiuploader.context_processors.booleans',
+            )
      )
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(BASE_DIR,"files/")
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+'''
+UPLOADCARE = {
+    'pub_key': '40f8c675ce99f1fa7ab6',
+    'secret': 'd44ce3444b9a9218c6e9',
+}
+'''
+
 EVENT_ATTACHMENTS_DIR = os.path.join(BASE_DIR, "files/events/")
 EVENT_EMAIL_TEMPLATES_DIR = os.path.join(BASE_DIR, "email_templates/events/")

@@ -11,7 +11,7 @@
 	<thead>
 		<tr>
 			<td>
-				<p>{{ event.name }}</p>
+				<p class="lead">{{ event.name }}</p>
 			</td>
 			<td></td>
 			<td></td>
@@ -21,10 +21,11 @@
 		<tr>
 			<td>
 				<p>
-				Базовая информация
+				<b>Базовая информация
 					{% if 'admin' in user_permissions %}
                         <a id="edit_event_link" href = "#" onClick="ModalToggle('{% url 'events_admin_edit' event.id 'base' %}','{% url 'events_admin_edit' event.id 'base' %}','#form','Редактирование '); return false;" >Редактирование</a>
 					{% endif %}
+				</b>
 				</p>
 				<p>
 					<ul>
@@ -49,13 +50,20 @@
 					{% if rq %}
 						<p>
 							Информация о заявке:
-								{{ rq.status }}
+							{{ rq.status }}
+							{% if rq.status == 'в обработке' %}
+							<b>
+							<a href="
+						 {% url 'events_manage_undo_request' event.id rq.id %}">
+								Отменить
+							</a>
+							</b>
+							{% endif %}
 						</p>
 					{% else %}
 						<p>
-							<a href="
-								{% url 'events_manage_place_request' event.id %}
-							">
+                            {% url 'events_manage_place_request' event.id as events_manage_place_request %}
+							<a href="#" onClick="linkWrapper('{{ events_manage_place_request }}','{{ request.path }}')">
 								Подать заявку
 							</a>
 						</p>
@@ -63,23 +71,17 @@
 				{% endif %}
 				{% if 'event_worker' in user_permissions %}
         			<p>
-					<a href="
-					{% url 'events_manage_choose_users' event.id 'teacher' %}
-					">
+					<a href="#" onClick="linkWrapper('{% url 'events_manage_choose_users' event.id 'teacher' %}','{{ request.path }}')">
 						Пригласить учителей
 					</a>
 					</p>
 					<p>
-       				<a href="
-					{% url 'events_manage_choose_users' event.id 'mentor'%}
-					">
+       				<a href="#" onClick="linkWrapper('{% url 'events_manage_choose_users' event.id 'mentor'%}','{{ request.path }}')">
 						Пригласить воспитателей
 					</a>
 					</p>
         			<p>
-        			<a href="
-					{% url 'events_manage_choose_users' event.id 'observer' %}
-					">
+        			<a href="#" onClick="linkWrapper('{% url 'events_manage_choose_users' event.id 'observer' %}','{{ request.path }}')">
 						Пригласить наблюдателей
 					</a>
 					</p>		
@@ -91,7 +93,7 @@
 				{% endif %}
 				{% if 'admin' in user_permissions %}
 					<p>
-					<a href="{% url 'events_admin_deactivate' event.id %}">
+					<a href="#" onClick="linkWrapper('{% url 'events_admin_deactivate' event.id %}','{{ request.path }}')">
 						{% if event.is_active %}
 							Заморозить
 						{% else %}
@@ -111,10 +113,11 @@
 			<td>
 				{% if event.is_journey %}
 					<p>
-						Информация о поездке
+					<b>Информация о поездке
 						{% if 'admin' in user_permissions %}
                             <a id="journey_edit_link" href = "#" onClick="ModalToggle('{% url 'events_admin_edit' event.id 'journey' %}','{% url 'events_admin_edit' event.id 'journey' %}','#form','Редактирование информаци о поездке'); return false;" >Редактировать</a>
 						{% endif %}
+					</b>
 					</p>
 					<p>Время отъезда: {{ event.JourneyData.departure_time }}</p>
 					<p>Информация: {{ event.JourneyData.info|linebreaks }}</p>

@@ -6,20 +6,18 @@
 {% block main_menu %}
  			<ul id="main_menu" class="nav nav-tabs nav-justified">
 				<li {% if request.path == news_main %}class="active" {% endif %}>
-					<a href="{{ news_main }}">Новости </a>
+					<a href="#" onClick="linkWrapper('{{ news_main }}','{{ request.path }}')">Новости </a>
 				</li>
                 {% if  user.is_authenticated %}
                 	<li {% if request.path == common_profile_view_profile %}class="active" {% endif %}>
-						<a href="{{ common_profile_view_profile }}">
-							Профиль
-						</a>
+                        <a href="#" onClick="linkWrapper('{{ common_profile_view_profile }}','{{ request.path }}')">Профиль</a>
 					</li>
        	        	{% if user.UserData.Admin.is_active %}
 						<li {% if request.path == schools_show_unproved %}class="active" {% endif %}>
-							<a href="{{ schools_show_unproved }}">Школы</a>
+							<a href="#" onClick="linkWrapper('{{ schools_show_unproved }}','{{ request.path }}')">Школы</a>
 						</li>
             	        <li {% if request.path == user_manager_show_all %}class="active" {% endif %}>
-							<a href="{{ user_manager_show_all }}">
+							<a href="#" onClick="linkWrapper('{{ user_manager_show_all }}','{{ request.path }}')">
 								Управление персоналом 
 							</a>
 						</li>

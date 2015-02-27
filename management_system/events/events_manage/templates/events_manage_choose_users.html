@@ -3,34 +3,39 @@
 	{% include 'event_menu.html' %}
 {% endblock %}
 {% block content %}
+{% if free_users or not_free_users %}
 <table class="table table-hover">
 <thead>
 	<tr>
-		<td>
+		<td width=40%>
 			ФИО
 		</td>
-		<td>
+		<td width=25%>
+			E-mail
+		</td>
+		<td width=20%>
 			Статус
 		</td>
-		<td>
+		<td width=15%>
 		</td>
 	</tr>
 </thead>
 <tbody>
 {% for each in not_free_users %}
-<tr>
+<tr class="info">
     <td>
-        <a href="{% url 'common_profile_view_profile' each.data.id %}">
+        <a href="#" onClick="linkWrapper('{% url 'common_profile_view_profile' each.data.id %}','{{ request.path }}')">
 			{{ each.data.last_name }} {{ each.data.first_name }} {{ each.data.middle_name }}
 		</a>        
     </td>
-    <td>
+	<td>
+		{{ each.data.user.email }}
+    </td>
+	<td>
     	Приглашен
 	</td>
 	<td>
-        <a href="
-			{% url 'events_manage_exclude' event.id each.data.id role %}
-		">
+        <a href="#" onClick="linkWrapper('{% url 'events_manage_exclude' event.id each.data.id role %}','{{ request.path }}')">
 			Отменить
 		</a>
 	</td>
@@ -39,15 +44,18 @@
 {% for each in free_users %}
 <tr>
     <td>
-        <a href="{% url 'common_profile_view_profile' each.data.id %}">
+        <a href="#" onClick="linkWrapper('{% url 'common_profile_view_profile' each.data.id %}','{{ request.path }}')">
 			{{ each.data.last_name }} {{ each.data.first_name }} {{ each.data.middle_name }}
 		</a>        
+    </td>
+	<td>
+		{{ each.data.user.email }}
     </td>
     <td>
     	Свободен
 	</td>
 	<td>
-        <a href="{% url 'events_manage_invite' event.id each.data.id role %}" >
+        <a href="#" onClick="linkWrapper('{% url 'events_manage_invite' event.id each.data.id role %}','{{ request.path }}')">
 			Пригласить
 		</a>
     </td>
@@ -55,4 +63,7 @@
 {% endfor %}
 </tbody>
 </table>
+{% else %}
+<p class="lead">Список персонала пуст</p>
+{% endif %}
 {% endblock %}
