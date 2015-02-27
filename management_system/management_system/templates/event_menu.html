@@ -31,7 +31,8 @@
 {% endif %}
 
 {% if 'admin' in user_permissions or 'event_worker' in user_permissions or 'teacher' in user_permissions or 'observer' in user_permissions %}
-   <li><a href="#" onClick="linkWrapper('{{ study_groups_index }}','{{ request.path }}')">Учебные группы</a>
+   <li {% if request.path == study_groups_index %} class="active" {% endif %}>
+   <a href="#" onClick="linkWrapper('{{ study_groups_index }}','{{ request.path }}')">Учебные группы</a>
 {% endif %}
 
 </ul>

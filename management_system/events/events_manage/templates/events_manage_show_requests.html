@@ -11,6 +11,9 @@
 <table class="table">
 <tr>
 {% for each in price_groups %}
+	{% if forloop.counter|divisibleby:"7" %}
+	</tr><tr>
+	{% endif %}
 	<td><pre>{{ each }}</pre></td>
 {% endfor %}
 </tr>
@@ -29,7 +32,9 @@
 </thead>
 <tbody>
 	{% for each in users  %}
-		<tr>
+		<tr {% if each.status == 'одобрена' %}class="info"{% endif %}
+			{% if each.status == 'в обработке' %}class=""{% endif %}
+			{% if each.status == 'отклонена' %}class="danger"{% endif %}>
     		<td>
         		<a href="#" onClick="linkWrapper('{% url 'common_profile_view_profile' each.user.data.id %}','{{ request.path }}')">{{ each.user.data.last_name }} {{ each.user.data.first_name }} {{ each.user.data.middle_name }}</a>        
     		</td>

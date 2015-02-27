@@ -7,10 +7,13 @@
 <table class="table">
 	<thead>
 		<tr>
-			<td>
-				<p class="lead">{{ event.name }}</p>
+			<td width=70%>
+				<p class="lead">{{ event.name }}
+					{% if not event.is_active %}
+					(Закрыто)
+					{% endif %}
+				</p>
 			</td>
-			<td></td>
 			<td></td>
 		<tr>
 	</thead>
@@ -97,10 +100,6 @@
 							Разморозить
 						{% endif %}
 					</a>
-					{% if not event.is_active %}
-						<br>
-						<font color = "red">Заморожено</font>
-					{% endif %}
 					</p>
 				{% endif %}
 

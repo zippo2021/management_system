@@ -68,6 +68,7 @@ INSTALLED_APPS = (
     'search',
 	'user_manager',
     'news',
+    'feedback'
 )
 
 MIDDLEWARE_CLASSES = (  

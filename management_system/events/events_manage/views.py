@@ -70,7 +70,7 @@ def edit_or_create_result(request, event_id, user_id):
                   {'form' : form})
 
 @login_required
-#@should_be_defined
+@should_be_defined
 @should_be_allowed_to_view_event
 def main(request,event_id):
     event = Event.objects.get(id = event_id)
@@ -169,7 +169,6 @@ def accept_request(request, event_id, request_id):
             files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
             try:
                 template_file = Template(get_template_from_string(EmailTemplate.objects.get(event = event).text))
-                print template_file.render({})
                 send_templated_email(
                         subject='Подтверждение заявки',
                         template_file = template_file,
