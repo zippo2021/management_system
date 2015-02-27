@@ -6,13 +6,16 @@
 <table class="table table-hover">
 <thead>
 	<tr>
-		<td>
+		<td width=40%>
 			ФИО
 		</td>
-		<td>
+		<td width=25%>
+			E-mail
+		</td>
+		<td width=20%>
 			Статус
 		</td>
-		<td>
+		<td width=15%>
 		</td>
 	</tr>
 </thead>
@@ -24,7 +27,10 @@
 			{{ each.data.last_name }} {{ each.data.first_name }} {{ each.data.middle_name }}
 		</a>        
     </td>
-    <td>
+	<td>
+		{{ each.data.user.email }}
+    </td>
+	<td>
     	Приглашен
 	</td>
 	<td>
@@ -40,6 +46,9 @@
         <a href="#" onClick="linkWrapper('{% url 'common_profile_view_profile' each.data.id %}','{{ request.path }}')">
 			{{ each.data.last_name }} {{ each.data.first_name }} {{ each.data.middle_name }}
 		</a>        
+    </td>
+	<td>
+		{{ each.data.user.email }}
     </td>
     <td>
     	Свободен

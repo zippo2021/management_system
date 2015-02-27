@@ -1,5 +1,7 @@
 {% url 'events_manage_main' event.id as events_manage_main %}
 {% url 'events_manage_show_requests' event.id as events_manage_show_requests %}
+{% url 'study_groups_index' event.id as study_groups_index %}
+
 
 {% block event_menu %}
 <ul id="event_menu" class="nav nav-tabs nav-justified">
@@ -28,7 +30,7 @@
 {% endif %}
 
 {% if 'admin' in user_permissions or 'event_worker' in user_permissions or 'teacher' in user_permissions or 'observer' in user_permissions %}
-   <li><a href="#" onClick="linkWrapper('{% url 'study_groups_index' event.id %}','{{ request.path }}')">Учебные группы</a>
+   <li><a href="#" onClick="linkWrapper('{{ study_groups_index }}','{{ request.path }}')">Учебные группы</a>
 {% endif %}
 
 </ul>

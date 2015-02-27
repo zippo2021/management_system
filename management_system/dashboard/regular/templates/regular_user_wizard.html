@@ -1,6 +1,6 @@
 {% load crispy_forms_tags %}
 <input type="hidden" id="next_step" name="variable" value="{{ wizard.steps.next }}">
-<p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }} </p>
+<p>Шаг {{ wizard.steps.step1 }}</p>
 <form action = "" id='form' method = "post">
 {% csrf_token %}
 <table>
