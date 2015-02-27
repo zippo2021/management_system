@@ -15,13 +15,29 @@ from events.events_manage.forms import PriceChoiceForm, ResultForm, AcceptanceEm
 from user_manager.permissions import perms_to_classes
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
-from decorators import should_be_event_worker, should_be_allowed_for_event, should_be_allowed_to_view_event, should_have_filled_data, should_be_regular
+from decorators import should_be_event_worker, should_be_allowed_for_event,\
+should_be_allowed_to_view_event, should_have_filled_data,\
+should_be_regular, should_be_allowed_to_view_event
 from django.contrib.auth.decorators import login_required
 from base_source_functions import send_templated_email
 import glob
 import os
 from django.conf import settings
 from django.http import HttpResponse
+
+############################################################
+##################### RRESULTS ############################
+##########################################################
+
+@login_required
+@should_be_event_worker
+@should_be_allowed_to_view_event
+def show_results(request, event_id):
+    event = Event.objects.get(id = event_id)
+    results = Result.objects.filter(event = event)
+    return render(request,
+                  'events_manage_show_results.html',
+                  {'results' : results})
 
 @login_required
 @should_be_event_worker
