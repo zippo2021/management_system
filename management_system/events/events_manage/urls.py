@@ -4,9 +4,11 @@ from events.events_manage import views
 urlpatterns = [
 	url(r'^main/$', views.main,
                     name = 'events_manage_main'),
-    url(r'^result/(?P<user_id>\d+)',
+    url(r'^results/(?P<user_id>\d+)',
         views.edit_or_create_result,
                     name = 'events_manage_edit_or_create_result'),
+    url(r'^results/$', views.show_results,
+                    name = 'events_manage_show_results'),
     url(r'^choose/(?P<role>\w+)/$', views.choose_users,
                     name = 'events_manage_choose_users'),
     url(r'^invite/(?P<uid>\d+)/(?P<role>\w+)/$', views.invite,

@@ -1,7 +1,7 @@
 {% url 'events_manage_main' event.id as events_manage_main %}
 {% url 'events_manage_show_requests' event.id as events_manage_show_requests %}
 {% url 'study_groups_index' event.id as study_groups_index %}
-
+{% url 'events_manage_show_results' event.id as events_manage_show_results %}
 
 {% block event_menu %}
 <ul id="event_menu" class="nav nav-tabs nav-justified">
@@ -25,7 +25,8 @@
 	{% if event.has_journal %}
 		<li><a href="#">Журнал</a></li>
 	{% else %}
-		<li><a href="#">Результаты</a></li>
+		<li {% if request.path == events_manage_show_results %}class="active" {% endif %}>
+		<a href="#" onClick="linkWrapper('{{ events_manage_show_results}}','{{ request.path }}')">Результаты</a></li>
 	{% endif %}
 {% endif %}
 
