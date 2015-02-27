@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+{% csrf_token %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+    <link rel="stylesheet" type="text/css"  href="{% static 'external/bootstrap/css/bootstrap.min.css' %}"/>
+
+    <script type="text/javascript"  src="{% static 'external/js/jquery-1.11.1.min.js' %}"></script>
+    <script type="text/javascript"  src="{% static 'external/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript"  src="{% static 'js/common.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'external/js/jquery.timepicker.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'external/css/jquery.timepicker.css' %}"/>
+
+    <script type="text/javascript" src="{% static 'external/js/bootstrap-datepicker.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'external/css/bootstrap-datepicker.css' %}"/>
+
+    <script type="text/javascript"  src="{% static 'journal/js/journal_teacher_schedule.js' %}"></script>
+
+    <style type="text/css">
+        .datepicker{
+            z-index: 1100 !important;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="date_container">
+        <label for="from">From</label>
+        <input type="text" id="from" name="from" autocomplete="off">
+        <label for="to">to</label>
+        <input type="text" id="to" name="to" autocomplete="off">
+    </div>
+    <div id="schedule">
+    </div>
+
+
+    <table  border="2px" id="lessons_table" hidden="hidden">
+        <thead>
+            <tr>
+                <td colspan="5" id="lessons_date" align="center"></td>
+            </tr>
+        </thead>
+        <tbody id="lessons_data">
+            <tr>
+                <td>Время начала</td>
+                <td>Время окончания</td>
+                <td>Предмет</td>
+                <td>Группа</td>
+                <td>Место</td>
+            </tr>
+        </tbody>
+    </table>
+    <input type="hidden" id="event_id" value="{{ event_id }}"/>
+    <input type="hidden" id="event_start_date" value="{{ start_date }}"/>
+    <input type="hidden" id="event_end_date" value="{{ end_date }}"/>
+</body>
+</html>
+{% endblock %}

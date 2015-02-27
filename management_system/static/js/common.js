@@ -1,3 +1,12 @@
+function ParseDate(str) {
+    var dmy = str.split('/');
+    return new Date(dmy[2], dmy[1] - 1, dmy[0]);
+}
+
+function DayDiff(first, second) {
+    return (second-first)/(1000*60*60*24);
+}
+
 function PrepareAjax()
 {
     $.ajaxSetup({
