@@ -235,7 +235,7 @@ $(document).ready(function()
 
     $("#call_delete_group_button").click(function()
     {
-        SendDeleteGroupData();
+        ConfirmWindow('Вы действительно хотите удалить группу?', SendDeleteGroupData);
     });
 
     $("#add_to_group_button").click(function()

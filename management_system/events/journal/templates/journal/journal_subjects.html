@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block event_menu %}
-	{% include 'event_menu.html' %}
-{% endblock %}
 {% block content %}
 {% csrf_token %}
 <html lang="en">
@@ -25,7 +22,7 @@
     <script type="text/javascript" src="{% static 'external/js/bootstrap-datepicker.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'external/css/bootstrap-datepicker.css' %}"/>
 
-    <script type="text/javascript"  src="{% static 'journal/js/journal_pupil_marks.js' %}"></script>
+    <script type="text/javascript"  src="{% static 'journal/js/journal_subjects.js' %}"></script>
 
     <style type="text/css">
         .datepicker{
@@ -35,38 +32,24 @@
 
 </head>
 <body>
-    <div id="date_container">
-        <label for="from">From</label>
-        <input type="text" id="from" name="from" autocomplete="off">
-        <label for="to">to</label>
-        <input type="text" id="to" name="to" autocomplete="off">
-    </div>
-<div>
     <table border="2px">
         <thead>
             <tr>
-                <td><br></td>
+                <td></td>
+                <td>Предмет</td>
             </tr>
         </thead>
-        <tbody id="subjects_list">
+        <tbody id="subject_list">
         </tbody>
     </table>
-    <div style="overflow:auto;">
-        <table border="2px">
-            <thead id="lessons_dates">
-                <tr>
-                </tr>
-            </thead>
-            <tbody id="lessons_list">
-            </tbody>
-        </table>
-    </div>
-</div>
 
+    <button id="call_add_subject_button">Добавить</button>
+
+    <div id="add_window" hidden="hidden">
+        <input id="new_subject_title" placeholder="Название предмета" value=""/>
+    </div>
 
     <input type="hidden" id="event_id" value="{{ event.id }}"/>
-    <input type="hidden" id="event_start_date" value="{{ event.opened|date:"d/m/Y" }}"/>
-    <input type="hidden" id="event_end_date" value="{{ event.closed|date:"d/m/Y" }}"/>
 </body>
 </html>
 {% endblock %}

@@ -62,9 +62,9 @@
             </tr>
         </tbody>
     </table>
-    <input type="hidden" id="event_id" value="{{ event_id }}"/>
-    <input type="hidden" id="event_start_date" value="{{ start_date }}"/>
-    <input type="hidden" id="event_end_date" value="{{ end_date }}"/>
+    <input type="hidden" id="event_id" value="{{ event.id }}"/>
+    <input type="hidden" id="event_start_date" value="{{ event.opened|date:"d/m/Y" }}"/>
+    <input type="hidden" id="event_end_date" value="{{ event.closed|date:"d/m/Y" }}"/>
 </body>
 </html>
 {% endblock %}
