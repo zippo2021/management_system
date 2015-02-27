@@ -105,6 +105,38 @@ def get_marks(data):
 ###########
 
 @login_required
+@should_be_regular
+def get_schedule_pupil(request, event_id):
+    if request.method == "POST" and request.is_ajax:
+        pupil_id = request.user.UserData.RegularUser.id
+        answer = dict()
+        answer["data"] = dict()
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d/%m/%Y').date(),
+                                      datetime.strptime(data["end_date"], '%d/%m/%Y').date(),
+                                      1)
+            lessons = Lesson.objects.filter(event__id=event_id, group__users=pupil_id, date__in=dates)\
+                .distinct().order_by('date').order_by('start_time')
+            prev_date = ""
+            for lesson in lessons:
+                if lesson.date != prev_date:
+                    prev_date = lesson.date.strftime('%d/%m/%Y')
+                    answer["data"][prev_date] = list()
+                answer["data"][prev_date].append(dict())
+                answer["data"][prev_date][-1]["subject"] = str(lesson.subject)
+                answer["data"][prev_date][-1]["start_time"] = str(lesson.start_time.strftime('%H:%M'))
+                answer["data"][prev_date][-1]["end_time"] = str(lesson.end_time.strftime('%H:%M'))
+                answer["data"][prev_date][-1]["study_group"] = str(lesson.group)
+                answer["data"][prev_date][-1]["place"] = lesson.place
+        except Exception as e:
+            print(str(e))
+            answer["error"] = "Error: " + str(e)
+        return HttpResponse(json.dumps(answer), content_type="application/json")
+    else:
+        return HttpResponseNotFound(request)
+
+@login_required
 @should_be_teacher
 def get_schedule_teacher(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -395,8 +427,16 @@ def index(request, event_id):
 
 @login_required
 @should_be_regular
-def as_pupil(request, event_id):
-    return HttpResponseNotFound(request)
+def as_pupil_schedule(request, event_id):
+    if request.method == "GET":
+        event = Event.objects.get(id=event_id)
+        start_date = event.opened.strftime('%d/%m/%Y')
+        end_date = event.closed.strftime('%d/%m/%Y')
+        return render(request, 'journal/journal_pupil_schedule.html', {'event_id': event_id,
+                                                                       'start_date': start_date,
+                                                                       'end_date': end_date})
+    else:
+        return HttpResponseNotFound(request)
 
 @login_required
 @should_be_teacher
@@ -406,8 +446,8 @@ def as_teacher_schedule(request, event_id):
         start_date = event.opened.strftime('%d/%m/%Y')
         end_date = event.closed.strftime('%d/%m/%Y')
         return render(request, 'journal/journal_teacher_schedule.html', {'event_id': event_id,
-                                                                     'start_date': start_date,
-                                                                     'end_date': end_date})
+                                                                         'start_date': start_date,
+                                                                         'end_date': end_date})
     else:
         return HttpResponseNotFound(request)
 
