@@ -26,7 +26,7 @@
 		<li><a href="#">Журнал</a></li>
 	{% else %}
 		<li {% if request.path == events_manage_show_results %}class="active" {% endif %}>
-		<a href="#" onClick="linkWrapper('{{ events_manage_show_results}}','{{ request.path }}')">Результаты</a></li>
+		<a href="#" onClick="linkWrapper('{{ events_manage_show_results }}','{{ request.path }}')">Результаты</a></li>
 	{% endif %}
 {% endif %}
 
