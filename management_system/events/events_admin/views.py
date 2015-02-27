@@ -26,7 +26,7 @@ class EventWizard(SessionWizardView):
             journey.event = event
             journey.save()
         
-        return redirect('completed')
+        return redirect('event_main',event_id = event.id)
 
 def add_journey_data_condition(wizard):
     cleaned_data = wizard.get_cleaned_data_for_step('0') or {}

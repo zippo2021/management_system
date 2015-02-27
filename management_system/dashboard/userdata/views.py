@@ -83,7 +83,7 @@ end of Wizard
 def edit(request):
     if request.method == 'POST':    
         #userdata always exists if we passed should_have_data
-        form = UserDataForm(request.POST, instance = request.user.UserData)
+        form = UserDataForm(request.POST,request.FILES, instance = request.user.UserData)
         #validate form and redirect
         if form.is_valid():
             user_data = form.save(commit = False)

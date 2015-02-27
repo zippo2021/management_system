@@ -217,7 +217,7 @@ OkMessageAutoClose = function (okText, delay, autoreload)
 {
 function init(okText, delay, autoreload) {
 var modal = new Modal();
-modal.setTitle("ОК");
+modal.setTitle("Успешно!");
 modal.getContentElement().append($("<p class='text-success'>" + okText + "<p>"));
 delay = delay || 3;
 if (autoreload === undefined)
@@ -236,7 +236,7 @@ OkMessage = function (okText, okDescription)
 {
     function init(okText, okDescription) {
         var modal = new Modal();
-        modal.setTitle("ОК");
+        modal.setTitle("Успешно!");
         modal.getContentElement().append($("<p>" + okText + "<p>"));
         if (okDescription != undefined)
         {

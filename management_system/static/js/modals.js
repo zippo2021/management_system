@@ -15,6 +15,7 @@ success : function(text)
     modal.getContentElement().append(content);
     modal.setButtons([
     {
+            id:'send',
             label:'Сохранить',
             callback:function(){
                 var msg = modal.getContentElement().find(t_id).serialize();
@@ -103,7 +104,6 @@ function linkWrapper(url_to,url_from)
             document.open();
             document.write(data);
             document.close();
-            alert('What are you waiting for? Cristmas?');
         }    
     },
     error: function(xhr, str){                  
