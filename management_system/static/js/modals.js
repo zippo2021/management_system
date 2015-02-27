@@ -95,6 +95,7 @@ function linkWrapper(url_to,url_from)
             };
             history.pushState(state, "New Title", url_to);          
             document.open();
+            alert(data);
             document.write(data);
             document.close();
         }    
