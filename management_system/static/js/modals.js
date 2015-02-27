@@ -90,7 +90,10 @@ function linkWrapper(url_to,url_from)
                 window.location = url_from;
         }
         else{
-            window.history.pushState("object or string", "Title", url_to);
+            var state = {
+                "thisIsOnPopState": true
+            };
+            history.pushState(state, "New Title", url_to);          
             document.open();
             document.write(data);
             document.close();
