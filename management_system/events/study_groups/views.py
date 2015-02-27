@@ -21,11 +21,11 @@ from decorators import should_be_staff, should_be_allowed_for_event
 @should_be_staff
 @should_be_allowed_for_event
 def index(request, event_id):
-    event = Event.objects.get(id = event_id)
+    event = Event.objects.get(id=event_id)
     if request.method == "GET":
         try:
             groups = StudyGroup.objects.filter(event__id=event_id)
-            return render(request, 'study_groups/study_groups_index.html', {'groups': groups, 'event_id': event_id})
+            return render(request, 'study_groups/study_groups_index.html', {'groups': groups, 'event': event})
         except ObjectDoesNotExist as e:
             return HttpResponseNotFound(request)
         except Exception as e:
