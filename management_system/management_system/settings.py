@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles', 
     'django.contrib.humanize',  # Required for elapsed time formatting
+    'multiuploader',
     'crispy_forms',
     'registration',
     'customuseradmin',
@@ -66,9 +67,9 @@ INSTALLED_APPS = (
     'export',
     'schools',
     'search',
-	'user_manager',
+    'user_manager',
     'news',
-    'feedback'
+    'feedback',
 )
 
 MIDDLEWARE_CLASSES = (  
@@ -156,15 +157,26 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 			 'context_processors.permission_translation_processor',
              'context_processors.events_processor',
              'context_processors.documents_translation_processor',
-             'context_processors.user_permissions_processor',)
+             'context_processors.user_permissions_processor',
+             'multiuploader.context_processors.booleans',
+            )
      )
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(BASE_DIR,"files/")
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+'''
+UPLOADCARE = {
+    'pub_key': '40f8c675ce99f1fa7ab6',
+    'secret': 'd44ce3444b9a9218c6e9',
+}
+'''
+
 EVENT_ATTACHMENTS_DIR = os.path.join(BASE_DIR, "files/events/")
 EVENT_EMAIL_TEMPLATES_DIR = os.path.join(BASE_DIR, "email_templates/events/")

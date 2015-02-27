@@ -3,6 +3,7 @@ from django import forms
 from events.events_admin.models import Event
 from events.events_manage.models import Result, EmailTemplate
 
+
 class PriceChoiceForm(forms.Form):
     def __init__(self, *args, **kwargs):
         eid = kwargs.pop('event_id', None)

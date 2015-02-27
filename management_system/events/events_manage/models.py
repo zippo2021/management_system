@@ -30,4 +30,18 @@ class Request(models.Model):
     price_group = models.ForeignKey(PriceGroup,
                                     related_name = 'Request',
                                     null = True)
+
+'''
+def content_file_name(instance, filename):
+    return '/'.join(['content', instance.user.username, filename])
+
+class File(models.Model):
+    user = models.ForeignKey('userdata.UserData',
+   								related_name = 'File',
+                                blank = True,
+    )
+    event = models.ForeignKey(Event, related_name = 'File')
+    file = models.FileField(upload_to=content_file_name)
+'''
+
 admin.site.register(Request)
