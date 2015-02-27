@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^journal/teacher/schedule$', schedule.as_teacher_schedule, name='journal_teacher_schedule'),
 
     url(r'^journal/pupil/schedule$', schedule.as_pupil_schedule, name='journal_pupil_schedule'),
+    url(r'^journal/pupil/marks$', schedule.as_pupil_marks, name='journal_pupil_marks'),
 
     url(r'^journal/admin/get_lessons$', schedule.get_lessons_admin, name='journal_admin_get_lessons'),
     url(r'^journal/admin/add_lessons$', schedule.add_lessons_admin, name='journal_admin_add_lessons'),
@@ -29,4 +30,5 @@ urlpatterns = patterns('',
     url(r'^journal/teacher/get_schedule$', schedule.get_schedule_teacher, name='journal_teacher_get_schedule'),
 
     url(r'^journal/pupil/get_schedule$', schedule.get_schedule_pupil, name='journal_pupil_get_schedule'),
+    url(r'^journal/pupil/get_marks$', schedule.get_marks_pupil, name='journal_pupil_get_marks'),
 )

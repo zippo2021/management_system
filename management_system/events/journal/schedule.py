@@ -104,6 +104,36 @@ def get_marks(data):
 ##  API  ##
 ###########
 
+
+@login_required
+@should_be_regular
+def get_marks_pupil(request, event_id):
+    if request.method == "POST" and request.is_ajax:
+        pupil_id = request.user.UserData.RegularUser.id
+        answer = dict()
+        answer["data"] = dict()
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d/%m/%Y').date(),
+                                      datetime.strptime(data["end_date"], '%d/%m/%Y').date(),
+                                      1)
+            lessons = Lesson.objects.filter(event__id=event_id, group__users=pupil_id, date__in=dates)\
+                .distinct().order_by('date').order_by('start_time')
+            marks = Mark.objects.filter(lesson__in=lessons, pupil__id=pupil_id).distinct()
+            subjects = Subject.objects.filter(event__id=event_id, lesson__in=lessons)
+
+            answer["data"]["subjects"] = list()
+
+            answer["data"]["lessons"] = list()
+            answer["data"]["marks"] = list()
+        except Exception as e:
+            print(str(e))
+            answer["error"] = "Error: " + str(e)
+        return HttpResponse(json.dumps(answer), content_type="application/json")
+    else:
+        return HttpResponseNotFound(request)
+
+
 @login_required
 @should_be_regular
 def get_schedule_pupil(request, event_id):
@@ -135,6 +165,7 @@ def get_schedule_pupil(request, event_id):
         return HttpResponse(json.dumps(answer), content_type="application/json")
     else:
         return HttpResponseNotFound(request)
+
 
 @login_required
 @should_be_teacher
@@ -168,6 +199,7 @@ def get_schedule_teacher(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
+
 @login_required
 @should_be_teacher
 def set_mark(request, event_id):
@@ -196,6 +228,7 @@ def set_mark(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
+
 @login_required
 @should_be_teacher
 def get_pupils_lessons_marks(request, event_id):
@@ -218,6 +251,7 @@ def get_pupils_lessons_marks(request, event_id):
         return HttpResponse(json.dumps(answer), content_type="application/json")
     else:
         return HttpResponseNotFound(request)
+
 
 @login_required
 @should_be_teacher
@@ -245,6 +279,7 @@ def update_homework_teacher(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
+
 @login_required
 @should_be_teacher
 def update_lesson_teacher(request, event_id):
@@ -263,6 +298,7 @@ def update_lesson_teacher(request, event_id):
         return HttpResponse(json.dumps(answer), content_type="application/json")
     else:
         return HttpResponseNotFound(request)
+
 
 @login_required
 @should_be_teacher
@@ -283,6 +319,7 @@ def get_groups_teacher(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
+
 @login_required
 @should_be_teacher
 def get_lessons_teacher(request, event_id):
@@ -301,6 +338,7 @@ def get_lessons_teacher(request, event_id):
         return HttpResponse(json.dumps(answer), content_type="application/json")
     else:
         return HttpResponseNotFound(request)
+
 
 @login_required
 @should_be_admin
@@ -331,6 +369,7 @@ def get_lessons_admin(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
+
 @login_required
 @should_be_admin
 def delete_lesson_admin(request, event_id):
@@ -346,6 +385,7 @@ def delete_lesson_admin(request, event_id):
         return HttpResponse(json.dumps(answer), content_type="application/json")
     else:
         return HttpResponseNotFound(request)
+
 
 @login_required
 @should_be_admin
@@ -369,6 +409,7 @@ def update_lesson_admin(request, event_id):
         return HttpResponse(json.dumps(answer), content_type="application/json")
     else:
         return HttpResponseNotFound(request)
+
 
 @login_required
 @should_be_admin
@@ -414,6 +455,7 @@ def add_lessons_admin(request, event_id):
 ##  VIEWS  ##
 #############
 
+
 @login_required
 def index(request, event_id):
     if request.user.UserData.Admin.is_active:
@@ -424,6 +466,21 @@ def index(request, event_id):
         return redirect('journal_pupil_schedule', event_id=event_id)
     else:
         return HttpResponseNotFound(request)
+
+
+@login_required
+@should_be_regular
+def as_pupil_marks(request, event_id):
+    if request.method == "GET":
+        event = Event.objects.get(id=event_id)
+        start_date = event.opened.strftime('%d/%m/%Y')
+        end_date = event.closed.strftime('%d/%m/%Y')
+        return render(request, 'journal/journal_pupil_marks.html', {'event_id': event_id,
+                                                                    'start_date': start_date,
+                                                                    'end_date': end_date})
+    else:
+        return HttpResponseNotFound(request)
+
 
 @login_required
 @should_be_regular
@@ -438,6 +495,7 @@ def as_pupil_schedule(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
+
 @login_required
 @should_be_teacher
 def as_teacher_schedule(request, event_id):
@@ -450,6 +508,7 @@ def as_teacher_schedule(request, event_id):
                                                                          'end_date': end_date})
     else:
         return HttpResponseNotFound(request)
+
 
 @login_required
 @should_be_teacher
@@ -473,6 +532,7 @@ def as_teacher_left(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
+
 @login_required
 @should_be_teacher
 def as_teacher_right(request, event_id):
@@ -494,6 +554,7 @@ def as_teacher_right(request, event_id):
                                                                       'groups': groups})
     else:
         return HttpResponseNotFound(request)
+
 
 @login_required
 @should_be_admin
