@@ -1,7 +1,7 @@
 
 {% load crispy_forms_tags %}
 
-<p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }} </p>
+<p>Шаг {{ wizard.steps.step1 }}</p>
 <form id='form' action = "" method = "post">
 {% csrf_token %}
 <table>
