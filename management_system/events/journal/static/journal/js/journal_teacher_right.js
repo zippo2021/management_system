@@ -13,7 +13,7 @@ function GetLessons()
     var sendData = {};
     sendData["start_date"] = $("#from").val();
     sendData["end_date"] = $("#to").val();
-    sendData["group"] = $("#group_list option:selected").val();
+    sendData["study_group"] = $("#group_list option:selected").val();
     sendData["subject"] = $("#subject_list option:selected").val();
     $.ajax(
     {
@@ -37,7 +37,7 @@ function GetLessons()
                 $.each(lessons, function (key, val)
                 {
                     $("<tr data-lessonid=\"" + val["id"] + "\" data-homeworkid=\"" + val["homework_id"] + "\">" +
-                        "<td><a class='edit_lesson' href='#'>e</a></td>" +
+                        "<td><a class='edit_lesson' href='#'><img src='/static/images/edit.png' alt='edit' height='20'></a></td>" +
                         "<td>" + val["date"] + "</td>" +
                         "<td>" + val["start_time"] + "</td>" +
                         "<td>" + val["end_time"] + "</td>" +
@@ -46,7 +46,7 @@ function GetLessons()
                         "<td style='display:none;'>" + val["comment"] + "</td>" +
                         "<td>" + val["homework"] + "</td>" +
                         "<td style='display:none;'>" + val["homework_comment"] + "</td>" +
-                        "<td><a class='edit_homework' href='#'>e</a></td>" +
+                        "<td><a class='edit_homework' href='#'><img src='/static/images/edit.png' alt='edit' height='20'></a></td>" +
                     "</tr>").appendTo(lessonsList);
                 });
                 $(".edit_lesson").click(function()
@@ -199,7 +199,7 @@ function SendUpdateHomeworkRequest(sendData)
 {
     $.ajax(
     {
-        url: "/event/" + $("#event_id").val() + "/schedule/update_homework_teacher",
+        url: "/event/" + $("#event_id").val() + "/journal/teacher/update_homework",
         dataType: "json",
         data: JSON.stringify(sendData),
         type: "post",
