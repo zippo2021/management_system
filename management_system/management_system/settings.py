@@ -40,7 +40,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles', 
     'django.contrib.humanize',  # Required for elapsed time formatting
-    'multiuploader',
     'crispy_forms',
     'registration',
     'customuseradmin',
@@ -158,7 +157,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
              'context_processors.events_processor',
              'context_processors.documents_translation_processor',
              'context_processors.user_permissions_processor',
-             'multiuploader.context_processors.booleans',
             )
      )
 

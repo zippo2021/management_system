@@ -169,11 +169,7 @@ def accept_request(request, event_id, request_id):
             p_group = form.cleaned_data['price_group']
             files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
             try:
-<<<<<<< HEAD
                 template_file = get_template_from_string(EmailTemplate.objects.get(event = event).text)
-=======
-                template_file = Template(get_template_from_string(EmailTemplate.objects.get(event = event).text))
->>>>>>> da3000c6d655c75870259d9542d108abe85aea89
                 send_templated_email(
                         subject='Подтверждение заявки',
                         template_file = template_file,
