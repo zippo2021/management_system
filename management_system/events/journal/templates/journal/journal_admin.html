@@ -93,18 +93,15 @@
         <input id="lesson_place" type="text">
         <div id="repeat_group" hidden="hidden">
             <input id="repeat_box" type="checkbox">Repeat</input>
-            <select size="1" id="repeat_list" style="width: 200px">
+            <select size="1" id="repeat_list" hidden="hidden" style="width: 200px">
                 <option value="1">Every day</option>
                 <option value="7">Every week</option>
             </select>
-            <select size="1" id="until_list" style="width: 200px">
+            <select size="1" id="until_list" hidden="hidden" style="width: 200px">
                 <option value="1">until event end</option>
                 <option value="2">times</option>
             </select>
-            <select size="1" id="times_list" style="width: 50px">
-                {% for i in repeats %}
-                    <option value="{{ i }}">{{ i }}</option>
-                {% endfor %}
+            <select size="1" id="times_list" hidden="hidden" style="width: 50px">
             </select>
         </div>
     </div>

@@ -31,7 +31,9 @@ function GetLessons()
                 $.each(lessons, function (key, val)
                 {
                     $("<tr data-lessonid='" +val["id"] + "'>" +
-                        "<td><a class='edit_lesson' href='#'>e</a><a class='del_lesson' href='#'>d</a></td>" +
+                        "<td><a class='edit_lesson' href='#'><img src='/static/images/edit.png' alt='edit' height='20'></a>" +
+                            "<a class='del_lesson' href='#'><img src='/static/images/delete.png' alt='delete'  height='20'></a>" +
+                        "</td>" +
                         "<td>" + val["date"] + "</td>" +
                         "<td>" + val["start_time"] + "</td>" +
                         "<td>" + val["end_time"] + "</td>" +
@@ -287,6 +289,25 @@ function PrepareLessonWindow()
     return addWindow;
 }
 
+function GetTimesCount(curentWindow)
+{
+    if (curentWindow.find("#until_list").val() === '1')
+    {
+        curentWindow.find("#times_list").attr("hidden", "hidden");
+        return;
+    }
+    var timesList = curentWindow.find("#times_list");
+    var step = curentWindow.find("#repeat_list").val();
+
+    timesList.find("option").remove();
+    var times = (DayDiff(ParseDate(curentWindow.find("#lesson_date").val()), ParseDate($("#event_end_date").val())) / step | 0) + 1;
+    for (var i = 1; i <= times; i++)
+    {
+        $("<option value='" + i + "'>" + i + "</option>").appendTo(timesList);
+    }
+    timesList.removeAttr("hidden");
+}
+
 function AddLessonButtonReaction()
 {
     $("#call_add_lesson_button").click(function()
@@ -295,6 +316,32 @@ function AddLessonButtonReaction()
         var addWindow = PrepareLessonWindow();
 
         addWindow.find("#repeat_group").removeAttr("hidden");
+        addWindow.find("#repeat_box").change(function(){
+            if (this.checked)
+            {
+                addWindow.find("#repeat_list").removeAttr("hidden");
+                addWindow.find("#until_list").removeAttr("hidden");
+                GetTimesCount(addWindow);
+            }
+            else
+            {
+                addWindow.find("#repeat_list").attr("hidden", "hidden");
+                addWindow.find("#until_list").attr("hidden", "hidden");
+                addWindow.find("#times_list").attr("hidden", "hidden");
+            }
+        });
+
+        addWindow.find("#repeat_list").change(function(){
+            GetTimesCount(addWindow);
+        });
+
+        addWindow.find("#until_list").change(function(){
+            GetTimesCount(addWindow);
+        });
+
+        addWindow.find("#lesson_date").change(function(){
+            GetTimesCount(addWindow);
+        });
 
         var lessonDate = addWindow.find("#lesson_date");
         lessonDate.val($("#from").val());
