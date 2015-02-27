@@ -4,8 +4,10 @@ from events.events_admin.models import Event
 from dashboard.regular.models import RegularUser
 from events.study_groups.models import StudyGroup
 from events.journal.models import Lesson, Subject, Homework, Mark
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from decorators import should_be_teacher, should_be_admin, should_be_regular
 import json
 from datetime import datetime, timedelta
 
@@ -42,8 +44,9 @@ def get_groups(data):
 
 def get_pupils(data):
     answer = list()
-    pupils = RegularUser.objects.filter(StudyGroup__id=data["group"],
-                                        Request__event__id=data["event_id"]).order_by("data__last_name")
+    pupils = RegularUser.objects.filter(StudyGroup__id=int(data["study_group"]),
+                                        Request__event__id=int(data["event_id"]))\
+        .order_by("data__last_name").order_by("data__first_name")
     for pupil in pupils:
         answer.append(dict())
         answer[-1]["name"] = str(pupil.data)
@@ -52,11 +55,10 @@ def get_pupils(data):
 
 
 def get_lessons(data):
-    print(data)
     dates = get_date_in_range(datetime.strptime(data["start_date"], '%d/%m/%Y').date(),
                               datetime.strptime(data["end_date"], '%d/%m/%Y').date(),
                               1)
-    lessons = Lesson.objects.filter(group__id=int(data["group"]),
+    lessons = Lesson.objects.filter(group__id=int(data["study_group"]),
                                     teacher__id=int(data["teacher"]),
                                     subject__id=int(data['subject']),
                                     date__in=dates,
@@ -102,7 +104,40 @@ def get_marks(data):
 ##  API  ##
 ###########
 
+@login_required
+@should_be_teacher
+def get_schedule_teacher(request, event_id):
+    if request.method == "POST" and request.is_ajax:
+        teacher_id = request.user.UserData.Teacher.id
+        answer = dict()
+        answer["data"] = dict()
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d/%m/%Y').date(),
+                                      datetime.strptime(data["end_date"], '%d/%m/%Y').date(),
+                                      1)
+            lessons = Lesson.objects.filter(event__id=event_id, teacher__id=teacher_id, date__in=dates)\
+                .distinct().order_by('date').order_by('start_time')
+            prev_date = ""
+            for lesson in lessons:
+                if lesson.date != prev_date:
+                    prev_date = lesson.date.strftime('%d/%m/%Y')
+                    answer["data"][prev_date] = list()
+                answer["data"][prev_date].append(dict())
+                answer["data"][prev_date][-1]["subject"] = str(lesson.subject)
+                answer["data"][prev_date][-1]["start_time"] = str(lesson.start_time.strftime('%H:%M'))
+                answer["data"][prev_date][-1]["end_time"] = str(lesson.end_time.strftime('%H:%M'))
+                answer["data"][prev_date][-1]["study_group"] = str(lesson.group)
+                answer["data"][prev_date][-1]["place"] = lesson.place
+        except Exception as e:
+            print(str(e))
+            answer["error"] = "Error: " + str(e)
+        return HttpResponse(json.dumps(answer), content_type="application/json")
+    else:
+        return HttpResponseNotFound(request)
 
+@login_required
+@should_be_teacher
 def set_mark(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -129,14 +164,16 @@ def set_mark(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
-
+@login_required
+@should_be_teacher
 def get_pupils_lessons_marks(request, event_id):
     if request.method == "POST" and request.is_ajax:
+        teacher_id = request.user.UserData.Teacher.id
         answer = dict()
         answer["data"] = dict()
         try:
             data = json.loads(request.body.decode('utf-8'))
-            data["teacher"] = 1
+            data["teacher"] = teacher_id
             data["event_id"] = event_id
             answer["data"]["pupils"] = get_pupils(data)
             answer["data"]["lessons"] = get_lessons(data)
@@ -150,7 +187,8 @@ def get_pupils_lessons_marks(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
-
+@login_required
+@should_be_teacher
 def update_homework_teacher(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -162,7 +200,6 @@ def update_homework_teacher(request, event_id):
                 homework = Homework(title=data["task"])
                 homework.comment = data["comment"] if data["comment"] != "" else None
                 homework.to_lesson = Lesson.objects.get(id=int(data["lesson_id"]))
-                homework.from_lesson = Lesson.objects.get(id=int(data["lesson_id"])) #Temp
                 homework.save()
             else:
                 homework = Homework.objects.get(id=int(data['id']))
@@ -176,7 +213,8 @@ def update_homework_teacher(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
-
+@login_required
+@should_be_teacher
 def update_lesson_teacher(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -194,15 +232,17 @@ def update_lesson_teacher(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
-
+@login_required
+@should_be_teacher
 def get_groups_teacher(request, event_id):
     if request.method == "POST" and request.is_ajax:
+        teacher_id = request.user.UserData.Teacher.id
         answer = dict()
         answer["data"] = dict()
         try:
             data = json.loads(request.body.decode('utf-8'))
             data["event_id"] = event_id
-            data["teacher"] = 1
+            data["teacher"] = teacher_id
             answer["data"]["groups"] = get_groups(data)
         except Exception as e:
             print(str(e))
@@ -211,15 +251,17 @@ def get_groups_teacher(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
-
+@login_required
+@should_be_teacher
 def get_lessons_teacher(request, event_id):
     if request.method == "POST" and request.is_ajax:
+        teacher_id = request.user.UserData.Teacher.id
         answer = dict()
         answer["data"] = dict()
         try:
             data = json.loads(request.body.decode('utf-8'))
             data["event_id"] = event_id
-            data["teacher"] = 1
+            data["teacher"] = teacher_id
             answer["data"]["lessons"] = get_lessons(data)
         except Exception as e:
             print(str(e))
@@ -228,7 +270,8 @@ def get_lessons_teacher(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
-
+@login_required
+@should_be_admin
 def get_lessons_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -256,7 +299,8 @@ def get_lessons_admin(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
-
+@login_required
+@should_be_admin
 def delete_lesson_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -271,7 +315,8 @@ def delete_lesson_admin(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
-
+@login_required
+@should_be_admin
 def update_lesson_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -293,7 +338,8 @@ def update_lesson_admin(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
-
+@login_required
+@should_be_admin
 def add_lessons_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -312,7 +358,7 @@ def add_lessons_admin(request, event_id):
             if data['repeat']:
                 if data['until'] == "1":
                     dates = get_date_in_range(datetime.strptime(data["date"], '%d/%m/%Y').date(),
-                                              lesson.event.end_date,
+                                              lesson.event.closed,
                                               int(data["delta"]))
                 else:
                     dates = get_date_count(datetime.strptime(data["date"], '%d/%m/%Y').date(),
@@ -336,14 +382,45 @@ def add_lessons_admin(request, event_id):
 ##  VIEWS  ##
 #############
 
+@login_required
+def index(request, event_id):
+    if request.user.UserData.Admin.is_active:
+        return redirect('journal_admin', event_id=event_id)
+    elif request.user.UserData.Teacher.is_active:
+        return redirect('journal_teacher_schedule', event_id=event_id)
+    elif request.user.UserData.RegularUser.is_active:
+        return redirect('journal_pupil_schedule', event_id=event_id)
+    else:
+        return HttpResponseNotFound(request)
 
+@login_required
+@should_be_regular
+def as_pupil(request, event_id):
+    return HttpResponseNotFound(request)
+
+@login_required
+@should_be_teacher
+def as_teacher_schedule(request, event_id):
+    if request.method == "GET":
+        event = Event.objects.get(id=event_id)
+        start_date = event.opened.strftime('%d/%m/%Y')
+        end_date = event.closed.strftime('%d/%m/%Y')
+        return render(request, 'journal/journal_teacher_schedule.html', {'event_id': event_id,
+                                                                     'start_date': start_date,
+                                                                     'end_date': end_date})
+    else:
+        return HttpResponseNotFound(request)
+
+@login_required
+@should_be_teacher
 def as_teacher_left(request, event_id):
     if request.method == "GET":
-        subjects = Subject.objects.filter(lesson__teacher__id=1).distinct()
+        teacher_id = request.user.UserData.Teacher.id
+        subjects = Subject.objects.filter(lesson__teacher__id=teacher_id).distinct()
         if len(subjects) == 0:
             return HttpResponseNotFound(request)
         groups = StudyGroup.objects.filter(event__id=event_id,
-                                           lesson__teacher__id=1,
+                                           lesson__teacher__id=teacher_id,
                                            lesson__subject=subjects[0]).distinct()
         event = Event.objects.get(id=event_id)
         start_date = event.opened.strftime('%d/%m/%Y')
@@ -356,14 +433,16 @@ def as_teacher_left(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
-
+@login_required
+@should_be_teacher
 def as_teacher_right(request, event_id):
     if request.method == "GET":
-        subjects = Subject.objects.filter(lesson__teacher__id=1).distinct()
+        teacher_id = request.user.UserData.Teacher.id
+        subjects = Subject.objects.filter(lesson__teacher__id=teacher_id).distinct()
         if len(subjects) == 0:
             return HttpResponseNotFound(request)
         groups = StudyGroup.objects.filter(event__id=event_id,
-                                           lesson__teacher__id=1,
+                                           lesson__teacher__id=teacher_id,
                                            lesson__subject=subjects[0]).distinct()
         event = Event.objects.get(id=event_id)
         start_date = event.opened.strftime('%d/%m/%Y')
@@ -376,7 +455,8 @@ def as_teacher_right(request, event_id):
     else:
         return HttpResponseNotFound(request)
 
-
+@login_required
+@should_be_admin
 def as_admin(request, event_id):
     if request.method == "GET":
         groups = StudyGroup.objects.filter(event__id=event_id)
@@ -385,13 +465,11 @@ def as_admin(request, event_id):
         event = Event.objects.get(id=event_id)
         start_date = event.opened.strftime('%d/%m/%Y')
         end_date = event.closed.strftime('%d/%m/%Y')
-        repeats = (event.closed - event.opened).days + 1
         return render(request, 'journal/journal_admin.html', {'groups': groups,
                                                               'event_id': event_id,
                                                               'start_date': start_date,
                                                               'end_date': end_date,
                                                               'subjects': subjects,
-                                                              'teachers': teachers,
-                                                              'repeats': range(1, repeats + 1)})
+                                                              'teachers': teachers})
     else:
         return HttpResponseNotFound(request)

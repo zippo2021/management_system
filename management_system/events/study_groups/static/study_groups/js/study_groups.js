@@ -68,14 +68,15 @@ function SendDeleteGroupData()
 function SendSaveNewMembersRequest()
 {
     var send_data = {};
-    send_data["group"] = $("#group_list option:selected").text();
-    send_data["remove_from_group"] = [];
-    send_data["add_to_group"] = [];
+    send_data["study_group"] = $("#group_list option:selected").val();
+    send_data["pupils"] ={};
+    send_data["pupils"]["remove_from_group"] = [];
+    send_data["pupils"]["add_to_group"] = [];
     $('#pupils_list_out :selected').each(function(i, selected)
     {
-        send_data["add_to_group"][i] = $(selected).val();
+        send_data["pupils"]["add_to_group"][i] = $(selected).val();
     });
-    if (send_data["add_to_group"].length == 0)
+    if (send_data["pupils"]["add_to_group"].length == 0)
         return;
     $.ajax(
     {
@@ -108,14 +109,15 @@ function SendSaveNewMembersRequest()
 function SendRemoveMembersRequest()
 {
     var send_data = {};
-    send_data["group"] = $("#group_list option:selected").text();
-    send_data["remove_from_group"] = [];
-    send_data["add_to_group"] = [];
+    send_data["study_group"] = $("#group_list option:selected").val();
+    send_data["pupils"] ={};
+    send_data["pupils"]["remove_from_group"] = [];
+    send_data["pupils"]["add_to_group"] = [];
     $('#pupils_list_in :selected').each(function(i, selected)
     {
-        send_data["remove_from_group"][i] = $(selected).val();
+        send_data["pupils"]["remove_from_group"][i] = $(selected).val();
     });
-    if (send_data["remove_from_group"].length == 0)
+    if (send_data["pupils"]["remove_from_group"].length == 0)
         return;
     $.ajax(
     {

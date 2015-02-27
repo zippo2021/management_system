@@ -21,7 +21,6 @@ def index(request, event_id):
     if request.method == "GET":
         try:
             groups = StudyGroup.objects.filter(event__id=event_id)
-            pupils = RegularUser.objects.filter(Request__event__id=event_id, Request__status="Accepted").distinct()
             return render(request, 'study_groups/study_groups_index.html', {'groups': groups, 'event_id': event_id})
         except ObjectDoesNotExist as e:
             return HttpResponseNotFound(request)
@@ -43,7 +42,11 @@ def delete_group(request, event_id):
         answer = dict()
         try:
             data = json.loads(request.body.decode('utf-8'))
-            StudyGroup.objects.filter(event__id=event_id, id=data).delete()
+            study_group = StudyGroup.objects.get(event__id=event_id, id=data)
+            if study_group.label != 'All':
+                study_group.delete()
+            else:
+                answer["error"] = "Can't delete group 'All'"
         except Exception as e:
             print(str(e))
             answer["error"] = "Error: " + str(e)
@@ -81,10 +84,10 @@ def get_group_info(request, event_id):
         answer = dict()
         try:
             data = json.loads(request.body.decode('utf-8'))
-            pupils_in_group = RegularUser.objects.filter(StudyGroup__id=data, Request__event__id=event_id)\
-                .distinct()
-            pupils_not_in_group = RegularUser.objects.filter(~Q(StudyGroup__id=data), Request__event__id=event_id)\
-                .distinct()
+            pupils_in_group = RegularUser.objects.filter(StudyGroup__id=data, Request__event__id=event_id, Request__status="одобрена")\
+                .distinct().order_by("data__last_name").order_by("data__first_name")
+            pupils_not_in_group = RegularUser.objects.filter(~Q(StudyGroup__id=data), Request__event__id=event_id, Request__status="одобрена")\
+                .distinct().order_by("data__last_name").order_by("data__first_name")
             answer["data"] = dict()
             answer["data"]["in"] = list()
             answer["data"]["out"] = list()

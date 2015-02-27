@@ -63,7 +63,7 @@ function UpdateTable()
     var sendData = {};
     sendData["start_date"] = $("#from").val();
     sendData["end_date"] = $("#to").val();
-    sendData["group"] = $("#group_list option:selected").val();
+    sendData["study_group"] = $("#group_list option:selected").val();
     sendData["subject"] = $("#subject_list option:selected").val();
      $.ajax(
     {
