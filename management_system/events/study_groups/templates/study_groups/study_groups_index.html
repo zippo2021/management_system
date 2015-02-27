@@ -22,21 +22,21 @@
     <script type="text/javascript"  src="{% static 'study_groups/js/study_groups.js' %}"></script>
 </head>
 <body>
-    <div id="group_select_container">
-        <select size="1" id="group_list" style="width: 200px">
+    <div id="group_select_container" class="form-group">
+        <select size="1" class="form-control" id="group_list" style="width: 200px">
         {% for group in groups %}
             <option value="{{ group.id }}">{{ group.label }}</option>
         {% endfor %}
         </select>
     </div>
-    <table border="2px">
+    <table class="table table-bordered">
         <thead>
             <tr>
-                <td>
+                <td width=45%>
                     В Группе
                 </td>
-                <td></td>
-                <td>
+                <td width=10%></td>
+                <td width=45%>
                     Не в группе
                 </td>
             </tr>
@@ -44,25 +44,27 @@
         <tbody>
             <tr>
                 <td>
-                    <select size="10" id="pupils_list_in" style="width: 200px">
+                    <select size="10" id="pupils_list_in" class="form-control" style="width: 100%">
                     </select>
                 </td>
-                <td>
-                    <button id="add_to_group_button"><--</button>
-                    <button id="remove_from_group_button">--></button>
+                <td class="td-centered" align="center">
+					<div class="div-centered">
+                    	<button id="add_to_group_button" class="btn btn-lg btn-block"><</button>
+                    	<button id="remove_from_group_button" class="btn btn-lg btn-block">></button>
+					</div>
                 </td>
                 <td valign="top" width="200px">
-                    <select size="10" id="pupils_list_out" style="width: 200px">
+                    <select size="10" id="pupils_list_out" class="form-control" style="width: 100%">
                     </select>
                 </td>
             </tr>
         </tbody>
     </table>
-    <button id="call_add_group_button">Добавить</button>
-    <button id="call_delete_group_button">Удалить</button>
+    <button id="call_add_group_button" class="btn btn-primary">Добавить</button>
+    <button id="call_delete_group_button" class="btn btn-primary">Удалить</button>
 
     <div id="add_window" hidden="hidden">
-        <input id="new_group_title" placeholder="Название группы" value=""/>
+        <input id="new_group_title" class="form-control" placeholder="Название группы" value=""/>
     </div>
     <input type="hidden" id="event_id" value="{{ event.id }}"/>
 </body>
