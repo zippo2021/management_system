@@ -7,18 +7,41 @@
  <script type="text/javascript" src="{% static 'js/modals.js' %}"></script>
 {% endblock %}
 {% block content %}
-{% if reseults %}
-<a id="edit_or_create_result_link" href = "#" onClick="ModalToggle('{% url 'events_manage_edit_or_create_result' event.id %}','{% url 'events_manage_edit_or_create_result' event.id %}','#form','Добавление результата'); return false;" >Добавить</a>
-<table class="table">
-<tr>
-{% for each in results %}
-	<td>{{ each }}</td>
-{% endfor %}
-</tr>
-</table>
+{% if users_and_results %}
+	<table class="table">
+	<thead>
+	    <tr>
+	        <td width=30%>ФИО</td>
+	        <td width=20%>Город</td>
+	        <td width=20%>Школа</td>
+	        <td width=15%>Результат</td>
+	        <td width=15%></td>
+	    </tr>
+	</thead>
+
+	{% for each, result in users_and_results.items %}
+		<tr>
+			<td>
+			<a href="#" onClick="linkWrapper('{% url 'common_profile_view_profile' each.data.id %}','{{ request.path }}')">{{ each.data.last_name }} {{ each.data.first_name }} {{ each.data.middle_name }}</a>
+			</td>
+			 <td>
+			     {{ each.city }}
+			</td>
+			<td>
+			     {{ each.school }}
+			</td>
+			<td>
+				{% if result %}
+					{{ result }}
+				{% endif %}
+			</td>
+			<td>
+				<a id="edit_or_create_result_link" href = "#" onClick="ModalToggle('{% url 'events_manage_edit_or_create_result' event.id user.id%}','{% url 'events_manage_edit_or_create_result' event.id user.id %}','#form','Добавление результата'); return false;" >Добавить</a>
+			</td>
+		</tr>
+	{% endfor %}
+	</table>
 {% else %}
-<p class="lead">
-Результаты отсутствуют
-</p>
+<p class="lead">Участники отсутствуют</p>
 {% endif %}
 {% endblock %}
