@@ -100,7 +100,7 @@ Modal = function ()
 
     function setTitle(value)
     {
-        $modal.find('.modal-title').text(value || '');
+        $modal.find('.modal-title').html("<p class='lead'>"+value+'</p>' || '');
     }
 
     function setButtons(values)

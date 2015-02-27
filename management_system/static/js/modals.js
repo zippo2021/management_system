@@ -55,6 +55,8 @@ success : function(text)
 });
 }
 
+
+
 function ToggleSimpleTextModal(text,title){
     var modal = new Modal();
     modal.setTitle(title);
@@ -95,12 +97,18 @@ function linkWrapper(url_to,url_from)
             var state = {
                 "thisIsOnPopState": true
             };
-            history.pushState(state, "New Title", url_to);          
+
+            history.pushState(state, "New Title", url_to);
+                     
             document.open();
             document.write(data);
             document.close();
+            alert('What are you waiting for? Cristmas?');
         }    
-    }
+    },
+    error: function(xhr, str){                  
+                        ErrorMessage("Error");
+                    }
     });
 }
 
