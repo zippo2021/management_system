@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block event_menu %}
+	{% include 'event_menu.html' %}
+{% endblock %}
 {% block content %}
 {% csrf_token %}
 <html lang="en">
@@ -32,21 +35,23 @@
 
 </head>
 <body>
-    <div id="date_container">
+    <div id="date_container" class="form-inline form-group">
         <label for="from">From</label>
-        <input type="text" id="from" name="from" autocomplete="off">
+        <input type="text" class="form-control" style="width: 200px" id="from" name="from" autocomplete="off">
         <label for="to">to</label>
-        <input type="text" id="to" name="to" autocomplete="off">
-    </div>
-    <div id="group_select_container">
-        <select size="1" id="groups_list" style="width: 200px">
+        <input type="text" class="form-control" id="to" name="to" style="width: 200px" autocomplete="off">
+	</div>
+    <div id="group_select_container" class="form-group">
+		<p>
+        <select size="1" id="groups_list" class="form-control" style="width: 200px">
         {% for group in groups %}
             <option value="{{ group.id }}">{{ group.label }}</option>
         {% endfor %}
         </select>
-    </div>
+    	</p>
+	</div>
 
-    <table border="2px">
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <td></td>
@@ -63,7 +68,7 @@
         </tbody>
     </table>
 
-    <button id="call_add_lesson_button">Добавить</button>
+    <button class="btn btn-primary" id="call_add_lesson_button">Добавить</button>
 
     <div id="add_window" hidden="hidden">
 
