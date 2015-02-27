@@ -17,7 +17,7 @@ def send(request):
             if cleaned_data['problem_type'] == 'T':
                 recipients = ['zippo2021@gmail.com']
             else:
-                reciepients = ['a.s.marchenko@yandex.ru']
+                recipients = ['a.s.marchenko@yandex.ru']
             
             text = cleaned_data['text'] + '\n\n\n' + 'From: ' +\
                    user.UserData.__unicode__() + '\n' + 'E-mail: ' +  user.email
