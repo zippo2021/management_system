@@ -1,7 +1,6 @@
 
 {% load crispy_forms_tags %}
 
-<p>Шаг {{ wizard.steps.step1 }}</p>
 <form id='form' action = "" method = "post">
 {% csrf_token %}
 <table>
@@ -15,9 +14,6 @@
     {{ wizard.form|crispy }}
 {% endif %}
 </table>
-{% if wizard.steps.prev %}
-<button name = "wizard_goto_step" type = "submit" value="{{ wizard.steps.prev }}">back</button>
-{% endif %}
 
 </form>
 

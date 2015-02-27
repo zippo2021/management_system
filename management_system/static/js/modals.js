@@ -86,8 +86,10 @@ function linkWrapper(url_to,url_from)
                     ModalToggle(response['error']['url'],response['error']['url'],'#form',response['error']['title']);
                 else
                     ToggleSimpleTextModal(response['error']['text'],'Ошибка доступа');
-            else 
+            else{
+				alert('uhi');
                 window.location = url_from;
+			}
         }
         else{
             var state = {
