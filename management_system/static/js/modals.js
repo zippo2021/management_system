@@ -112,3 +112,4 @@ function isJson(str) {
     }
     return true;
 }
+

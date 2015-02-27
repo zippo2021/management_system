@@ -169,6 +169,7 @@ def accept_request(request, event_id, request_id):
             files =  glob.glob(os.path.join(os.path.join(settings.EVENT_ATTACHMENTS_DIR,str(event_id)), '*'))
             try:
                 template_file = Template(get_template_from_string(EmailTemplate.objects.get(event = event).text))
+                print template_file.render({})
                 send_templated_email(
                         subject='Подтверждение заявки',
                         template_file = template_file,
