@@ -2,7 +2,8 @@ thead {
     font-weight:bold;
 }
 
-#logout-a {
+.top-menu-link {
+	float: right;
 	color: white;
 	margin-right: 40px;
 }

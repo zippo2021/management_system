@@ -1,4 +1,5 @@
 Здравствуйте!
+{% load custom_template_filters %}
 <p>
 Администрацией сайта для Вас был создан аккаунт.
 </p>
@@ -7,10 +8,11 @@
 Ваш пароль: {{ password }}
 </p>
 <p>
-Ваш набор прав: {% for key, value in perms.items %}
-					{% if value %}
-						|{{ key }}|
-					{% endif %}
-				{% endfor %}
+Ваш набор прав:
+	<ul>
+	{% for each in perms %}
+		<li>{{ perms_to_language|get_item:each }}</li>
+	{% endfor %}
+	</ul>
 {% if admin %}<br> Также вы наделены правами администратора {% endif %}
 </p>

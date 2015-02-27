@@ -71,7 +71,7 @@ def edit_or_create_result(request, event_id, user_id):
                   {'form' : form})
 
 @login_required
-#@should_be_defined
+@should_be_defined
 @should_be_allowed_to_view_event
 def main(request,event_id):
     event = Event.objects.get(id = event_id)

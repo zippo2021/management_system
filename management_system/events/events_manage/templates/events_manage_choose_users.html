@@ -3,6 +3,7 @@
 	{% include 'event_menu.html' %}
 {% endblock %}
 {% block content %}
+{% if free_users or not_free_users %}
 <table class="table table-hover">
 <thead>
 	<tr>
@@ -21,7 +22,7 @@
 </thead>
 <tbody>
 {% for each in not_free_users %}
-<tr>
+<tr class="info">
     <td>
         <a href="#" onClick="linkWrapper('{% url 'common_profile_view_profile' each.data.id %}','{{ request.path }}')">
 			{{ each.data.last_name }} {{ each.data.first_name }} {{ each.data.middle_name }}
@@ -62,4 +63,7 @@
 {% endfor %}
 </tbody>
 </table>
+{% else %}
+<p class="lead">Список персонала пуст</p>
+{% endif %}
 {% endblock %}

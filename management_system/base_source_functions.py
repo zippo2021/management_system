@@ -35,7 +35,6 @@ def send_templated_email(subject, email_context,recipients, email_template_name=
             template = template_file	
         text_part = strip_tags(template.render(c))
 	html_part = template.render(c)
-        print text_part,'idididid ',html_part
         if type(recipients) == str:
 		if recipients.find(','):
 			recipients = recipients.split(',')

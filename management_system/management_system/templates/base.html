@@ -21,7 +21,9 @@
 	<div id="container">
 		<div id="top">
 			{% if  user.is_authenticated %}
-			<a class="option-link" id="logout-a" href="{% url 'auth_logout' %}">Выйти</a>
+			
+			<a class="top-menu-link" id="logout-a" href="{% url 'auth_logout' %}">Выйти</a>
+			<a id="userdata_edit_link" class="top-menu-link" href = "#" onClick="ModalToggle('{% url 'feedback_send' %}','{% url 'feedback_send' %}','#form','Обратная связь'); return false;" >Обратная связь</a>
 			<!--
 			<font color="white">
 			Ваш логин:

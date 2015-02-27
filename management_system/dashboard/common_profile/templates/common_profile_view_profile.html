@@ -92,7 +92,13 @@
 	<tbody>
 		<tr>
 			{% for key, value in fields.items %}
-				<td>{{ key }}: {% if value %} {{ value }} {% endif %}
+				<td>
+				{% if role == 'regular' %}
+					{{ key }}:
+				{% endif %}
+				{% if value %}
+				{{ value }}
+				{% endif %}
 				</td>
 				{% if forloop.counter|divisibleby:"3" %}
 					</tr><tr>

@@ -9,7 +9,8 @@ from user_manager.source_functions import create_user, get_staff_members
 from base_source_functions import send_templated_email
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from user_manager.permissions import perms_to_classes
+from user_manager.permissions import perms_to_classes, perms_to_language
+from dashboard.common_profile.source_functions import perms_to_list
 
 @login_required
 @should_be_admin
@@ -20,6 +21,7 @@ def create(request):
 			#creating user
 			perms = { each : form.cleaned_data[each] 
 					  for each in perms_to_classes.keys()}
+
 			password = User.objects.make_random_password(length = 8)
 			user = create_user(username = form.cleaned_data['email'],
 							  password = password,
@@ -31,8 +33,9 @@ def create(request):
 				email_template_name = 'user_manager_create_email.html',
 				email_context = {'username' : user.username,
 								 'password' : password,
-								 'perms' : perms,
-								 'admin' : user.is_staff
+								 'perms' : perms_to_list(perms),
+								 'admin' : user.is_staff,
+                                 'perms_to_language' : perms_to_language,
 								 },
 				recipients = user.email,
 			)
