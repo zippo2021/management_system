@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block event_menu %}
+	{% include 'event_menu.html' %}
+{% endblock %}
+{% load staticfiles %}
+{% block extrahead %} 
+ <script type="text/javascript" src="{% static 'js/modals.js' %}"></script>
+{% endblock %}
+{% block content %}
+{% if reseults %}
+<a id="edit_or_create_result_link" href = "#" onClick="ModalToggle('{% url 'events_manage_edit_or_create_result' event.id %}','{% url 'events_manage_edit_or_create_result' event.id %}','#form','Добавление результата'); return false;" >Добавить</a>
+<table class="table">
+<tr>
+{% for each in results %}
+	<td>{{ each }}</td>
+{% endfor %}
+</tr>
+</table>
+{% else %}
+<p class="lead">
+Результаты отсутствуют
+</p>
+{% endif %}
+{% endblock %}
