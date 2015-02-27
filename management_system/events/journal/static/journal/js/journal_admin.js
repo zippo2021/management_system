@@ -278,7 +278,7 @@ function PrepareLessonWindow()
         'step':         5,
         'timeFormat':   'H:i',
         'showDuration': true,
-        'maxTime':      '00:00'
+        'maxTime':      '23:55'
     });
 
     startTime.on('changeTime', function()
@@ -296,7 +296,7 @@ function GetTimesCount(curentWindow)
 {
     if (curentWindow.find("#until_list").val() === '1')
     {
-        curentWindow.find("#times_list").attr("hidden", "hidden");
+        curentWindow.find("#times_list").addClass('hide');
         return;
     }
     var timesList = curentWindow.find("#times_list");
@@ -308,7 +308,7 @@ function GetTimesCount(curentWindow)
     {
         $("<option value='" + i + "'>" + i + "</option>").appendTo(timesList);
     }
-    timesList.removeAttr("hidden");
+    timesList.removeClass("hide");
 }
 
 function AddLessonButtonReaction()
@@ -318,19 +318,19 @@ function AddLessonButtonReaction()
         var modal = new Modal();
         var addWindow = PrepareLessonWindow();
 
-        addWindow.find("#repeat_group").removeAttr("hidden");
+        addWindow.find("#repeat_group").removeClass("hide");
         addWindow.find("#repeat_box").change(function(){
             if (this.checked)
             {
-                addWindow.find("#repeat_list").removeAttr("hidden");
-                addWindow.find("#until_list").removeAttr("hidden");
+                addWindow.find("#repeat_list").removeClass("hide");
+                addWindow.find("#until_list").removeClass("hide");
                 GetTimesCount(addWindow);
             }
             else
             {
-                addWindow.find("#repeat_list").attr("hidden", "hidden");
-                addWindow.find("#until_list").attr("hidden", "hidden");
-                addWindow.find("#times_list").attr("hidden", "hidden");
+                addWindow.find("#repeat_list").addClass('hide');
+                addWindow.find("#until_list").addClass('hide');
+                addWindow.find("#times_list").addClass('hide');
             }
         });
 
