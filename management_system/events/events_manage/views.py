@@ -17,7 +17,7 @@ from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from decorators import should_be_event_worker, should_be_allowed_for_event,\
 should_be_allowed_to_view_event, should_have_filled_data,\
-should_be_regular, should_be_allowed_to_view_event
+should_be_regular, should_be_allowed_to_view_event, should_be_defined
 from django.contrib.auth.decorators import login_required
 from base_source_functions import send_templated_email
 import glob
@@ -35,6 +35,8 @@ from multiuploader.forms import MultiUploadForm
 @should_be_allowed_to_view_event
 def show_results(request, event_id):
     event = Event.objects.get(id = event_id)
+    if event.has_journal:
+        return redirect('events_manage_main', event.id)
     requests = Request.objects.filter(event = event, status = 'одобрена')
     users = [each.user for each in requests]
     users_and_results = {}
@@ -54,6 +56,8 @@ def show_results(request, event_id):
 def edit_or_create_result(request, event_id, user_id):
     user = RegularUser.objects.get(id = user_id)
     event = Event.objects.get(id = event_id)
+    if event.has_journal:
+        return redirect('events_manage_main', event.id)
     result, created = Result.objects.get_or_create(event = event, user = user)
     if request.method == 'POST':
         form = ResultForm(request.POST, instance = result)
@@ -67,6 +71,7 @@ def edit_or_create_result(request, event_id, user_id):
                   {'form' : form})
 
 @login_required
+#@should_be_defined
 @should_be_allowed_to_view_event
 def main(request,event_id):
     event = Event.objects.get(id = event_id)
