@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block event_menu %}
+	{% include 'event_menu.html' %}
+{% endblock %}
 {% block content %}
 {% csrf_token %}
 <html lang="en">
@@ -32,10 +35,10 @@
 
 </head>
 <body>
-    <table border="2px">
+    <table class="table table-hover">
         <thead>
             <tr>
-                <td></td>
+                <td width=5%></td>
                 <td>Предмет</td>
             </tr>
         </thead>
@@ -43,10 +46,10 @@
         </tbody>
     </table>
 
-    <button id="call_add_subject_button">Добавить</button>
+    <button id="call_add_subject_button" class="btn btn-primary">Добавить</button>
 
     <div id="add_window" hidden="hidden">
-        <input id="new_subject_title" placeholder="Название предмета" value=""/>
+        <input class="form-control" id="new_subject_title" placeholder="Название предмета" value=""/>
     </div>
 
     <input type="hidden" id="event_id" value="{{ event.id }}"/>
