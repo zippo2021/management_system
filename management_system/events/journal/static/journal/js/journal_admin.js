@@ -31,8 +31,8 @@ function GetLessons()
                 $.each(lessons, function (key, val)
                 {
                     $("<tr data-lessonid='" +val["id"] + "'>" +
-                        "<td><a class='edit_lesson' href='#'><img src='/static/images/edit.png' alt='edit' height='20'></a>" +
-                            "<a class='del_lesson' href='#'><img src='/static/images/delete.png' alt='delete'  height='20'></a>" +
+                        "<td><a class='edit_lesson' href='#'><span class='glyphicon glyphicon-pencil'></span></a>&nbsp" +
+                            "<a class='del_lesson' href='#'><span class='glyphicon glyphicon-remove'></span></a>" +
                         "</td>" +
                         "<td>" + val["date"] + "</td>" +
                         "<td>" + val["start_time"] + "</td>" +
