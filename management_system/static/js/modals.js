@@ -13,6 +13,7 @@ success : function(text)
     content = text;
     modal.setTitle(t_title);
     modal.getContentElement().append(content);
+    $('.dateinput').datepicker({ format: "dd.mm.yyyy", autoclose:true,language:'ru' });
     modal.setButtons([
     {
             id:'send',
@@ -45,6 +46,7 @@ success : function(text)
                         }
                         else{
                             modal.getContentElement().replaceWith("<div class='modal-body'>"+data+"</div>")
+                            $('.dateinput').datepicker({ format: "dd.mm.yyyy",autoclose:true,language:'ru' });   
                         }
                     },
                     error: function(xhr, str){
