@@ -8,11 +8,13 @@
     
 	<link rel="stylesheet" href="{% static 'markup.css' %}">
 	<link rel="stylesheet" href="{% static 'main.css' %}">
+    <link rel="stylesheet" href="{% static 'sidebar.css' %}">
     <script type="text/javascript"  src="{% static 'external/js/jquery-1.11.1.min.js' %}"></script>
     <link rel="stylesheet" type="text/css"  href="{% static 'external/bootstrap/css/bootstrap.min.css' %}"/>
     <script type="text/javascript"  src="{% static 'external/bootstrap/js/bootstrap.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
-     <script type="text/javascript" src="{% static 'js/modals.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/modals.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/sidebar.js' %}"></script>
 	{% block extrahead %}{% endblock %}
 </head>
 
@@ -47,7 +49,10 @@
 			{% block main_menu %}{% endblock %}
 			{% block event_menu %}{% endblock %}
 		</div>
-
+        <div id="sidebar">
+        {% block sidebar %} {% include 'sidebar.html' %} {% endblock %}
+            
+        </div>
 		<div id="content">
 			{% block content %}{% endblock %}
 		</div>
