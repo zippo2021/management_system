@@ -196,8 +196,6 @@ function SendUpdateLessonRequest(sendData)
 
 function SendNewLessonRequest(sendData)
 {
-    var indicator = new LoadingIndicator("Добавляю сервера");
-    indicator.show();
     $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/journal/admin/add_lessons",
@@ -219,7 +217,6 @@ function SendNewLessonRequest(sendData)
         },
         complete: function ()
         {
-            indicator.destroy();
         }
     });
 }

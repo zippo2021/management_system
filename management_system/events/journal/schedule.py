@@ -121,12 +121,32 @@ def get_marks_pupil(request, event_id):
             lessons = Lesson.objects.filter(event__id=event_id, group__users=pupil_id, date__in=dates)\
                 .distinct().order_by('date').order_by('start_time')
             marks = Mark.objects.filter(lesson__in=lessons, pupil__id=pupil_id).distinct()
-            subjects = Subject.objects.filter(event__id=event_id, lesson__in=lessons)
+            subjects = Subject.objects.filter(event__id=event_id, lesson__in=lessons).distinct().order_by('name')
+            lessons_ids = list(lesson.id for lesson in lessons)
+            subjects_ids = list(subject.id for subject in subjects)
 
             answer["data"]["subjects"] = list()
+            for subject in subjects:
+                answer["data"]["subjects"].append(dict())
+                answer["data"]["subjects"][-1]["id"] = subject.id
+                answer["data"]["subjects"][-1]["name"] = subject.name
 
             answer["data"]["lessons"] = list()
-            answer["data"]["marks"] = list()
+            for lesson in lessons:
+                answer["data"]["lessons"].append(dict())
+                answer["data"]["lessons"][-1]["id"] = lesson.id
+                answer["data"]["lessons"][-1]["title"] = lesson.title
+                answer["data"]["lessons"][-1]["date"] = lesson.date.strftime('%d/%m/%Y')
+
+            answer["data"]["marks"] = dict()
+            for sid in subjects_ids:
+                answer["data"]["marks"][sid] = dict()
+                for lid in lessons_ids:
+                    answer["data"]["marks"][sid][lid] = ""
+
+            for mark in marks:
+                answer["data"]["marks"][mark.lesson.subject.id][mark.lesson.id] = mark.mark
+
         except Exception as e:
             print(str(e))
             answer["error"] = "Error: " + str(e)
