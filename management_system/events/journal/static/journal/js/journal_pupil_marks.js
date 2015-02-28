@@ -8,7 +8,7 @@ function SetDatepickers()
     fromDate.datepicker(
     {
         autoclose:      true,
-        format:         'dd/mm/yyyy',
+        format:         'dd.mm.yyyy',
         startDate:      startDate,
         endDate:        endDate
     });
@@ -16,7 +16,7 @@ function SetDatepickers()
     toDate.datepicker(
     {
         autoclose:      true,
-        format:         'dd/mm/yyyy',
+        format:         'dd.mm.yyyy',
         startDate:      startDate,
         endDate:        endDate
     });
@@ -60,44 +60,34 @@ function UpdateTable()
             {
                 ErrorMessage("Ошибка во время получения данных", data["error"]);
             }
-            var pupils = data["data"]["pupils"];
-            ClearPupilsTable();
-            var pupilList = $("#pupils_list");
-            pupilList.val("");
-            $.each(pupils, function (key, val)
+            var subjects = data["data"]["subjects"];
+            var subjectList = $("#subjects_list");
+            subjectList.find("tr").remove();
+            $.each(subjects, function (key, val)
             {
                 $("<tr data-id='" + val["id"] + "'>" +
                     "<td>" + val["name"] + "</td>" +
-                  "</tr>").appendTo(pupilList);
+                  "</tr>").appendTo(subjectList);
             });
-            ClearLessonsTable();
+            var lessonsDates = $("#lessons_dates");
+            lessonsDates.find("td").remove();
             var lessons = data["data"]["lessons"];
             var marks = data["data"]["marks"];
-            var lessonsDates = $("#lessons_dates").children().first();
             $.each(lessons, function (key, val)
             {
                 $("<td data-id='" + val["id"] + "' title='" + val["title"] + "'>" + val["date"].substring(0, val["date"].lastIndexOf('/')) + "</td>").appendTo(lessonsDates);
             });
             var lessonsLists = $("#lessons_list");
-            var pupilsCount = pupilList.children().length;
+            var subjectsCount = subjectList.children().length;
             var lessonsCount = lessonsDates.children().length;
-            for (var i = 1; i <= pupilsCount; i++)
+            for (var i = 1; i <= subjectsCount; i++)
             {
                 var tr = "<tr>";
-                var pupilId = pupilList.children().eq(i-1).data('id');
+                var subjectId = subjectList.children().eq(i-1).data('id');
                 for (var j = 1; j <= lessonsCount; j++)
                 {
                     var lessonId = lessonsDates.children().eq(j-1).data('id');
-                    tr += "<td>" +
-                            "<div>" +
-                                "<input type='text' " +
-                                    "autocomplete='off' " +
-                                    "data-lesson='" + lessonId + "' " +
-                                    "data-pupil='" + pupilId + "' " +
-                                    "class='mark_input'" +
-                                    "value='" + marks[pupilId][lessonId] + "'>" +
-                            "</div>" +
-                        "</td>";
+                    tr += "<td align='center'>" + marks[subjectId][lessonId] + "</td>";
                 }
                 tr += "</tr>";
                 $(tr).appendTo(lessonsLists);

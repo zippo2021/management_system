@@ -7,7 +7,7 @@ from events.journal.models import Lesson, Subject, Homework, Mark
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from decorators import should_be_teacher, should_be_admin, should_be_regular
+from decorators import should_be_teacher, should_be_defined, should_be_regular, should_be_event_worker, should_be_allowed_for_event
 import json
 from django.db import IntegrityError
 from datetime import datetime, timedelta
@@ -56,8 +56,8 @@ def get_pupils(data):
 
 
 def get_lessons(data):
-    dates = get_date_in_range(datetime.strptime(data["start_date"], '%d/%m/%Y').date(),
-                              datetime.strptime(data["end_date"], '%d/%m/%Y').date(),
+    dates = get_date_in_range(datetime.strptime(data["start_date"], '%d.%m.%Y').date(),
+                              datetime.strptime(data["end_date"], '%d.%m.%Y').date(),
                               1)
     lessons = Lesson.objects.filter(group__id=int(data["study_group"]),
                                     teacher__id=int(data["teacher"]),
@@ -69,7 +69,7 @@ def get_lessons(data):
         homeworks = Homework.objects.filter(to_lesson=lesson)
         answer.append(dict())
         answer[-1]["id"] = lesson.id
-        answer[-1]["date"] = lesson.date.strftime('%d/%m/%Y')
+        answer[-1]["date"] = lesson.date.strftime('%d.%m.%Y')
         answer[-1]["start_time"] = lesson.start_time.strftime('%H:%M')
         answer[-1]["end_time"] = lesson.end_time.strftime('%H:%M')
         answer[-1]["group"] = lesson.group.label
@@ -107,6 +107,7 @@ def get_marks(data):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_regular
 def get_marks_pupil(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -115,18 +116,38 @@ def get_marks_pupil(request, event_id):
         answer["data"] = dict()
         try:
             data = json.loads(request.body.decode('utf-8'))
-            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d/%m/%Y').date(),
-                                      datetime.strptime(data["end_date"], '%d/%m/%Y').date(),
+            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d.%m.%Y').date(),
+                                      datetime.strptime(data["end_date"], '%d.%m.%Y').date(),
                                       1)
             lessons = Lesson.objects.filter(event__id=event_id, group__users=pupil_id, date__in=dates)\
                 .distinct().order_by('date').order_by('start_time')
             marks = Mark.objects.filter(lesson__in=lessons, pupil__id=pupil_id).distinct()
-            subjects = Subject.objects.filter(event__id=event_id, lesson__in=lessons)
+            subjects = Subject.objects.filter(event__id=event_id, lesson__in=lessons).distinct().order_by('name')
+            lessons_ids = list(lesson.id for lesson in lessons)
+            subjects_ids = list(subject.id for subject in subjects)
 
             answer["data"]["subjects"] = list()
+            for subject in subjects:
+                answer["data"]["subjects"].append(dict())
+                answer["data"]["subjects"][-1]["id"] = subject.id
+                answer["data"]["subjects"][-1]["name"] = subject.name
 
             answer["data"]["lessons"] = list()
-            answer["data"]["marks"] = list()
+            for lesson in lessons:
+                answer["data"]["lessons"].append(dict())
+                answer["data"]["lessons"][-1]["id"] = lesson.id
+                answer["data"]["lessons"][-1]["title"] = lesson.title
+                answer["data"]["lessons"][-1]["date"] = lesson.date.strftime('%d.%m.%Y')
+
+            answer["data"]["marks"] = dict()
+            for sid in subjects_ids:
+                answer["data"]["marks"][sid] = dict()
+                for lid in lessons_ids:
+                    answer["data"]["marks"][sid][lid] = ""
+
+            for mark in marks:
+                answer["data"]["marks"][mark.lesson.subject.id][mark.lesson.id] = mark.mark
+
         except Exception as e:
             print(str(e))
             answer["error"] = "Error: " + str(e)
@@ -136,6 +157,7 @@ def get_marks_pupil(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_regular
 def get_schedule_pupil(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -144,15 +166,15 @@ def get_schedule_pupil(request, event_id):
         answer["data"] = dict()
         try:
             data = json.loads(request.body.decode('utf-8'))
-            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d/%m/%Y').date(),
-                                      datetime.strptime(data["end_date"], '%d/%m/%Y').date(),
+            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d.%m.%Y').date(),
+                                      datetime.strptime(data["end_date"], '%d.%m.%Y').date(),
                                       1)
             lessons = Lesson.objects.filter(event__id=event_id, group__users=pupil_id, date__in=dates)\
                 .distinct().order_by('date').order_by('start_time')
             prev_date = ""
             for lesson in lessons:
                 if lesson.date != prev_date:
-                    prev_date = lesson.date.strftime('%d/%m/%Y')
+                    prev_date = lesson.date.strftime('%d.%m.%Y')
                     answer["data"][prev_date] = list()
                 answer["data"][prev_date].append(dict())
                 answer["data"][prev_date][-1]["subject"] = str(lesson.subject)
@@ -169,6 +191,7 @@ def get_schedule_pupil(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def get_schedule_teacher(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -177,15 +200,15 @@ def get_schedule_teacher(request, event_id):
         answer["data"] = dict()
         try:
             data = json.loads(request.body.decode('utf-8'))
-            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d/%m/%Y').date(),
-                                      datetime.strptime(data["end_date"], '%d/%m/%Y').date(),
+            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d.%m.%Y').date(),
+                                      datetime.strptime(data["end_date"], '%d.%m.%Y').date(),
                                       1)
             lessons = Lesson.objects.filter(event__id=event_id, teacher__id=teacher_id, date__in=dates)\
                 .distinct().order_by('date').order_by('start_time')
             prev_date = ""
             for lesson in lessons:
                 if lesson.date != prev_date:
-                    prev_date = lesson.date.strftime('%d/%m/%Y')
+                    prev_date = lesson.date.strftime('%d.%m.%Y')
                     answer["data"][prev_date] = list()
                 answer["data"][prev_date].append(dict())
                 answer["data"][prev_date][-1]["subject"] = str(lesson.subject)
@@ -202,6 +225,7 @@ def get_schedule_teacher(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def set_mark(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -231,6 +255,7 @@ def set_mark(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def get_pupils_lessons_marks(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -255,6 +280,7 @@ def get_pupils_lessons_marks(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def update_homework_teacher(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -282,6 +308,7 @@ def update_homework_teacher(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def update_lesson_teacher(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -302,6 +329,7 @@ def update_lesson_teacher(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def get_groups_teacher(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -322,6 +350,7 @@ def get_groups_teacher(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def get_lessons_teacher(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -342,21 +371,22 @@ def get_lessons_teacher(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def get_lessons_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
         answer["data"] = list()
         try:
             data = json.loads(request.body.decode('utf-8'))
-            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d/%m/%Y').date(),
-                                      datetime.strptime(data["end_date"], '%d/%m/%Y').date(),
+            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d.%m.%Y').date(),
+                                      datetime.strptime(data["end_date"], '%d.%m.%Y').date(),
                                       1)
             lessons = Lesson.objects.filter(group__id=int(data["group"]), date__in=dates, event__id=event_id).order_by("date", "start_time")
             for lesson in lessons:
                 answer["data"].append(dict())
                 answer["data"][-1]["id"] = lesson.id
-                answer["data"][-1]["date"] = lesson.date.strftime('%d/%m/%Y')
+                answer["data"][-1]["date"] = lesson.date.strftime('%d.%m.%Y')
                 answer["data"][-1]["start_time"] = lesson.start_time.strftime('%H:%M')
                 answer["data"][-1]["end_time"] = lesson.end_time.strftime('%H:%M')
                 answer["data"][-1]["group"] = lesson.group.label
@@ -372,7 +402,8 @@ def get_lessons_admin(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def delete_lesson_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -391,7 +422,8 @@ def delete_lesson_admin(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def update_lesson_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -404,7 +436,7 @@ def update_lesson_admin(request, event_id):
             lesson.start_time = datetime.strptime(data['start_time'], '%H:%M').time()
             lesson.end_time = datetime.strptime(data['end_time'], '%H:%M').time()
             lesson.place = data['place']
-            lesson.date = datetime.strptime(data["date"], '%d/%m/%Y').date()
+            lesson.date = datetime.strptime(data["date"], '%d.%m.%Y').date()
             lesson.save()
         except Exception as e:
             print(str(e))
@@ -415,7 +447,8 @@ def update_lesson_admin(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def add_lessons_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -433,15 +466,15 @@ def add_lessons_admin(request, event_id):
             dates = list()
             if data['repeat']:
                 if data['until'] == "1":
-                    dates = get_date_in_range(datetime.strptime(data["date"], '%d/%m/%Y').date(),
+                    dates = get_date_in_range(datetime.strptime(data["date"], '%d.%m.%Y').date(),
                                               lesson.event.closed,
                                               int(data["delta"]))
                 else:
-                    dates = get_date_count(datetime.strptime(data["date"], '%d/%m/%Y').date(),
+                    dates = get_date_count(datetime.strptime(data["date"], '%d.%m.%Y').date(),
                                            int(data["times"]),
                                            int(data["delta"]))
             else:
-                dates.append(datetime.strptime(data["date"], '%d/%m/%Y').date())
+                dates.append(datetime.strptime(data["date"], '%d.%m.%Y').date())
             for cur_date in dates:
                 current_lesson = lesson
                 current_lesson.id = None
@@ -456,7 +489,8 @@ def add_lessons_admin(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def delete_subject_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -472,7 +506,8 @@ def delete_subject_admin(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def add_subject_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -495,7 +530,8 @@ def add_subject_admin(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def get_subjects_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -520,7 +556,23 @@ def get_subjects_admin(request, event_id):
 
 
 @login_required
+@should_be_defined
+@should_be_allowed_for_event
 def index(request, event_id):
+    if request.user.UserData.Admin.is_active:
+        return redirect('journal_admin', event_id=event_id)
+    elif request.user.UserData.Teacher.is_active:
+        return redirect('journal_teacher_right', event_id=event_id)
+    elif request.user.UserData.RegularUser.is_active:
+        return redirect('journal_pupil_marks', event_id=event_id)
+    else:
+        return HttpResponseNotFound(request)
+
+
+@login_required
+@should_be_defined
+@should_be_allowed_for_event
+def schedule_index(request, event_id):
     if request.user.UserData.Admin.is_active:
         return redirect('journal_admin', event_id=event_id)
     elif request.user.UserData.Teacher.is_active:
@@ -532,6 +584,7 @@ def index(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_regular
 def as_pupil_marks(request, event_id):
     if request.method == "GET":
@@ -542,6 +595,7 @@ def as_pupil_marks(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_regular
 def as_pupil_schedule(request, event_id):
     if request.method == "GET":
@@ -552,6 +606,7 @@ def as_pupil_schedule(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def as_teacher_schedule(request, event_id):
     if request.method == "GET":
@@ -562,6 +617,7 @@ def as_teacher_schedule(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def as_teacher_left(request, event_id):
     if request.method == "GET":
@@ -581,6 +637,7 @@ def as_teacher_left(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def as_teacher_right(request, event_id):
     if request.method == "GET":
@@ -600,7 +657,8 @@ def as_teacher_right(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def subjects(request, event_id):
     if request.method == "GET":
         event = Event.objects.get(id=event_id)
@@ -610,7 +668,8 @@ def subjects(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def as_admin(request, event_id):
     if request.method == "GET":
         groups = StudyGroup.objects.filter(event__id=event_id)

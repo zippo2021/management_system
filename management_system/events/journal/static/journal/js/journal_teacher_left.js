@@ -24,7 +24,7 @@ function SetDatepickers()
     fromDate.datepicker(
     {
         autoclose:      true,
-        format:         'dd/mm/yyyy',
+        format:         'dd.mm.yyyy',
         startDate:      startDate,
         endDate:        endDate
     });
@@ -32,7 +32,7 @@ function SetDatepickers()
     toDate.datepicker(
     {
         autoclose:      true,
-        format:         'dd/mm/yyyy',
+        format:         'dd.mm.yyyy',
         startDate:      startDate,
         endDate:        endDate
     });
@@ -106,7 +106,7 @@ function UpdateTable()
                 for (var j = 1; j <= lessonsCount; j++)
                 {
                     var lessonId = lessonsDates.children().eq(j-1).data('id');
-                    tr += "<td class='marc_input_cell'>" +
+                    tr += "<td class='mark_input_cell'>" +
                             "<div>" +
                                 "<input type='text' " +
                                     "autocomplete='off' " +

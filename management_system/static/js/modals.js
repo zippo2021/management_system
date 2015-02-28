@@ -1,6 +1,6 @@
 
 
-function ModalToggle(get_url,post_url,t_id,t_title)
+function ModalToggle(get_url,post_url,t_id,t_title,school)
 {
 var content = '';
 var modal = new Modal();
@@ -13,6 +13,7 @@ success : function(text)
     content = text;
     modal.setTitle(t_title);
     modal.getContentElement().append(content);
+    $('.dateinput').datepicker({ format: "dd.mm.yyyy", autoclose:true,language:'ru' });
     modal.setButtons([
     {
             id:'send',
@@ -26,14 +27,26 @@ success : function(text)
                     async: false,
                     cache: false,
                     success: function(data) {
-                        
-                        if (data === "success"){
+                        if (data === "success"|| isJson(data)){
+                            if (school === undefined)
+                                school = false;
+                            if (school){
+                                json_data = JSON.parse(data);
+                                var id = json_data['school_id'];
+                                var tmp = "<option value = '"+id+"'>" + modal.getContentElement().find("#id_name").val() + "</option>";       
+                            }
                             modal.hide();
                             modal.destroy();
-                            OkMessageAutoClose("Данные сохранены.",2,true);
+                            
+                            OkMessageAutoClose("Данные сохранены.",2,!school);
+                            $("body").addClass("modal-open");
+                            if (school)
+                                $(".modal-body").find("select").first().append(tmp);
+                                $(".modal-body").find("select").first().val(id);
                         }
                         else{
                             modal.getContentElement().replaceWith("<div class='modal-body'>"+data+"</div>")
+                            $('.dateinput').datepicker({ format: "dd.mm.yyyy",autoclose:true,language:'ru' });   
                         }
                     },
                     error: function(xhr, str){
@@ -49,6 +62,7 @@ success : function(text)
         callback:function(){
             modal.hide();
             modal.destroy();
+            $("body").addClass("modal-open");
         }
     }]);
     modal.show();
@@ -76,12 +90,14 @@ function ToggleSimpleTextModal(text,title){
 function linkWrapper(url_to,url_from)
 {
     var content = '';
+    var indicator = new LoadingIndicator('Идет загрузка');
+    indicator.show();
     $.ajax({ type: "GET", 
     url: url_to, 
     async: false,
     cache: false,
     success : function(data){
- 
+        indicator.destroy();
         if (isJson(data)){
             response = JSON.parse(data);
             if (response['error'] != undefined)
@@ -89,21 +105,16 @@ function linkWrapper(url_to,url_from)
                     ModalToggle(response['error']['url'],response['error']['url'],'#form',response['error']['title']);
                 else
                     ToggleSimpleTextModal(response['error']['text'],'Ошибка доступа');
-            else{
-				alert('uhi');
-                window.location = url_from;
-			}
         }
         else{
             var state = {
                 "thisIsOnPopState": true
             };
 
-            history.pushState(state, "New Title", url_to);
-                     
-            document.open();
-            document.write(data);
-            document.close();
+            history.pushState(state, "New Title", url_to);       
+            var new_doc = document.open("text/html","replace");
+            new_doc.write(data);
+            new_doc.close();
         }    
     },
     error: function(xhr, str){                  

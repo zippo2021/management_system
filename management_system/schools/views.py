@@ -6,6 +6,7 @@ from schools.forms import SchoolForm
 from schools.models import School
 from django.http import HttpResponse
 from decorators import should_be_admin
+import json
 # Create your views here.
 
 @login_required
@@ -16,7 +17,8 @@ def add(request):
         if form.is_valid():
             school = form.save()
             status = "success"
-            return HttpResponse(status)
+            school_id = school.id
+            return HttpResponse(json.dumps({'status':status,'school_id':school_id}))
     else:       
         form = SchoolForm()
     return render(request, 'schools_add_form.html', {'form' : form})
