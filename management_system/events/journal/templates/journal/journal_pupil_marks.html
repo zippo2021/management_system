@@ -35,14 +35,17 @@
 
 </head>
 <body>
-    <div id="date_container">
+    <div id="date_container" class="form-inline form-group">
         <label for="from">From</label>
-        <input type="text" id="from" name="from" autocomplete="off">
+        <input type="text" class="form-control" id="from" name="from" autocomplete="off">
         <label for="to">to</label>
-        <input type="text" id="to" name="to" autocomplete="off">
+        <input type="text" class="form-control" id="to" name="to" autocomplete="off">
     </div>
 <div>
-    <table border="2px">
+<table id="journal-left-wrapper-table" class="table">
+<tr>
+	<td width=20%>
+	<table class="table table-bordered table-striped journal-left-table">
         <thead>
             <tr>
                 <td><br></td>
@@ -51,8 +54,10 @@
         <tbody id="subjects_list">
         </tbody>
     </table>
+	</td>
+	<td>
     <div style="overflow:auto;">
-        <table border="2px">
+        <table class="table table-bordered table-striped journal-left-table-resized">
             <thead id="lessons_dates">
                 <tr>
                 </tr>
@@ -61,6 +66,9 @@
             </tbody>
         </table>
     </div>
+	</td>
+</tr>
+</table>
 </div>
 
 
