@@ -5,23 +5,12 @@
 {% block event_menu %}
 	{% include 'event_menu.html' %}
 {% endblock %}
+{% block extrahead %}
+<title>Учебные группы</title>
+<script type="text/javascript"  src="{% static 'study_groups/js/study_groups.js' %}"></script>
+{% endblock %}
 {% block content %}
 {% csrf_token %}
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
-
-    <link rel="stylesheet" type="text/css"  href="{% static 'external/bootstrap/css/bootstrap.min.css' %}"/>
-
-    <script type="text/javascript"  src="{% static 'external/js/jquery-1.11.1.min.js' %}"></script>
-    <script type="text/javascript"  src="{% static 'external/bootstrap/js/bootstrap.min.js' %}"></script>
-    <script type="text/javascript"  src="{% static 'js/common.js' %}"></script>
-    <script type="text/javascript"  src="{% static 'study_groups/js/study_groups.js' %}"></script>
-</head>
-<body>
     <div id="group_select_container" class="form-group">
         <select size="1" class="form-control" id="group_list" style="width: 200px">
         {% for group in groups %}
@@ -67,6 +56,5 @@
         <input id="new_group_title" class="form-control" placeholder="Название группы" value=""/>
     </div>
     <input type="hidden" id="event_id" value="{{ event.id }}"/>
-</body>
-</html>
+
 {% endblock %}

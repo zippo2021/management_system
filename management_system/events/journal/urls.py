@@ -6,6 +6,7 @@ from events.journal import schedule
 
 urlpatterns = patterns('',
     url(r'^journal$', schedule.index, name='journal_index'),
+    url(r'^journal/schedule$', schedule.schedule_index, name='journal_schedule_index'),
 
     url(r'^journal/admin$', schedule.as_admin, name='journal_admin'),
     url(r'^journal/admin/subjects$', schedule.subjects, name='journal_subjects'),

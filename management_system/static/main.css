@@ -2,7 +2,7 @@ thead {
     font-weight:bold;
 }
 
-.mark_input_cell {
+.marc_input_cell {
 	width: 40px
 }
 
@@ -19,8 +19,16 @@ thead {
 	vertical-align: middle;
 }
 
+.journal-left-table-resized tr{
+	height: 49px;
+}
+
 .journal-left-table tr{
 	height: 50px;
+}
+
+.journal-left-table-resized {
+	display: block;
 }
 
 .div-centered {
@@ -32,6 +40,10 @@ thead {
 	float: right;
 	color: white;
 	margin-right: 40px;
+}
+
+#journal-left-wrapper-table {
+	table-layout: fixed;
 }
 
 #panel-wrapper {
@@ -57,4 +69,12 @@ thead {
 
 .option-link {
 	float: right;
+}
+
+span.glyphicon {
+    font-size: 1.5em;
+}
+
+span.glyphicon-remove {
+    color: red;
 }
