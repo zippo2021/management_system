@@ -24,5 +24,5 @@ class StudyGroup(models.Model):
 @receiver(post_save, sender = Event)
 def create_study_group_all(instance, created, **kwargs):
     if created:
-        group = StudyGroup(event = instance, label = 'All')
+        group = StudyGroup(event = instance, label = 'Все ученики')
         group.save()
