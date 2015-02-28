@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-{% load i18n %}
+<!--{% load i18n %}-->
+{% load l10n %}
 {% load custom_template_filters %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
@@ -12,9 +13,18 @@
     <script type="text/javascript"  src="{% static 'external/js/jquery-1.11.1.min.js' %}"></script>
     <link rel="stylesheet" type="text/css"  href="{% static 'external/bootstrap/css/bootstrap.min.css' %}"/>
     <script type="text/javascript"  src="{% static 'external/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'external/js/bootstrap-datepicker.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'external/css/bootstrap-datepicker.css' %}"/>
     <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/modals.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/sidebar.js' %}"></script>
+    <style type="text/css">
+    .datepicker{
+        z-index: 1100 !important;    
+    }    
+    </style>
+
+
 	{% block extrahead %}{% endblock %}
 </head>
 
@@ -66,4 +76,9 @@
 
 	</div>
 </body>
+<script>
+$(document).ready(function() {
+    $('.dateinput').datepicker({ format: "dd.mm.yyyy",autoclose:true,language:'ru' });
+}); 
+</script>
 </html>

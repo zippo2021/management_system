@@ -13,6 +13,7 @@ from dashboard.observer.models import Observer
 from user_manager.permissions import perms_to_classes
 from django.db.models.signals import post_save
 
+
 # Create your models here.
 class UserData(models.Model):
     def get_permissions(self):
@@ -99,7 +100,7 @@ class Passport(models.Model):
     ser = models.PositiveIntegerField(verbose_name='Серия', max_length=4)
     number = models.PositiveIntegerField(verbose_name='Номер', max_length=6)
     issued_by = models.CharField(verbose_name="Кем выдан", max_length=255,)
-    when_issued = models.DateField(verbose_name="Когда выдан")
+    when_issued = models.DateField(verbose_name="Когда выдан" )
     code = models.CharField(verbose_name="Код подразделения", max_length=30)
 admin.site.register(Passport)
 
