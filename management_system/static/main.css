@@ -2,6 +2,14 @@ thead {
     font-weight:bold;
 }
 
+.mark_input_cell {
+	width: 40px
+}
+
+.mark_input {
+	width: 40px;
+}
+
 .td-centered {
 	vertical-align: middle;
     text-align: center;
@@ -9,6 +17,10 @@ thead {
     margin-right: auto;
 	text-align: center; 
 	vertical-align: middle;
+}
+
+.journal-left-table tr{
+	height: 50px;
 }
 
 .div-centered {

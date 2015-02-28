@@ -106,13 +106,13 @@ function UpdateTable()
                 for (var j = 1; j <= lessonsCount; j++)
                 {
                     var lessonId = lessonsDates.children().eq(j-1).data('id');
-                    tr += "<td>" +
+                    tr += "<td class='marc_input_cell'>" +
                             "<div>" +
                                 "<input type='text' " +
                                     "autocomplete='off' " +
                                     "data-lesson='" + lessonId + "' " +
                                     "data-pupil='" + pupilId + "' " +
-                                    "class='mark_input'" +
+                                    "class='mark_input form-control'" +
                                     "value='" + marks[pupilId][lessonId] + "'>" +
                             "</div>" +
                         "</td>";
