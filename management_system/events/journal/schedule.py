@@ -7,7 +7,7 @@ from events.journal.models import Lesson, Subject, Homework, Mark
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from decorators import should_be_teacher, should_be_admin, should_be_regular
+from decorators import should_be_teacher, should_be_defined, should_be_regular, should_be_event_worker, should_be_allowed_for_event
 import json
 from django.db import IntegrityError
 from datetime import datetime, timedelta
@@ -107,6 +107,7 @@ def get_marks(data):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_regular
 def get_marks_pupil(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -156,6 +157,7 @@ def get_marks_pupil(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_regular
 def get_schedule_pupil(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -189,6 +191,7 @@ def get_schedule_pupil(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def get_schedule_teacher(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -222,6 +225,7 @@ def get_schedule_teacher(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def set_mark(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -251,6 +255,7 @@ def set_mark(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def get_pupils_lessons_marks(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -275,6 +280,7 @@ def get_pupils_lessons_marks(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def update_homework_teacher(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -302,6 +308,7 @@ def update_homework_teacher(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def update_lesson_teacher(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -322,6 +329,7 @@ def update_lesson_teacher(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def get_groups_teacher(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -342,6 +350,7 @@ def get_groups_teacher(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def get_lessons_teacher(request, event_id):
     if request.method == "POST" and request.is_ajax:
@@ -362,7 +371,8 @@ def get_lessons_teacher(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def get_lessons_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -392,7 +402,8 @@ def get_lessons_admin(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def delete_lesson_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -411,7 +422,8 @@ def delete_lesson_admin(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def update_lesson_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -435,7 +447,8 @@ def update_lesson_admin(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def add_lessons_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -476,7 +489,8 @@ def add_lessons_admin(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def delete_subject_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -492,7 +506,8 @@ def delete_subject_admin(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def add_subject_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -515,7 +530,8 @@ def add_subject_admin(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def get_subjects_admin(request, event_id):
     if request.method == "POST" and request.is_ajax:
         answer = dict()
@@ -540,7 +556,23 @@ def get_subjects_admin(request, event_id):
 
 
 @login_required
+@should_be_defined
+@should_be_allowed_for_event
 def index(request, event_id):
+    if request.user.UserData.Admin.is_active:
+        return redirect('journal_admin', event_id=event_id)
+    elif request.user.UserData.Teacher.is_active:
+        return redirect('journal_teacher_right', event_id=event_id)
+    elif request.user.UserData.RegularUser.is_active:
+        return redirect('journal_pupil_marks', event_id=event_id)
+    else:
+        return HttpResponseNotFound(request)
+
+
+@login_required
+@should_be_defined
+@should_be_allowed_for_event
+def schedule_index(request, event_id):
     if request.user.UserData.Admin.is_active:
         return redirect('journal_admin', event_id=event_id)
     elif request.user.UserData.Teacher.is_active:
@@ -552,6 +584,7 @@ def index(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_regular
 def as_pupil_marks(request, event_id):
     if request.method == "GET":
@@ -562,6 +595,7 @@ def as_pupil_marks(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_regular
 def as_pupil_schedule(request, event_id):
     if request.method == "GET":
@@ -572,6 +606,7 @@ def as_pupil_schedule(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def as_teacher_schedule(request, event_id):
     if request.method == "GET":
@@ -582,6 +617,7 @@ def as_teacher_schedule(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def as_teacher_left(request, event_id):
     if request.method == "GET":
@@ -601,6 +637,7 @@ def as_teacher_left(request, event_id):
 
 
 @login_required
+@should_be_allowed_for_event
 @should_be_teacher
 def as_teacher_right(request, event_id):
     if request.method == "GET":
@@ -620,7 +657,8 @@ def as_teacher_right(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def subjects(request, event_id):
     if request.method == "GET":
         event = Event.objects.get(id=event_id)
@@ -630,7 +668,8 @@ def subjects(request, event_id):
 
 
 @login_required
-@should_be_admin
+@should_be_allowed_for_event
+@should_be_event_worker
 def as_admin(request, event_id):
     if request.method == "GET":
         groups = StudyGroup.objects.filter(event__id=event_id)
