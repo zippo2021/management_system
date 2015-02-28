@@ -135,7 +135,7 @@ LOGIN_REDIRECT_URL = '/news/main/'
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
 
@@ -175,6 +175,8 @@ UPLOADCARE = {
     'secret': 'd44ce3444b9a9218c6e9',
 }
 '''
+
+FORMAT_MODULE_PATH = 'management_system.formats'
 
 EVENT_ATTACHMENTS_DIR = os.path.join(BASE_DIR, "files/events/")
 EVENT_EMAIL_TEMPLATES_DIR = os.path.join(BASE_DIR, "email_templates/events/")

@@ -4,20 +4,8 @@
 {% block event_menu %}
     {% include 'event_menu.html' %}
 {% endblock %}
-{% block content %}
-{% csrf_token %}
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
-
-    <link rel="stylesheet" type="text/css"  href="{% static 'external/bootstrap/css/bootstrap.min.css' %}"/>
-
-    <script type="text/javascript"  src="{% static 'external/js/jquery-1.11.1.min.js' %}"></script>
-    <script type="text/javascript"  src="{% static 'external/bootstrap/js/bootstrap.min.js' %}"></script>
-    <script type="text/javascript"  src="{% static 'js/common.js' %}"></script>
+{% block extrahead %}
+    <title>Темы занятий</title>
 
     <script type="text/javascript" src="{% static 'external/js/jquery.timepicker.min.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'external/css/jquery.timepicker.css' %}"/>
@@ -32,9 +20,10 @@
             z-index: 1100 !important;
         }
     </style>
+{% endblock %}
+{% block content %}
+{% csrf_token %}
 
-</head>
-<body>
     <div id="date_container" class="form-inline form-group">
         <label for="from">From</label>
         <input type="text" class="form-control" id="from" name="from" autocomplete="off">
@@ -117,8 +106,6 @@
     </div>
 
     <input type="hidden" id="event_id" value="{{ event.id }}"/>
-    <input type="hidden" id="event_start_date" value="{{ event.opened|date:"d/m/Y" }}"/>
-    <input type="hidden" id="event_end_date" value="{{ event.closed|date:"d/m/Y" }}"/>
-</body>
-</html>
+    <input type="hidden" id="event_start_date" value="{{ event.opened|date:"d.m.Y" }}"/>
+    <input type="hidden" id="event_end_date" value="{{ event.closed|date:"d.m.Y" }}"/>
 {% endblock %}

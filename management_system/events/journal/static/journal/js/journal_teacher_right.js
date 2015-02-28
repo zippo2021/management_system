@@ -37,7 +37,7 @@ function GetLessons()
                 $.each(lessons, function (key, val)
                 {
                     $("<tr data-lessonid=\"" + val["id"] + "\" data-homeworkid=\"" + val["homework_id"] + "\">" +
-                        "<td><a class='edit_lesson' href='#'><img src='/static/images/edit.png' alt='edit' height='20'></a></td>" +
+                        "<td><a class='edit_lesson' href='#'><span class='glyphicon glyphicon-pencil'></span></a></td>" +
                         "<td>" + val["date"] + "</td>" +
                         "<td>" + val["start_time"] + "</td>" +
                         "<td>" + val["end_time"] + "</td>" +
@@ -46,7 +46,7 @@ function GetLessons()
                         "<td style='display:none;'>" + val["comment"] + "</td>" +
                         "<td>" + val["homework"] + "</td>" +
                         "<td style='display:none;'>" + val["homework_comment"] + "</td>" +
-                        "<td><a class='edit_homework' href='#'><img src='/static/images/edit.png' alt='edit' height='20'></a></td>" +
+                        "<td><a class='edit_homework' href='#'><span class='glyphicon glyphicon-pencil'></span></a></td>" +
                     "</tr>").appendTo(lessonsList);
                 });
                 $(".edit_lesson").click(function()
@@ -161,7 +161,7 @@ function SetDatepickers()
     fromDate.datepicker(
     {
         autoclose:      true,
-        format:         'dd/mm/yyyy',
+        format:         'dd.mm.yyyy',
         startDate:      startDate,
         endDate:        endDate
     });
@@ -169,7 +169,7 @@ function SetDatepickers()
     toDate.datepicker(
     {
         autoclose:      true,
-        format:         'dd/mm/yyyy',
+        format:         'dd.mm.yyyy',
         startDate:      startDate,
         endDate:        endDate
     });
