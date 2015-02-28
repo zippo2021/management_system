@@ -8,7 +8,7 @@ function SetDatepickers()
     fromDate.datepicker(
     {
         autoclose:      true,
-        format:         'dd/mm/yyyy',
+        format:         'dd.mm.yyyy',
         startDate:      startDate,
         endDate:        endDate
     });
@@ -16,7 +16,7 @@ function SetDatepickers()
     toDate.datepicker(
     {
         autoclose:      true,
-        format:         'dd/mm/yyyy',
+        format:         'dd.mm.yyyy',
         startDate:      startDate,
         endDate:        endDate
     });

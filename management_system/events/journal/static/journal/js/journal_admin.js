@@ -31,7 +31,7 @@ function GetLessons()
                 $.each(lessons, function (key, val)
                 {
                     $("<tr data-lessonid='" +val["id"] + "'>" +
-                        "<td><a class='edit_lesson' href='#'><span class='glyphicon glyphicon-pencil'></span></a>&nbsp" +
+                        "<td><a class='edit_lesson' href='#'><span class='glyphicon glyphicon-pencil'></span></a>" +
                             "<a class='del_lesson' href='#'><span class='glyphicon glyphicon-remove'></span></a>" +
                         "</td>" +
                         "<td>" + val["date"] + "</td>" +
@@ -123,7 +123,7 @@ function GetLessons()
     });
 }
 
-function SetDatepickers()
+    function SetDatepickers()
 {
     var startDate = $("#event_start_date").val();
     var endDate = $("#event_end_date").val();
@@ -133,7 +133,7 @@ function SetDatepickers()
     fromDate.datepicker(
     {
         autoclose:      true,
-        format:         'dd/mm/yyyy',
+        format:         'dd.mm.yyyy',
         startDate:      startDate,
         endDate:        endDate
     });
@@ -141,7 +141,7 @@ function SetDatepickers()
     toDate.datepicker(
     {
         autoclose:      true,
-        format:         'dd/mm/yyyy',
+        format:         'dd.mm.yyyy',
         startDate:      startDate,
         endDate:        endDate
     });
