@@ -15,9 +15,9 @@
 {% csrf_token %}
 
     <div id="date_container" class="form-inline form-group">
-        <label for="from">From</label>
+        <label for="from">С</label>
         <input type="text" class="form-control" style="width: 200px" id="from" name="from" autocomplete="off">
-        <label for="to">to</label>
+        <label for="to">по</label>
         <input type="text" class="form-control" id="to" name="to" style="width: 200px" autocomplete="off">
 	</div>
     <div id="group_select_container" class="form-group">
@@ -52,11 +52,12 @@
     <div id="add_window" hidden="hidden">
 
         <div id="date_container" class="form-group">
-            <label for="lesson_date">Date</label>
+            <label for="lesson_place">Место</label>
             <input type="text" class="form-control" id="lesson_date" name="lesson_date" autocomplete="off">
         </div>
 
         <div id="time_container" class="form-group form-inline">
+            <label for="start_time">Время</label>
             <input id="start_time" type="text" class="time ui-timepicker-input form-control" autocomplete="off">
             <input id="end_time" type="text" class="time ui-timepicker-input form-control" autocomplete="off">
         </div>
@@ -74,7 +75,7 @@
             </select>
         </div>
 		<div class="form-group">
-        	<label for="lesson_place">Place</label>
+        	<label for="lesson_place">Место</label>
         	<input id="lesson_place" class="form-control" type="text">
         </div>
 		<div id="repeat_group" class="form-group hide">
