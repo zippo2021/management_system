@@ -2,6 +2,10 @@ thead {
     font-weight:bold;
 }
 
+.mark_input_cell {
+	width: 40px
+}
+
 .mark_input {
 	width: 40px;
 }
