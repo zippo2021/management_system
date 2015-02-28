@@ -35,31 +35,36 @@
 
 </head>
 <body>
-    <div id="date_container">
+    <div id="date_container" class="form-inline form-group">
         <label for="from">From</label>
-        <input type="text" id="from" name="from" autocomplete="off">
+        <input type="text" class="form-control" id="from" name="from" autocomplete="off">
         <label for="to">to</label>
-        <input type="text" id="to" name="to" autocomplete="off">
+        <input type="text" class="form-control" id="to" name="to" autocomplete="off">
     </div>
-    <div id="subject_select_container">
-        <select size="1" id="subject_list" style="width: 200px">
-        {% for subject in subjects %}
-            <option value="{{ subject.id }}">{{ subject.name }}</option>
-        {% endfor %}
-        </select>
-    </div>
-    <div id="group_select_container">
-        <select size="1" id="group_list" style="width: 200px">
+
+	<div class="form-inline form-group">
+    <div id="group_select_container" class="form-group">
+        <label for="group_list">Group</label>
+		<select size="1" class="form-control" id="group_list" style="width: 200px">
         {% for group in groups %}
             <option value="{{ group.id }}">{{ group.label }}</option>
         {% endfor %}
         </select>
     </div>
+    <div id="subject_select_container" class="form-group">
+        <label for="subject_list">Subject</label>
+        <select size="1" class="form-control" id="subject_list" style="width: 200px">
+        {% for subject in subjects %}
+            <option value="{{ subject.id }}">{{ subject.name }}</option>
+        {% endfor %}
+        </select>
+    </div>
+	</div>
 
-    <table border="2px">
+    <table class="table table-bordered">
         <thead>
             <tr>
-                <td></td>
+                <td width=3%></td>
                 <td>Дата</td>
                 <td>Время начала</td>
                 <td>Время конца</td>
@@ -68,7 +73,7 @@
                 <td style='display:none;'></td>
                 <td>Домашнее задание</td>
                 <td style='display:none;'></td>
-                <td></td>
+                <td width=3%></td>
             </tr>
         </thead>
         <tbody id="lessons_list">
@@ -77,34 +82,37 @@
 
     <div id="edit_window" hidden="hidden">
 
-        <div id="date_container">
+        <div id="date_container" class="form-group">
             <label for="lesson_date">Date</label>
-            <input disabled="disabled" type="text" id="lesson_date" name="lesson_date" autocomplete="off">
+            <input disabled="disabled" class="form-control" type="text" id="lesson_date" name="lesson_date" autocomplete="off">
         </div>
 
-        <div id="time_container">
-            <input disabled="disabled" id="start_time" type="text" class="time ui-timepicker-input" autocomplete="off">
-            <input disabled="disabled" id="end_time" type="text" class="time ui-timepicker-input" autocomplete="off">
+        <div id="time_container" class="form-group form-inline">
+            <input disabled="disabled" class="form-control" id="start_time" type="text" class="time ui-timepicker-input" autocomplete="off">
+            <input disabled="disabled" class="form-control" id="end_time" type="text" class="time ui-timepicker-input" autocomplete="off">
         </div>
-
+		<div class="form-group">
         <label for="lesson_place">Place</label>
-        <input disabled="disabled" id="lesson_place" type="text">
-
+        <input disabled="disabled" class="form-control" id="lesson_place" type="text">
+		</div>
+		<div class="form-group">
         <label for="title">Title</label>
-        <input id="title" type="text">
-
+        <input id="title" class="form-control" type="text">
+		</div>
+		<div class="form-group">
         <label for="comment">Comment</label>
-        <textarea rows="4" cols="50" id="comment"></textarea>
+        <textarea rows="4" cols="50" class="form-control" id="comment"></textarea>
+		</div>
 
     </div>
 
-    <div id="edit_homework_window" hidden="hidden">
+    <div id="edit_homework_window" class="form-group" hidden="hidden">
 
         <label for="task">Task</label>
-        <input id="task" type="text">
+        <input id="task" class="form-control" type="text">
 
         <label for="comment">Comment</label>
-        <textarea rows="4" cols="50" id="comment"></textarea>
+        <textarea rows="4" class="form-control" cols="50" id="comment"></textarea>
 
     </div>
 
