@@ -37,7 +37,7 @@ class RegularUserFormStep1(ModelForm):
         fields = ('school', 'grad_date',)
         #help_texts = { 'school' : mark_safe('<a href=\'/schools/add\'>Добавить Школу</a>')}
         schools_add_url = '/schools/add/'
-        help_texts = {'school':mark_safe("<a id='school_add' href = '#' onClick=\"ModalToggle('%s','%s','#form','Добавить школу'); return false;\" >Добавить</a>" % (schools_add_url, schools_add_url))}
+        help_texts = {'school':mark_safe("<a id='school_add' href = '#' onClick=\"ModalToggle('%s','%s','#form','Добавить школу',true); return false;\" >Добавить</a>" % (schools_add_url, schools_add_url))}
 
 class RegularUserFormStep2(ModelForm):
     class Meta:
