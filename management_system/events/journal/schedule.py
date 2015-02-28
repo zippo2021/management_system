@@ -514,7 +514,7 @@ def add_subject_admin(request, event_id):
         try:
             data = json.loads(request.body.decode('utf-8'))
             if data == '':
-                raise Exception('Field should be not NULL')
+                raise Exception('Поле не должно быть пустым')
             subjects = Subject.objects.filter(event__id=event_id, name=data)
             if len(subjects) == 0:
                 subject = Subject(name=data, event_id=event_id)

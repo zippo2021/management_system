@@ -135,7 +135,8 @@ function GetLessons()
         autoclose:      true,
         format:         'dd.mm.yyyy',
         startDate:      startDate,
-        endDate:        endDate
+        endDate:        endDate,
+        language:       'ru'
     });
     toDate.val(endDate);
     toDate.datepicker(
@@ -143,7 +144,8 @@ function GetLessons()
         autoclose:      true,
         format:         'dd.mm.yyyy',
         startDate:      startDate,
-        endDate:        endDate
+        endDate:        endDate,
+        language:       'ru'
     });
 
     fromDate.on('changeDate', function()
@@ -262,7 +264,8 @@ function PrepareLessonWindow()
         autoclose:      true,
         format:         'dd/mm/yyyy',
         startDate:      startDate,
-        endDate:        endDate
+        endDate:        endDate,
+        language:       'ru'
     });
 
     var startTime = addWindow.find("#start_time");

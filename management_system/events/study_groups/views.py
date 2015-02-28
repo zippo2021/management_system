@@ -50,10 +50,10 @@ def delete_group(request, event_id):
         try:
             data = json.loads(request.body.decode('utf-8'))
             study_group = StudyGroup.objects.get(event__id=event_id, id=data)
-            if study_group.label != 'All':
+            if study_group.label != 'Все ученики':
                 study_group.delete()
             else:
-                answer["error"] = "Can't delete group 'All'"
+                answer["error"] = "Нельзя удалить группу 'Все ученики'"
         except Exception as e:
             print(str(e))
             answer["error"] = "Error: " + str(e)
@@ -71,7 +71,7 @@ def add_group(request, event_id):
         try:
             data = json.loads(request.body.decode('utf-8'))
             if data == '':
-                raise Exception('Field should be not NULL')
+                raise Exception('Поле не должно быть пустым')
             groups = StudyGroup.objects.filter(event__id=event_id, label=data)
             if len(groups) == 0:
                 group = StudyGroup(label=data, event_id=event_id)
