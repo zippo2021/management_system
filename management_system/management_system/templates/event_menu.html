@@ -3,6 +3,7 @@
 {% url 'study_groups_index' event.id as study_groups_index %}
 {% url 'events_manage_show_results' event.id as events_manage_show_results %}
 {% url 'journal_index' event.id as journal_index %}
+{% url 'journal_schedule' event.id as journal_schedule %}
 
 {% block event_menu %}
 <ul id="event_menu" class="nav nav-tabs nav-justified">
@@ -20,7 +21,7 @@
 </li>
 {% endif %}
 
-<li><a href="#">Расписание</a></li>
+<li {% if request.path == journal_schedule %} class="active" {% endif %}><a href="#" onClick="linkWrapper('{{ journal_schedule }}','{{ request. path }}')">Расписание</a></li>
 
 {% if 'regular' in user_permissions or 'admin' in user_permissions or 'teacher' in user_permissions or 'observer' in user_permissions or 'event_worker' in user_permissions %}
 	{% if event.has_journal %}
