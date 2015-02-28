@@ -58,3 +58,11 @@ thead {
 .option-link {
 	float: right;
 }
+
+span.glyphicon {
+    font-size: 1.5em;
+}
+
+span.glyphicon-remove {
+    color: red;
+}
