@@ -112,7 +112,7 @@ function UpdateTable()
                                     "autocomplete='off' " +
                                     "data-lesson='" + lessonId + "' " +
                                     "data-pupil='" + pupilId + "' " +
-                                    "class='mark_input'" +
+                                    "class='mark_input form-control'" +
                                     "value='" + marks[pupilId][lessonId] + "'>" +
                             "</div>" +
                         "</td>";
