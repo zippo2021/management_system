@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from decorators import should_be_teacher, should_be_defined, should_be_regular, should_be_event_worker, should_be_allowed_for_event
 import json
 from django.db import IntegrityError
+from django.db.models import Q
 from datetime import datetime, timedelta
 
 
@@ -29,6 +30,23 @@ def get_date_count(start, count=1, step=1):
         result.append(cur)
         cur += timedelta(days=step)
     return result
+
+
+def check_collisions(lesson):
+    #check teacher collision
+    lessons = Lesson.objects.filter(teacher=lesson.teacher, date=lesson.date)\
+                    .exclude(Q(end_time__lte=lesson.start_time), Q(end_time__lte=lesson.end_time))\
+                    .exclude(Q(start_time__gte=lesson.start_time), Q(start_time__gte=lesson.end_time))
+    if len(lessons) > 0:
+        return False
+    #check pupil collisions
+    pupils = RegularUser.objects.filter(StudyGroup=lesson.group)
+    lessons = Lesson.objects.filter(group__users__in=pupils, date=lesson.date)\
+                    .exclude(Q(end_time__lte=lesson.start_time), Q(end_time__lte=lesson.end_time))\
+                    .exclude(Q(start_time__gte=lesson.start_time), Q(start_time__gte=lesson.end_time))
+    if len(lessons) > 0:
+        return False
+    return True
 
 
 def get_groups(data):
@@ -479,7 +497,10 @@ def add_lessons_admin(request, event_id):
                 current_lesson = lesson
                 current_lesson.id = None
                 current_lesson.date = cur_date
-                current_lesson.save()
+                if check_collisions(current_lesson):
+                    current_lesson.save()
+                else:
+                    print('skip lesson')
         except Exception as e:
             print(str(e))
             answer["error"] = "Error: " + str(e)
