@@ -10,24 +10,16 @@
     <script type="text/javascript" src="{% static 'external/js/jquery.timepicker.min.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'external/css/jquery.timepicker.css' %}"/>
 
-    <script type="text/javascript" src="{% static 'external/js/bootstrap-datepicker.js' %}"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'external/css/bootstrap-datepicker.css' %}"/>
-
     <script type="text/javascript"  src="{% static 'journal/js/journal_pupil_marks.js' %}"></script>
 
-    <style type="text/css">
-        .datepicker{
-            z-index: 1100 !important;
-        }
-    </style>
 {% endblock %}
 {% block content %}
 {% csrf_token %}
 
     <div id="date_container">
-        <label for="from">From</label>
+        <label for="from">С</label>
         <input type="text" id="from" name="from" autocomplete="off">
-        <label for="to">to</label>
+        <label for="to">по</label>
         <input type="text" id="to" name="to" autocomplete="off">
     </div>
 <div>
@@ -54,7 +46,7 @@
 
 
     <input type="hidden" id="event_id" value="{{ event.id }}"/>
-    <input type="hidden" id="event_start_date" value="{{ event.opened|date:"d/m/Y" }}"/>
-    <input type="hidden" id="event_end_date" value="{{ event.closed|date:"d/m/Y" }}"/>
+    <input type="hidden" id="event_start_date" value="{{ event.opened|date:"d.m.Y" }}"/>
+    <input type="hidden" id="event_end_date" value="{{ event.closed|date:"d.m.Y" }}"/>
 
 {% endblock %}

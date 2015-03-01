@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from decorators import should_be_teacher, should_be_defined, should_be_regular, should_be_event_worker, should_be_allowed_for_event
 import json
 from django.db import IntegrityError
+from django.db.models import Q
 from datetime import datetime, timedelta
 
 
@@ -29,6 +30,23 @@ def get_date_count(start, count=1, step=1):
         result.append(cur)
         cur += timedelta(days=step)
     return result
+
+
+def check_collisions(lesson):
+    #check teacher collision
+    lessons = Lesson.objects.filter(teacher=lesson.teacher, date=lesson.date)\
+                    .exclude(Q(end_time__lte=lesson.start_time), Q(end_time__lte=lesson.end_time))\
+                    .exclude(Q(start_time__gte=lesson.start_time), Q(start_time__gte=lesson.end_time))
+    if len(lessons) > 0:
+        return False
+    #check pupil collisions
+    pupils = RegularUser.objects.filter(StudyGroup=lesson.group)
+    lessons = Lesson.objects.filter(group__users__in=pupils, date=lesson.date)\
+                    .exclude(Q(end_time__lte=lesson.start_time), Q(end_time__lte=lesson.end_time))\
+                    .exclude(Q(start_time__gte=lesson.start_time), Q(start_time__gte=lesson.end_time))
+    if len(lessons) > 0:
+        return False
+    return True
 
 
 def get_groups(data):
@@ -56,8 +74,8 @@ def get_pupils(data):
 
 
 def get_lessons(data):
-    dates = get_date_in_range(datetime.strptime(data["start_date"], '%d/%m/%Y').date(),
-                              datetime.strptime(data["end_date"], '%d/%m/%Y').date(),
+    dates = get_date_in_range(datetime.strptime(data["start_date"], '%d.%m.%Y').date(),
+                              datetime.strptime(data["end_date"], '%d.%m.%Y').date(),
                               1)
     lessons = Lesson.objects.filter(group__id=int(data["study_group"]),
                                     teacher__id=int(data["teacher"]),
@@ -69,7 +87,7 @@ def get_lessons(data):
         homeworks = Homework.objects.filter(to_lesson=lesson)
         answer.append(dict())
         answer[-1]["id"] = lesson.id
-        answer[-1]["date"] = lesson.date.strftime('%d/%m/%Y')
+        answer[-1]["date"] = lesson.date.strftime('%d.%m.%Y')
         answer[-1]["start_time"] = lesson.start_time.strftime('%H:%M')
         answer[-1]["end_time"] = lesson.end_time.strftime('%H:%M')
         answer[-1]["group"] = lesson.group.label
@@ -116,8 +134,8 @@ def get_marks_pupil(request, event_id):
         answer["data"] = dict()
         try:
             data = json.loads(request.body.decode('utf-8'))
-            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d/%m/%Y').date(),
-                                      datetime.strptime(data["end_date"], '%d/%m/%Y').date(),
+            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d.%m.%Y').date(),
+                                      datetime.strptime(data["end_date"], '%d.%m.%Y').date(),
                                       1)
             lessons = Lesson.objects.filter(event__id=event_id, group__users=pupil_id, date__in=dates)\
                 .distinct().order_by('date').order_by('start_time')
@@ -137,7 +155,7 @@ def get_marks_pupil(request, event_id):
                 answer["data"]["lessons"].append(dict())
                 answer["data"]["lessons"][-1]["id"] = lesson.id
                 answer["data"]["lessons"][-1]["title"] = lesson.title
-                answer["data"]["lessons"][-1]["date"] = lesson.date.strftime('%d/%m/%Y')
+                answer["data"]["lessons"][-1]["date"] = lesson.date.strftime('%d.%m.%Y')
 
             answer["data"]["marks"] = dict()
             for sid in subjects_ids:
@@ -166,15 +184,15 @@ def get_schedule_pupil(request, event_id):
         answer["data"] = dict()
         try:
             data = json.loads(request.body.decode('utf-8'))
-            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d/%m/%Y').date(),
-                                      datetime.strptime(data["end_date"], '%d/%m/%Y').date(),
+            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d.%m.%Y').date(),
+                                      datetime.strptime(data["end_date"], '%d.%m.%Y').date(),
                                       1)
             lessons = Lesson.objects.filter(event__id=event_id, group__users=pupil_id, date__in=dates)\
                 .distinct().order_by('date').order_by('start_time')
             prev_date = ""
             for lesson in lessons:
                 if lesson.date != prev_date:
-                    prev_date = lesson.date.strftime('%d/%m/%Y')
+                    prev_date = lesson.date.strftime('%d.%m.%Y')
                     answer["data"][prev_date] = list()
                 answer["data"][prev_date].append(dict())
                 answer["data"][prev_date][-1]["subject"] = str(lesson.subject)
@@ -200,15 +218,15 @@ def get_schedule_teacher(request, event_id):
         answer["data"] = dict()
         try:
             data = json.loads(request.body.decode('utf-8'))
-            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d/%m/%Y').date(),
-                                      datetime.strptime(data["end_date"], '%d/%m/%Y').date(),
+            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d.%m.%Y').date(),
+                                      datetime.strptime(data["end_date"], '%d.%m.%Y').date(),
                                       1)
             lessons = Lesson.objects.filter(event__id=event_id, teacher__id=teacher_id, date__in=dates)\
                 .distinct().order_by('date').order_by('start_time')
             prev_date = ""
             for lesson in lessons:
                 if lesson.date != prev_date:
-                    prev_date = lesson.date.strftime('%d/%m/%Y')
+                    prev_date = lesson.date.strftime('%d.%m.%Y')
                     answer["data"][prev_date] = list()
                 answer["data"][prev_date].append(dict())
                 answer["data"][prev_date][-1]["subject"] = str(lesson.subject)
@@ -379,14 +397,14 @@ def get_lessons_admin(request, event_id):
         answer["data"] = list()
         try:
             data = json.loads(request.body.decode('utf-8'))
-            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d/%m/%Y').date(),
-                                      datetime.strptime(data["end_date"], '%d/%m/%Y').date(),
+            dates = get_date_in_range(datetime.strptime(data["start_date"], '%d.%m.%Y').date(),
+                                      datetime.strptime(data["end_date"], '%d.%m.%Y').date(),
                                       1)
             lessons = Lesson.objects.filter(group__id=int(data["group"]), date__in=dates, event__id=event_id).order_by("date", "start_time")
             for lesson in lessons:
                 answer["data"].append(dict())
                 answer["data"][-1]["id"] = lesson.id
-                answer["data"][-1]["date"] = lesson.date.strftime('%d/%m/%Y')
+                answer["data"][-1]["date"] = lesson.date.strftime('%d.%m.%Y')
                 answer["data"][-1]["start_time"] = lesson.start_time.strftime('%H:%M')
                 answer["data"][-1]["end_time"] = lesson.end_time.strftime('%H:%M')
                 answer["data"][-1]["group"] = lesson.group.label
@@ -436,7 +454,7 @@ def update_lesson_admin(request, event_id):
             lesson.start_time = datetime.strptime(data['start_time'], '%H:%M').time()
             lesson.end_time = datetime.strptime(data['end_time'], '%H:%M').time()
             lesson.place = data['place']
-            lesson.date = datetime.strptime(data["date"], '%d/%m/%Y').date()
+            lesson.date = datetime.strptime(data["date"], '%d.%m.%Y').date()
             lesson.save()
         except Exception as e:
             print(str(e))
@@ -466,20 +484,23 @@ def add_lessons_admin(request, event_id):
             dates = list()
             if data['repeat']:
                 if data['until'] == "1":
-                    dates = get_date_in_range(datetime.strptime(data["date"], '%d/%m/%Y').date(),
+                    dates = get_date_in_range(datetime.strptime(data["date"], '%d.%m.%Y').date(),
                                               lesson.event.closed,
                                               int(data["delta"]))
                 else:
-                    dates = get_date_count(datetime.strptime(data["date"], '%d/%m/%Y').date(),
+                    dates = get_date_count(datetime.strptime(data["date"], '%d.%m.%Y').date(),
                                            int(data["times"]),
                                            int(data["delta"]))
             else:
-                dates.append(datetime.strptime(data["date"], '%d/%m/%Y').date())
+                dates.append(datetime.strptime(data["date"], '%d.%m.%Y').date())
             for cur_date in dates:
                 current_lesson = lesson
                 current_lesson.id = None
                 current_lesson.date = cur_date
-                current_lesson.save()
+                if check_collisions(current_lesson):
+                    current_lesson.save()
+                else:
+                    print('skip lesson')
         except Exception as e:
             print(str(e))
             answer["error"] = "Error: " + str(e)
@@ -514,7 +535,7 @@ def add_subject_admin(request, event_id):
         try:
             data = json.loads(request.body.decode('utf-8'))
             if data == '':
-                raise Exception('Field should be not NULL')
+                raise Exception('Поле не должно быть пустым')
             subjects = Subject.objects.filter(event__id=event_id, name=data)
             if len(subjects) == 0:
                 subject = Subject(name=data, event_id=event_id)
