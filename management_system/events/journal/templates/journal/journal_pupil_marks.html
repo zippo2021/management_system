@@ -23,7 +23,10 @@
         <input type="text" id="to" name="to" autocomplete="off">
     </div>
 <div>
-    <table border="2px">
+<table id="journal-left-wrapper-table" class="table">
+<tr>
+	<td width=20%>
+	<table class="table table-bordered table-striped journal-left-table">
         <thead>
             <tr>
                 <td><br></td>
@@ -32,16 +35,21 @@
         <tbody id="subjects_list">
         </tbody>
     </table>
+	</td>
+	<td>
     <div style="overflow:auto;">
-        <table border="2px">
-            <thead>
-                <tr  id="lessons_dates">
+        <table class="table table-bordered table-striped journal-left-table-resized">
+            <thead id="lessons_dates">
+                <tr>
                 </tr>
             </thead>
             <tbody id="lessons_list">
             </tbody>
         </table>
     </div>
+	</td>
+</tr>
+</table>
 </div>
 
 
