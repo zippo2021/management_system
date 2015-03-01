@@ -6,6 +6,8 @@ from events.events_admin.models import Event
 from middlewares import get_subdomain
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from datetime import date
+
 
 def organisation_settings_processor(request):
 	try:
@@ -40,6 +42,15 @@ def events_processor(request):
                                             | Q(observers = user.Observer))
         active_events = events.filter(is_active = True)
         archive_events = events.filter(is_active = False)   
-        return {'active_events' : active_events, 'archive_events' : archive_events}
+        archive_events_by_year = {}
+        start_year = 2014
+        end_year = date.today().year
+        for each in xrange(start_year, end_year+1):
+            archive_events_by_year.update(
+                    { each : archive_events.filter(closed__year = each)}
+            )
+        print archive_events_by_year
+        return {'active_events' : active_events,
+                'archive_events_by_year' : archive_events_by_year}
     else:
         return {}

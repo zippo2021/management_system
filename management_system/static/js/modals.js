@@ -8,6 +8,7 @@ $.ajax({ type: "GET",
 url: get_url, 
 async: false,
 cache: false ,
+enctype:"multipart/form-data",
 success : function(text)
 {
     content = text;
@@ -23,6 +24,7 @@ success : function(text)
                 $.ajax({
                     type: 'POST',
                     url: post_url,
+                    enctype:"multipart/form-data",
                     data: msg,
                     async: false,
                     cache: false,
@@ -38,7 +40,7 @@ success : function(text)
                             modal.hide();
                             modal.destroy();
                             
-                            OkMessageAutoClose("Данные сохранены.",2,!school);
+                            OkMessageAutoClose("Данные сохранены.",2,false);
                             $("body").addClass("modal-open");
                             if (school)
                                 $(".modal-body").find("select").first().append(tmp);

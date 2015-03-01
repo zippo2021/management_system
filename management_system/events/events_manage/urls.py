@@ -29,5 +29,6 @@ urlpatterns = [
                     name = 'events_manage_undo_request'),
     url(r'^email_template/acceptance', views.create_acceptance_email_template,
                     name = 'events_manage_create_acceptance_email_template'),
+
 ]
 
