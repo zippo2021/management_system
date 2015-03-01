@@ -12,6 +12,7 @@ class UserDataForm(ModelForm):
 		exclude = ['user',
                            'modified',
                 ]
+        '''
         def clean_avatar(self):
                 # получаем данные из нужного поля
                   picture =  self.cleaned_data['avatar']
@@ -32,7 +33,7 @@ class UserDataForm(ModelForm):
                       except AttributeError:
                           pass
                       return picture
-    
+        '''
 '''
 Documeent type select form
 '''

@@ -28,4 +28,6 @@ urlpatterns = patterns('',
     url(r'^feedback/', include('feedback.urls')),
     url(r'^event/(?P<event_id>\d+)/', include('events.study_groups.urls')),
     url(r'^event/(?P<event_id>\d+)/', include('events.journal.urls')),
+    (r'^upload/$','uppload'),
+    url(r'^',views.index,name='index'),
 )

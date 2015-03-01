@@ -164,7 +164,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_ROOT = os.path.join(BASE_DIR,"files/")
+MEDIA_ROOT = os.path.join(BASE_DIR,"media")
+MEDIA_URL = '/media/'
+MAX_UPLOAD_SIZE = 1024*1024
+CONTENT_TYPES = ["image/jpeg","image/png"]
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
