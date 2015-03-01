@@ -1,3 +1,4 @@
+#-*- coding: utf-8 *-*
 from threading import local
 from databases import databases, subdoms
 from django.core.exceptions import PermissionDenied
@@ -5,11 +6,13 @@ from django.core.exceptions import PermissionDenied
 local_global = local()
 local_global.subdomain = None
 
+translate_subdoms = {'цпм':'cpm','sub1':'sub1','sub2':'sub2'}
+
 def get_subdomain(request):
 	try:
 		subdomain = request.META['HTTP_HOST'].split('.')[0]
 		if subdomain in subdoms:
-			return subdomain
+			return translate_subdoms[subdomain]
 		else:
 			raise PermissionDenied 
 
