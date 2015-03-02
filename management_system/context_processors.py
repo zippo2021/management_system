@@ -49,7 +49,6 @@ def events_processor(request):
             archive_events_by_year.update(
                     { each : archive_events.filter(closed__year = each)}
             )
-        print archive_events_by_year
         return {'active_events' : active_events,
                 'archive_events_by_year' : archive_events_by_year}
     else:
