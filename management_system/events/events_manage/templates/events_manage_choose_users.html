@@ -2,6 +2,10 @@
 {% block event_menu %}
 	{% include 'event_menu.html' %}
 {% endblock %}
+{% block extrahead %}
+    <title>Назначение персонала</title>
+{% endblock %}
+
 {% block content %}
 {% if free_users or not_free_users %}
 <table class="table table-hover">

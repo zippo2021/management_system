@@ -71,7 +71,7 @@ class RegularUser(models.Model):
     school = models.ForeignKey('schools.School',
                                related_name = 'RegularUser',
                                verbose_name = 'Школа',
-                               null = True,)
+                               null = True,on_delete=models.SET_NULL)
 
     modified = models.BooleanField(default = False)
     is_active = models.BooleanField(default = False)

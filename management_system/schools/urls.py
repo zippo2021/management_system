@@ -8,4 +8,5 @@ urlpatterns = [
         views.approve,
         name = 'schools_approve'),
     url(r'^show_unproved', views.show_unproved, name = 'schools_show_unproved'),
+    #url(r'^transfer', views.transfer, name = 'transfer'),
 ]

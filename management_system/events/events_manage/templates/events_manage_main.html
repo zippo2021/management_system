@@ -3,16 +3,20 @@
 	{% include 'event_menu.html' %}
 {% endblock %}
 {% load staticfiles %}
+{% block extrahead %}
+    <title>Событие</title>
+{% endblock %}
+
 {% block content %}
 <table class="table">
 	<thead>
 		<tr>
 			<td width=70%>
-				<p class="lead">{{ event.name }}
+				<h3>{{ event.name }}
 					{% if not event.is_active %}
-					(Закрыто)
+					<small>(Закрыто)</small>
 					{% endif %}
-				</p>
+				</h3>
 			</td>
 			<td></td>
 		<tr>
@@ -40,17 +44,34 @@
 							</li>
 						{% endif %}
 					</ul>
-				<p>Открытие: {{ event.opened }}</p>
-				<p>Закрытие: {{ event.closed }}</p>
-				<p>Место проведения: {{ event.place }}</p>
-				<p>Комментарий: {{ event.comment|linebreaks }}</p>
+				<address>
+					Открытие:<span class="text-muted">
+					{{ event.opened }}
+				</span></address>
+				<address>
+					Закрытие:<span class="text-muted">
+					{{ event.closed }}
+				</span></address>
+				<address>
+					Место проведения:<span class="text-muted">
+					{{ event.place }}
+				</span></address>
+				<address>
+					Комментарий:<span class="text-muted">
+					{{ event.comment|linebreaks }}
+				</span></address>
 			</td>
 			<td>
 				{% if 'regular' in user_permissions %}
 					{% if rq %}
 						<p>
 							Информация о заявке:
-							{{ rq.status }}
+							{% if rq.status == 'одобрена' %}
+								<span class="text-success"{{ rq.status }}</span>
+							{% endif %}
+							{% if rq.status == 'отклонена' %}
+								<span class="text-danger"{{ rq.status }}</span>
+							{% endif %}
 							{% if rq.status == 'в обработке' %}
 							<b>
 							<a href="
@@ -115,8 +136,14 @@
 						{% endif %}
 					</b>
 					</p>
-					<p>Время отъезда: {{ event.JourneyData.departure_time }}</p>
-					<p>Информация: {{ event.JourneyData.info|linebreaks }}</p>
+					<address>
+						Время отъезда:<span class="text-muted">
+						{{ event.JourneyData.departure_time }}
+					</span></address>
+					<address>
+						Информация:<span class="text-muted">
+						{{ event.JourneyData.info|linebreaks }}
+					</span></address>
 				{% endif %}
 			</td>
 		</tr>

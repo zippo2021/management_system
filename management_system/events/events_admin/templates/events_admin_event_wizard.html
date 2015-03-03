@@ -4,6 +4,9 @@
 {% block main_menu %}
     {% include 'main_menu.html' %}
 {% endblock %}
+{% block extrahead %}
+    <title>Создание события</title>
+{% endblock %}
 
 {% block content %}
 <form action = "" method = "post">
@@ -20,8 +23,8 @@
 {% endif %}
 </table>
 {% if wizard.steps.prev %}
-<button name = "wizard_goto_step" type = "submit" value="{{ wizard.steps.prev }}" class="btn btn-primary">back</button>
+<button name = "wizard_goto_step" type = "submit" value="{{ wizard.steps.prev }}" class="btn btn-primary">Назад</button>
 {% endif %}
-<input type = "submit" value ="next" class="btn btn-primary"/>
+<input type = "submit" value ="Далее" class="btn btn-primary"/>
 </form>
 {% endblock %}

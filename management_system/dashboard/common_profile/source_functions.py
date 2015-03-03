@@ -18,7 +18,6 @@ def create_info(viewer, user, restr):
             for key in field_perms[uperm]:
                 model = getattr(user, perms_to_classes[uperm])
                 v_name = model._meta.get_field(key).verbose_name
-                print set(field_perms[uperm][key]), '<-- --> ',  set(viewer_perms)
                 if list(set(field_perms[uperm][key]) & set(viewer_perms)):
                     result[uperm][v_name] =\
                                            getattr(model, key)

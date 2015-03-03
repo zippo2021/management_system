@@ -47,6 +47,8 @@ function UpdateTable()
     var sendData = {};
     sendData["start_date"] = $("#from").val();
     sendData["end_date"] = $("#to").val();
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
      $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/journal/pupil/get_marks",
@@ -75,7 +77,7 @@ function UpdateTable()
             var marks = data["data"]["marks"];
             $.each(lessons, function (key, val)
             {
-                $("<td data-id='" + val["id"] + "' title='" + val["title"] + "'>" + val["date"].substring(0, val["date"].lastIndexOf('/')) + "</td>").appendTo(lessonsDates);
+                $("<td data-id='" + val["id"] + "' title='" + val["title"] + "'>" + val["date"].substring(0, val["date"].lastIndexOf('.')) + "</td>").appendTo(lessonsDates);
             });
             var lessonsLists = $("#lessons_list");
             var subjectsCount = subjectList.children().length;
@@ -99,6 +101,7 @@ function UpdateTable()
         },
         complete: function ()
         {
+            indicator.destroy();
         }
     });
 }

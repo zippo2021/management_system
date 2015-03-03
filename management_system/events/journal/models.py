@@ -26,7 +26,7 @@ class Lesson(models.Model):
     event = models.ForeignKey('events_admin.Event', related_name='lesson')
 
     def __unicode__(self):
-        return '%s (%s)' % (self.title, self.subject.name)
+        return u'%s (%s)' % (self.title, self.subject.name)
 
 
 class Homework(models.Model):
@@ -35,7 +35,7 @@ class Homework(models.Model):
     to_lesson = models.ForeignKey(Lesson, related_name='homework', on_delete=models.DO_NOTHING)
 
     def __unicode__(self):
-        return '%s' % self.title
+        return u'%s' % self.title
 
 
 class Mark(models.Model):
@@ -45,4 +45,4 @@ class Mark(models.Model):
     pupil = models.ForeignKey('regular.RegularUser', related_name='mark', on_delete=models.DO_NOTHING)
 
     def __unicode__(self):
-        return '%u' % self.mark
+        return u'%u' % self.mark

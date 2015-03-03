@@ -6,13 +6,13 @@ from dashboard.teacher.models import Teacher
 
 
 class Event(models.Model):
-    def __unicode__ (self):
+    def __unicode__(self):
         return self.name
-    name = models.CharField(verbose_name = 'Название', max_length = 100)
+    name = models.CharField(verbose_name = 'Название', max_length = 300)
     comment = models.TextField(verbose_name = 'Комментарий',
 			       max_length = 1000, blank = True)
     place = models.CharField(verbose_name = 'Место проведения',
-			     max_length = 100)
+			     max_length = 350)
     opened = models.DateField(verbose_name = 'Создано')
     closed = models.DateField(verbose_name = 'Закрыто')
     is_private = models.BooleanField(verbose_name = 'Добавление по заявкам')

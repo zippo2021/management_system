@@ -7,6 +7,7 @@ from middlewares import get_subdomain
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from datetime import date
+import collections
 
 
 def organisation_settings_processor(request):
@@ -49,6 +50,10 @@ def events_processor(request):
             archive_events_by_year.update(
                     { each : archive_events.filter(closed__year = each)}
             )
+        archive_events_by_year = collections.OrderedDict(
+                                  sorted(archive_events_by_year.items(),                                          reverse = True)
+                                  )
+
         return {'active_events' : active_events,
                 'archive_events_by_year' : archive_events_by_year}
     else:

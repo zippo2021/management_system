@@ -9,10 +9,12 @@
 </p>
 <p>
 Ваш набор прав:
-<p>
+	<ul>
 	{% for each in perms %}
-		+++{{ perms_to_language|get_item:each }}<br>
+		<li>{{ perms_to_language|get_item:each }}</li>
 	{% endfor %}
-</p>
+	</ul>
 {% if admin %}<br> Также вы наделены правами администратора {% endif %}
+
+Для входа в систему перейдите по адресу http://цпм.оргвопрос.рф
 </p>

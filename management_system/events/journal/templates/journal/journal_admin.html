@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
-{% load staticfiles %}
-{% block event_menu %}
-	{% include 'event_menu.html' %}
+{% block journal_menu %}
+	{% include 'journal_menu.html' %}
 {% endblock %}
+{% load staticfiles %}
 {% block extrahead %}
     <title>Расписание занятий</title>
     <script type="text/javascript" src="{% static 'external/js/jquery.timepicker.min.js' %}"></script>
@@ -20,14 +20,13 @@
         <label for="to">по</label>
         <input type="text" class="form-control" id="to" name="to" style="width: 200px" autocomplete="off">
 	</div>
-    <div id="group_select_container" class="form-group">
-		<p>
+    <div id="group_select_container" class="form-inline form-group">
+		<label for="group_list">Группа: </label>
         <select size="1" id="groups_list" class="form-control" style="width: 200px">
         {% for group in groups %}
             <option value="{{ group.id }}">{{ group.label }}</option>
         {% endfor %}
         </select>
-    	</p>
 	</div>
 
     <table class="table table-bordered">

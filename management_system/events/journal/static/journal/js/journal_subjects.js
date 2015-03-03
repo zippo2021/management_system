@@ -1,5 +1,7 @@
 function GetSubjects()
 {
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/journal/admin/get_subjects",
@@ -37,12 +39,15 @@ function GetSubjects()
         },
         complete: function ()
         {
+            indicator.destroy();
         }
     });
 }
 
 function SendDelSubjectRequest(sendData)
 {
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url:            "/event/" + $("#event_id").val() +"/journal/admin/delete_subject",
@@ -67,6 +72,7 @@ function SendDelSubjectRequest(sendData)
         },
         complete:       function()
         {
+            indicator.destroy();
         }
 
     });
@@ -74,6 +80,8 @@ function SendDelSubjectRequest(sendData)
 
 function SendNewSubjectData(data)
 {
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url:            "/event/" + $("#event_id").val() +"/journal/admin/add_subject",
@@ -98,6 +106,7 @@ function SendNewSubjectData(data)
         },
         complete:       function()
         {
+            indicator.destroy();
         }
     });
 }

@@ -1,7 +1,6 @@
-
-
-function ModalToggle(get_url,post_url,t_id,t_title,school)
+function ModalToggle(get_url,post_url,t_id,t_title,school,button_text)
 {
+button_text = button_text || 'Сохранить';
 var content = '';
 var modal = new Modal();
 $.ajax({ type: "GET", 
@@ -18,7 +17,7 @@ success : function(text)
     modal.setButtons([
     {
             id:'send',
-            label:'Сохранить',
+            label:button_text,
             callback:function(){
                 var msg = modal.getContentElement().find(t_id).serialize();
                 $.ajax({
@@ -47,7 +46,7 @@ success : function(text)
                                 $(".modal-body").find("select").first().val(id);
                         }
                         else{
-                            modal.getContentElement().replaceWith("<div class='modal-body'>"+data+"</div>")
+                            modal.getContentElement().replaceWith("<div class='modal-body'>"+data+"</div>");
                             $('.dateinput').datepicker({ format: "dd.mm.yyyy",autoclose:true,language:'ru' });   
                         }
                     },
@@ -78,6 +77,7 @@ success : function(text)
 function ToggleSimpleTextModal(text,title){
     var modal = new Modal();
     modal.setTitle(title);
+    alert(text);
     modal.getContentElement().append(text);
     modal.setButtons([
     {

@@ -3,8 +3,8 @@
 	{% include 'main_menu.html' %}
 {% endblock %}
 {% load staticfiles %}
-{% block extrahead %} 
- <script type="text/javascript" src="{% static 'js/modals.js' %}"></script>
+{% block extrahead %}
+    <title>Управление персоналом</title>
 {% endblock %}
 {% load custom_template_filters %}
 {% block content %}
@@ -20,7 +20,7 @@
 				<thead>
 					<tr>
 						<td>
-                            {% url 'common_profile_view_profile' key.id as common_profile_view_profile %}
+                            {% url 'common_profile_view_profile' key.UserData.id as common_profile_view_profile %}
 							<a href="#" onClick="linkWrapper('{{ common_profile_view_profile }}','{{ request.path }}')">
                             
 							{{ key }}

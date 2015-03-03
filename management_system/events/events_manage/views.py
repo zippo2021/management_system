@@ -200,7 +200,16 @@ def decline_request(request, event_id, request_id):
     current_rq = Request.objects.get(id=request_id)
     event = current_rq.event
     current_rq.status = 'отклонена'
-    current_rq.save() 
+    current_rq.save()
+    send_templated_email(
+                         subject='Отклонение заявки',
+                         email_template_name='events_manage_decline_email.html',
+                         email_context={
+                            'event': event
+                         },
+                         recipients=current_rq.user.data.user.email,
+                         fail_silently=False,
+                        )
     return redirect('events_manage_show_requests', event_id = event.id)
 
 @login_required

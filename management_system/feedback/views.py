@@ -15,21 +15,26 @@ def send(request):
         if form.is_valid():
             cleaned_data = form.cleaned_data
             if cleaned_data['problem_type'] == 'T':
-                recipients = ['zippo2021@gmail.com']
+                recipients = ['zippo2021@gmail.com',
+                              'kulagin.ilua@gmail.com',
+                              'a.s.marchenko@yandex.ru']
             else:
                 recipients = ['a.s.marchenko@yandex.ru']
-            
             text = cleaned_data['text'] + '\n\n\n' + 'From: ' +\
                    user.UserData.__unicode__() + '\n' + 'E-mail: ' +  user.email
-            template = get_template_from_string(text)
-            send_templated_email(
-                subject = cleaned_data['subject'],
-                email_context = {},
-                recipients = recipients,
-                template_file = template,
-                fail_silently = False
-            )
+	    template = get_template_from_string(text)
             status = 'success'
+            try:
+		send_templated_email(
+                    subject = cleaned_data['subject'],
+                    email_context = {},
+                    recipients = recipients,
+                    template_file = template,
+                    fail_silently = False
+                )
+            except Exception as e:
+		print(str(e))
+                status = 'Error sending mail'
             return HttpResponse(status)
 
     else:

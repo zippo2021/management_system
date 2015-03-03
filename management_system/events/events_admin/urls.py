@@ -6,5 +6,6 @@ urlpatterns = [
         views.edit, name = 'events_admin_edit'),
     url(r'^deactivate/$', views.deactivate,
         name = 'events_admin_deactivate'),
+    url(r'^import/$', views.import_data, name = 'import'),
 ]
 

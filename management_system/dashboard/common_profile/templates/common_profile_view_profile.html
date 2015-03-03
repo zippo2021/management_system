@@ -2,6 +2,9 @@
 {% block main_menu %}
 	{% include 'main_menu.html' %}
 {% endblock %}
+{% block extrahead %}
+	<title>Профиль</title>
+{% endblock %}
 {% load custom_template_filters %}
 {% load staticfiles %}
 {% block content %}
@@ -43,19 +46,19 @@ body.modal-dialog {
 				</p>
         		<p>
 					E-mail:<br>
-					{{ base_data.user.email }}
+					 <span class="text-muted">{{ base_data.user.email }}</span>
 				</p>
 				<p>
 					{% if 'admin' in user_permissions or edit_perm %}
 						Телефон:<br>
-						{{ base_data.phone }}
+						<span class="text-muted">{{ base_data.phone }}</span>
 					{% endif %}
 				</p>
     		</td>
 			<td>
 				<p>
 					{% for each in documents %}
-						{{ each }}<br>
+						 <span class="text-muted">{{ each }}</span><br>
 					{% endfor %}
 				</p>
 			</td>
@@ -102,7 +105,7 @@ body.modal-dialog {
 					{{ key }}:
 				{% endif %}
 				{% if value %}
-				{{ value }}
+				 <span class="text-muted">{{ value }}</span>
 				{% endif %}
 				</td>
 				{% if forloop.counter|divisibleby:"3" %}

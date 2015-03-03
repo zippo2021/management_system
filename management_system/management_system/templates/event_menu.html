@@ -21,11 +21,13 @@
 </li>
 {% endif %}
 
-<li {% if request.path == schedule_index %} class="active" {% endif %}><a href="#" onClick = "linkWrapper('{{ schedule_index }}','{{ request.path }}')">Расписание</a></li>
+<li {% if 'schedule' in request.path %} class="active" {% endif %}>
+    <a href="#" onClick = "linkWrapper('{{ schedule_index }}','{{ request.path }}')">Расписание</a>
+</li>
 
 {% if 'regular' in user_permissions or 'admin' in user_permissions or 'teacher' in user_permissions or 'observer' in user_permissions or 'event_worker' in user_permissions %}
 	{% if event.has_journal %}
-		<li {% if request.path == journal_index %} class="active" {% endif %}>
+		<li {% if 'journal' in request.path and 'schedule' not in request.path %} class="active" {% endif %}>
 			<a href="#" onClick="linkWrapper('{{ journal_index }}','{{ request.path }}')">Журнал</a>
 		</li>
 	{% else %}
