@@ -1,0 +1,13 @@
+{% if status == 'Get' %}
+<table>
+    <tbody>
+    {% for user_info in users %}
+        <tr>
+            <td><a href="{% url 'common_profile_view_profile' user_info.id %}">{{ user_info }}</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    По Вашему запросу никого не найдено
+{% endif %}
