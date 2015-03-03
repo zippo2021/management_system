@@ -1,5 +1,7 @@
 function SendNewGroupData(value)
 {
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url:            "/event/" + $("#event_id").val() +"/study_groups/new_group",
@@ -27,6 +29,7 @@ function SendNewGroupData(value)
         },
         complete:       function()
         {
+            indicator.destroy();
         }
 
     });
@@ -35,6 +38,8 @@ function SendNewGroupData(value)
 function SendDeleteGroupData()
 {
     var sendData = $("#group_list option:selected").val();
+    var indicator = LoadingIndicator('Удаляю группу');
+    indicator.show();
     $.ajax(
     {
         url:            "/event/" + $("#event_id").val() +"/study_groups/delete_group",
@@ -60,6 +65,7 @@ function SendDeleteGroupData()
         },
         complete:       function()
         {
+            indicator.destroy();
         }
 
     });
@@ -78,6 +84,8 @@ function SendSaveNewMembersRequest()
     });
     if (send_data["pupils"]["add_to_group"].length == 0)
         return;
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/study_groups/save_group_members",
@@ -102,6 +110,7 @@ function SendSaveNewMembersRequest()
         },
         complete: function ()
         {
+            indicator.destroy();
         }
     });
 }
@@ -119,6 +128,8 @@ function SendRemoveMembersRequest()
     });
     if (send_data["pupils"]["remove_from_group"].length == 0)
         return;
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/study_groups/save_group_members",
@@ -143,6 +154,7 @@ function SendRemoveMembersRequest()
         },
         complete: function ()
         {
+            indicator.destroy();
         }
     });
 }
@@ -150,7 +162,8 @@ function SendRemoveMembersRequest()
 function GetPupils()
 {
     var sendData = $("#group_list option:selected").val();
-
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/study_groups/get_group_info",
@@ -188,6 +201,7 @@ function GetPupils()
         },
         complete: function ()
         {
+            indicator.destroy();
         }
     });
 }

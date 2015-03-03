@@ -65,6 +65,8 @@ function UpdateTable()
     sendData["end_date"] = $("#to").val();
     sendData["study_group"] = $("#group_list option:selected").val();
     sendData["subject"] = $("#subject_list option:selected").val();
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
      $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/journal/teacher/get_pupils_lessons_marks",
@@ -192,6 +194,7 @@ function UpdateTable()
         },
         complete: function ()
         {
+            indicator.destroy();
         }
     });
 }
@@ -200,6 +203,8 @@ function GetGroupsBySubject()
 {
     var sendData = {};
     sendData["subject"] = $("#subject_list option:selected").val();
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/journal/teacher/get_groups",
@@ -229,6 +234,7 @@ function GetGroupsBySubject()
         },
         complete: function ()
         {
+            indicator.destroy();
         }
     });
 }

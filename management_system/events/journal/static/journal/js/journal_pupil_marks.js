@@ -47,6 +47,8 @@ function UpdateTable()
     var sendData = {};
     sendData["start_date"] = $("#from").val();
     sendData["end_date"] = $("#to").val();
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
      $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/journal/pupil/get_marks",
@@ -99,6 +101,7 @@ function UpdateTable()
         },
         complete: function ()
         {
+            indicator.destroy();
         }
     });
 }
