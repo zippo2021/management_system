@@ -94,7 +94,7 @@ function UpdateTable()
             var lessonsDates = $("#lessons_dates").children().first();
             $.each(lessons, function (key, val)
             {
-                $("<td data-id='" + val["id"] + "' title='" + val["title"] + "'>" + val["date"].substring(0, val["date"].lastIndexOf('/')) + "</td>").appendTo(lessonsDates);
+                $("<td data-id='" + val["id"] + "' title='" + val["title"] + "'>" + val["date"].substring(0, val["date"].lastIndexOf('.')) + "</td>").appendTo(lessonsDates);
             });
             var lessonsLists = $("#lessons_list");
             var pupilsCount = pupilList.children().length;

@@ -75,7 +75,7 @@ function UpdateTable()
             var marks = data["data"]["marks"];
             $.each(lessons, function (key, val)
             {
-                $("<td data-id='" + val["id"] + "' title='" + val["title"] + "'>" + val["date"].substring(0, val["date"].lastIndexOf('/')) + "</td>").appendTo(lessonsDates);
+                $("<td data-id='" + val["id"] + "' title='" + val["title"] + "'>" + val["date"].substring(0, val["date"].lastIndexOf('.')) + "</td>").appendTo(lessonsDates);
             });
             var lessonsLists = $("#lessons_list");
             var subjectsCount = subjectList.children().length;
