@@ -40,7 +40,7 @@ success : function(text)
                             modal.hide();
                             modal.destroy();
                             
-                            OkMessageAutoClose("Данные сохранены.",2,false);
+                            OkMessageAutoClose("Данные сохранены.",2,!school);
                             $("body").addClass("modal-open");
                             if (school)
                                 $(".modal-body").find("select").first().append(tmp);
@@ -64,7 +64,8 @@ success : function(text)
         callback:function(){
             modal.hide();
             modal.destroy();
-            $("body").addClass("modal-open");
+            if(school)
+                $("body").addClass("modal-open");
         }
     }]);
     modal.show();

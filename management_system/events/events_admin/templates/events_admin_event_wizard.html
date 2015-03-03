@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% load crispy_forms_tags %}
+{% block main_menu %}
+    {% include 'main_menu.html' %}
+{% endblock %}
 
 {% block content %}
 <form action = "" method = "post">

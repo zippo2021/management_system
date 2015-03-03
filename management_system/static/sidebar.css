@@ -91,7 +91,7 @@ html { height: 100%;}
             transition: width .2s ease-in;
 
 }
-.sidebar-nav li:first-child a {
+.sidebar-nav li a {
     color: #fff;
     background-color: #428BCA;
 }
@@ -152,6 +152,7 @@ html { height: 100%;}
 
 .sidebar-nav .dropdown-menu > li > a {
 	white-space: normal;
+    color: #ffffff !important; 
 }
 
 /*-------------------------------*/
