@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block event_menu %}
-    {% include 'event_menu.html' %}
+{% block journal_menu %}
+	{% include 'journal_menu.html' %}
 {% endblock %}
 {% block extrahead %}
     <title>Оценки</title>
@@ -22,7 +22,7 @@
     </div>
 	<div class="form-inline form-group">
    	 <div id="group_select_container" class="form-group">
-   	     <label for="group_list">Group</label>
+   	     <label for="group_list">Группа: </label>
    	     <select size="1" id="group_list" class="form-control" style="width: 200px">
    	     {% for group in groups %}
    	         <option value="{{ group.id }}">{{ group.label }}</option>
@@ -30,7 +30,7 @@
    	     </select>
    	   </div>
  	   <div id="subject_select_container" class="form-group">
-   	     <label for="subject_list">Subject</label>
+   	     <label for="subject_list">Предмет: </label>
 		 <select size="1" id="subject_list" class="form-control" style="width: 200px">
    	     {% for subject in subjects %}
    	         <option value="{{ subject.id }}">{{ subject.name }}</option>

@@ -1,0 +1,39 @@
+{% url 'events_manage_main' event.id as events_manage_main %}
+{% url 'journal_admin' event.id as journal_create_lessons %}
+{% url 'journal_subjects' event.id as journal_create_subjects %}
+{% url 'journal_teacher_right' event.id as journal_set_tasks %}
+{% url 'journal_teacher_left' event.id as journal_set_marks %}
+{% url 'journal_pupil_marks' event.id as journal_get_marks %}
+
+{% block journal_menu %}
+<ul id="event_menu" class="nav nav-tabs nav-justified">
+	<li>
+		<a href="#" onClick="linkWrapper('{{ events_manage_main }}','{{ request.path }}')">К событию</a>
+	</li>
+
+{% if 'event_worker' in user_permissions %}
+    <li {% if request.path == journal_create_lessons %} class="active" {% endif %}>
+        <a href="#" onClick="linkWrapper('{{ journal_create_lessons }}','{{ request.path }}')">Управление занятиями</a>
+    </li>
+    <li {% if request.path == journal_create_subjects %} class="active" {% endif %}>
+        <a href="#" onClick="linkWrapper('{{ journal_create_subjects }}','{{ request.path }}')">Управление предметами</a>
+    </li>
+{% endif %}
+
+{% if 'teacher' in user_permissions %}
+    <li {% if request.path == journal_set_tasks %} class="active" {% endif %}>
+        <a href="#" onClick="linkWrapper('{{ journal_set_tasks }}','{{ request.path }}')">Управление темати занятий</a>
+    </li>
+    <li {% if request.path == journal_set_marks %} class="active" {% endif %}>
+        <a href="#" onClick="linkWrapper('{{ journal_set_marks }}','{{ request.path }}')">Управление оценками</a>
+    </li>
+{% endif %}
+
+{% if 'regular' in user_permissions %}
+    <li {% if request.path == journal_get_marks %} class="active" {% endif %}>
+        <a href="#" onClick="linkWrapper('{{ journal_get_marks }}','{{ request.path }}')">Просмотр оценок</a>
+    </li>
+{% endif %}
+
+</ul>
+{% endblock %}

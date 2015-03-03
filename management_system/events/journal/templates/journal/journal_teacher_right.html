@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block event_menu %}
-    {% include 'event_menu.html' %}
-{% endblock %}
+{% block journal_menu %}
+	{% include 'journal_menu.html' %}
+{% endblock %}}
 {% block extrahead %}
     <title>Темы занятий</title>
 
@@ -23,7 +23,7 @@
 
 	<div class="form-inline form-group">
     <div id="group_select_container" class="form-group">
-        <label for="group_list">Группа</label>
+        <label for="group_list">Группа: </label>
 		<select size="1" class="form-control" id="group_list" style="width: 200px">
         {% for group in groups %}
             <option value="{{ group.id }}">{{ group.label }}</option>
@@ -31,7 +31,7 @@
         </select>
     </div>
     <div id="subject_select_container" class="form-group">
-        <label for="subject_list">Предмет</label>
+        <label for="subject_list">Предмет: </label>
         <select size="1" class="form-control" id="subject_list" style="width: 200px">
         {% for subject in subjects %}
             <option value="{{ subject.id }}">{{ subject.name }}</option>
