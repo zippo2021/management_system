@@ -15,6 +15,8 @@ function GetLessons()
     sendData["end_date"] = $("#to").val();
     sendData["study_group"] = $("#group_list option:selected").val();
     sendData["subject"] = $("#subject_list option:selected").val();
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/journal/teacher/get_lessons",
@@ -147,6 +149,7 @@ function GetLessons()
         },
         complete: function ()
         {
+            indicator.destroy();
         }
     });
 }
@@ -197,6 +200,8 @@ function SetDatepickers()
 
 function SendUpdateHomeworkRequest(sendData)
 {
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/journal/teacher/update_homework",
@@ -218,12 +223,15 @@ function SendUpdateHomeworkRequest(sendData)
         },
         complete: function ()
         {
+            indicator.destroy();
         }
     });
 }
 
 function SendUpdateLessonRequest(sendData)
 {
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/journal/teacher/update_lesson",
@@ -245,6 +253,7 @@ function SendUpdateLessonRequest(sendData)
         },
         complete: function ()
         {
+            indicator.destroy();
         }
     });
 }
@@ -297,6 +306,8 @@ function GetGroupsBySubject()
 {
     var sendData = {};
     sendData["subject"] = $("#subject_list option:selected").val();
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/journal/teacher/get_groups",
@@ -326,6 +337,7 @@ function GetGroupsBySubject()
         },
         complete: function ()
         {
+            indicator.destroy();
         }
     });
 }

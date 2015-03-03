@@ -9,6 +9,8 @@ function GetLessons()
     sendData["start_date"] = $("#from").val();
     sendData["end_date"] = $("#to").val();
     sendData["group"] = $("#groups_list option:selected").val();
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/journal/admin/get_lessons",
@@ -119,6 +121,7 @@ function GetLessons()
         },
         complete: function ()
         {
+            indicator.destroy();
         }
     });
 }
@@ -171,6 +174,8 @@ function GetLessons()
 
 function SendUpdateLessonRequest(sendData)
 {
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/journal/admin/update_lesson",
@@ -192,12 +197,15 @@ function SendUpdateLessonRequest(sendData)
         },
         complete: function ()
         {
+            indicator.destroy();
         }
     });
 }
 
 function SendNewLessonRequest(sendData)
 {
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/journal/admin/add_lessons",
@@ -219,12 +227,15 @@ function SendNewLessonRequest(sendData)
         },
         complete: function ()
         {
+            indicator.destroy();
         }
     });
 }
 
 function SendDelLessonRequest(sendData)
 {
+    var indicator = LoadingIndicator('Обновляю данные');
+    indicator.show();
     $.ajax(
     {
         url: "/event/" + $("#event_id").val() + "/journal/admin/del_lesson",
@@ -245,6 +256,7 @@ function SendDelLessonRequest(sendData)
         },
         complete: function ()
         {
+            indicator.destroy();
             GetLessons();
         }
     });
