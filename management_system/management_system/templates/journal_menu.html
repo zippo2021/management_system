@@ -13,10 +13,17 @@
 
 {% if 'event_worker' in user_permissions %}
     <li {% if request.path == journal_create_lessons %} class="active" {% endif %}>
+<<<<<<< HEAD
         <a href="#" onClick="linkWrapper('{{ journal_create_lessons }}','{{ request.path }}')">Занятия</a>
     </li>
     <li {% if request.path == journal_create_subjects %} class="active" {% endif %}>
         <a href="#" onClick="linkWrapper('{{ journal_create_subjects }}','{{ request.path }}')">Предметы</a>
+=======
+        <a href="#" onClick="linkWrapper('{{ journal_create_lessons }}','{{ request.path }}')">Управление занятиями</a>
+    </li>
+    <li {% if request.path == journal_create_subjects %} class="active" {% endif %}>
+        <a href="#" onClick="linkWrapper('{{ journal_create_subjects }}','{{ request.path }}')">Управление предметами</a>
+>>>>>>> bafa9bb7ce9a419a9ab1ad159232e5c0d529fe70
     </li>
 {% endif %}
 
@@ -31,7 +38,8 @@
 
 {% if 'regular' in user_permissions %}
     <li {% if request.path == journal_get_marks %} class="active" {% endif %}>
-        <a href="#" onClick="linkWrapper('{{ journal_get_marks }}','{{ request.path }}')">Мои оценки</a>
+        <a href="#" onClick="linkWrapper('{{ journal_get_marks }}','{{ request.path }}')">Мои
+        оценки</a>
     </li>
 {% endif %}
 
